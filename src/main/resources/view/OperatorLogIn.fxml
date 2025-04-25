@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane fx:controller="dk.easv.belsignexamproject.OperatorLogInController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fx:id="belmanLogo" fitHeight="125.0" fitWidth="149.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/belmanlogo.png" />
+         </image>
+      </ImageView>
+      <VBox alignment="CENTER" layoutX="2.0" layoutY="-2.0" prefHeight="400.0" prefWidth="600.0" spacing="10.0">
+         <children>
+            <Label text="Belsign" textFill="#004b88">
+               <font>
+                  <Font name="Arial Bold" size="36.0" />
+               </font>
+            </Label>
+            <Label text="Log In Operator">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <Label text="Please scan your Barcode">
+               <font>
+                  <Font name="Arial" size="18.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="30.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/examplebarcode.png" />
+               </image>
+            </ImageView>
+            <Label text="Belman" />
+            <Label text="Operator" />
+            <Label text="Employee" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <TextField fx:id="txtFieldName" promptText="Martin" />
+                  <Button mnemonicParsing="false" style="-fx-text-fill: green;" text="✓">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
