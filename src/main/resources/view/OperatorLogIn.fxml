@@ -54,6 +54,8 @@
                </children>
             </HBox>
          </children>
+         <TextField fx:id="barcodeTextField" layoutX="100" layoutY="200" promptText="Scan Barcode Here" />
+         <Label fx:id="welcomeText" layoutX="100" layoutY="250" text="Please scan your barcode."/>
       </VBox>
    </children>
 </AnchorPane>
