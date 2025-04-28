@@ -18,7 +18,7 @@ public class OperatorManager{
             operatorMap.put(1003, new Operator(1003, "AdminUser", "Admin"));
         }
 
-        // Method to get an operator by barcode ID (integer)
+        // Method to get an operator by barcode ID
         public Operator getOperatorById(int id) {
             return operatorMap.get(id); // Returns null if not found
         }
