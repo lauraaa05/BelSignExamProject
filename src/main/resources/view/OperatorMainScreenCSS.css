@@ -10,7 +10,7 @@
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
     -fx-padding: 10px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0, 15), 8, 0, 0, 4);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 15), 8, 0, 0, 4);
 }
 
 .topVBox {
@@ -36,4 +36,13 @@
 
 #signOutButton:hover {
     -fx-background-color: #b3b3b3;
+}
+
+#belsignHeading {
+
+    -fx-alignment: center;
+    -fx-text-aligment: center;
+    -fx-text-fill: #003366;
+    -fx-font-size: 60px;
+    -fx-font-weight: bold;
 }
