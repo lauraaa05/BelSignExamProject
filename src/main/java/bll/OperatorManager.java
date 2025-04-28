@@ -12,7 +12,7 @@ public class OperatorManager{
         // Constructor initializes the operator map
         public OperatorManager() {
             this.operatorMap = new HashMap<>();
-
+//TO DO DELETE THIS AND REVIEW AUTO GENERATION ID
             operatorMap.put(1001, new Operator(1001, "Martin", "Operator"));
             operatorMap.put(1002, new Operator(1002, "Laura", "Quality Control"));
             operatorMap.put(1003, new Operator(1003, "AdminUser", "Admin"));
