@@ -44,7 +44,7 @@
       <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #D9D9D9;" BorderPane.alignment="CENTER">
          <children>
             <Pane prefHeight="251.0" prefWidth="100.0" VBox.vgrow="ALWAYS" />
-            <Button fx:id="signOutButton" mnemonicParsing="false" prefHeight="45.0" prefWidth="56.0" style="-fx-background-color: #D9D9D9;" text="⏻">
+            <Button fx:id="signOutButton" mnemonicParsing="false" prefHeight="45.0" prefWidth="56.0" style="-fx-background-color: #D9D9D9;" text="🚪">
                <font>
                   <Font size="24.0" />
                </font>
