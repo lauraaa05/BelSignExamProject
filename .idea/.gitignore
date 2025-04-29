@@ -7,3 +7,5 @@
 /dataSources/
 /dataSources.local.xml
 .idea/
+lib/mssql-jdbc-12.4.0.jre11-preview.jar
+
