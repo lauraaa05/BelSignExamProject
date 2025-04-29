@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="710.0" stylesheets="@../css/OperatorMainCSS.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:controller="gui.controllers.OperatorMainController" id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="710.0" stylesheets="@../css/OperatorMainCSS.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" styleClass="topVBox" BorderPane.alignment="CENTER">
          <children>
@@ -61,7 +61,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <ListView id="listView" fx:id="listVToDo" prefHeight="323.0" prefWidth="250.0">
+                  <ListView id="listView" fx:id="toDoListView" prefHeight="323.0" prefWidth="250.0">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin></ListView>
@@ -74,7 +74,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <ListView id="listView" fx:id="listDone" prefHeight="323.0" prefWidth="234.0">
+                  <ListView id="listView" fx:id="doneListView" prefHeight="323.0" prefWidth="234.0">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin></ListView>
