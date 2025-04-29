@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="mainAnchorPane" prefHeight="500.0" prefWidth="711.0" stylesheets="@OperatorMainScreenCSS.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.OperatorMainScreen">
+<AnchorPane id="mainAnchorPane" prefHeight="500.0" prefWidth="711.0" stylesheets="@css/OperatorMainScreenCSS.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.OperatorMainController">
    <children>
       <HBox prefHeight="92.0" prefWidth="711.0" styleClass="topVBox">
          <children>
@@ -46,7 +46,7 @@
                      <VBox.margin>
                         <Insets left="10.0" />
                      </VBox.margin></Label>
-                  <MFXListView prefHeight="262.0" prefWidth="160.0" />
+                  <MFXListView fx:id="toDoListView" prefHeight="262.0" prefWidth="160.0" />
                </children>
             </VBox>
          </children>
@@ -59,7 +59,7 @@
                      <VBox.margin>
                         <Insets left="8.0" />
                      </VBox.margin></Label>
-                  <MFXListView prefHeight="261.0" prefWidth="160.0" />
+                  <MFXListView fx:id="DoneListView" prefHeight="261.0" prefWidth="160.0" />
                </children>
             </VBox>
          </children>
