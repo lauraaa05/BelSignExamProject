@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -75,7 +74,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <ListView prefHeight="400.0" prefWidth="200.0" />
+                  <ListView fx:id="listVDone" prefHeight="400.0" prefWidth="200.0" />
                </children>
             </VBox>
          </children>
