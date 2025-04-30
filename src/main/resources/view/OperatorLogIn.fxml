@@ -1,26 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:controller="gui.controllers.OperatorLogInController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <ImageView fx:id="belmanLogo" fitHeight="125.0" fitWidth="149.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/belmanlogo.png" />
-         </image>
-      </ImageView>
-      <VBox alignment="CENTER" layoutX="2.0" layoutY="-2.0" prefHeight="400.0" prefWidth="600.0" spacing="10.0">
+
+<BorderPane id="logInScreen" styleClass="logInScreen" stylesheets="@../css/logInScreenCSS.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.OperatorLogInController">
+   <top>
+      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Label text="Belsign" textFill="#004b88">
-               <font>
-                  <Font name="Arial Bold" size="36.0" />
-               </font>
+            <ImageView fx:id="belmanLogo" fitHeight="125.0" fitWidth="149.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/belmanlogo.png" />
+               </image>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </ImageView>
+            <Region prefHeight="125.0" prefWidth="100.0" HBox.hgrow="ALWAYS" />
+            <Label styleClass="topLabel" text="Belsign">
+               <HBox.margin>
+                  <Insets top="25.0" />
+               </HBox.margin>
             </Label>
+            <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+   </top>
+   <center>
+      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
             <Label text="Log In">
                <font>
                   <Font name="System Bold" size="24.0" />
@@ -34,5 +49,5 @@
             <ImageView fx:id="imgQRPicture" fitHeight="211.0" fitWidth="245.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </VBox>
-   </children>
-</AnchorPane>
+   </center>
+</BorderPane>
