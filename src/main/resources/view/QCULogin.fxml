@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane id="mainBorderPane" fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/QCULogInCSS.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCULogInController">
+    <top>
+        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" styleClass="topVBox" BorderPane.alignment="CENTER">
+            <children>
+                <ImageView fitHeight="98.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/belmanlogo.png" />
+                    </image>
+                    <HBox.margin>
+                        <Insets left="18.0" />
+                    </HBox.margin>
+                </ImageView>
+                <Pane prefHeight="100.0" prefWidth="48.0" HBox.hgrow="ALWAYS" />
+                <Label styleClass="topLabel" text="Belsign" />
+                <Pane prefHeight="100.0" prefWidth="167.0" HBox.hgrow="ALWAYS" />
+            </children>
+            <padding>
+                <Insets left="5.0" />
+            </padding>
+        </HBox>
+    </top>
+    <center>
+        <VBox fx:id="centerVBox" prefHeight="400.0" prefWidth="499.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="53.0" prefWidth="900.0">
+               <children>
+                  <Label fx:id="logInLabel" text="Log in">
+                     <HBox.margin>
+                        <Insets left="392.0" />
+                     </HBox.margin></Label>
+               </children>
+               <VBox.margin>
+                  <Insets top="80.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox prefHeight="36.0" prefWidth="900.0">
+               <children>
+                  <Label fx:id="errorLabel" text="Incorrect Password Text">
+                     <HBox.margin>
+                        <Insets left="355.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox prefHeight="100.0" prefWidth="918.0">
+                     <children>
+                        <Label styleClass="labelUserInfo" text="User">
+                           <VBox.margin>
+                              <Insets left="320.0" />
+                           </VBox.margin></Label>
+                        <MFXTextField prefHeight="50.0" prefWidth="240.0">
+                           <VBox.margin>
+                              <Insets left="320.0" />
+                           </VBox.margin></MFXTextField>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox prefHeight="100.0" prefWidth="918.0">
+                     <children>
+                        <Label styleClass="labelUserInfo" text="Password">
+                           <VBox.margin>
+                              <Insets left="320.0" />
+                           </VBox.margin></Label>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <MFXTextField prefWidth="240.0">
+                                 <HBox.margin>
+                                    <Insets left="320.0" />
+                                 </HBox.margin></MFXTextField>
+                              <Label fx:id="eyeLabel" text="👀">
+                                 <HBox.margin>
+                                    <Insets left="20.0" top="10.0" />
+                                 </HBox.margin></Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <MFXButton fx:id="logInButton" prefHeight="50.0" prefWidth="110.0" text="Log in">
+                     <HBox.margin>
+                        <Insets left="380.0" />
+                     </HBox.margin>
+                  </MFXButton>
+               </children>
+            </HBox>
+         </children>
+        </VBox>
+    </center>
+</BorderPane>
