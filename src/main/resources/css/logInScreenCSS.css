@@ -1,0 +1,10 @@
+.logInScreen {
+	-fx-background-color: white;
+}
+
+.topLabel {
+	-fx-font-weight: bold;
+	-fx-text-fill: #004b88;
+	-fx-font-family: "Arial";
+	-fx-font-size: 48px;
+}
