@@ -14,6 +14,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import bll.Camera; // your Camera class from bll
 
@@ -59,8 +61,10 @@ public class PictureTest extends Application {
 
     private void captureImage() {
         BufferedImage image = camera.takePicture();
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd__HH-mm-ss"));
+        String fileName = "src/main/resources/images/photo_" + timestamp + ".png";
         try {
-            ImageIO.write(image, "PNG", new File("snapshot.png"));
+            ImageIO.write(image, "PNG", new File(fileName));
             System.out.println("Picture taken!");
         } catch (IOException e) {
             e.printStackTrace();
