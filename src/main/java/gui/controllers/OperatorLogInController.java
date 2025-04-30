@@ -1,12 +1,18 @@
-package dk.easv.belsignexamproject;
+package gui.controllers;
 
 import be.Operator;
+import bll.Camera;
 import bll.OperatorManager;
+import io.github.palexdev.materialfx.utils.SwingFXUtils;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+
+import java.awt.image.BufferedImage;
 
 
 public class OperatorLogInController {
@@ -15,14 +21,22 @@ public class OperatorLogInController {
     private Label welcomeText;
 
     @FXML
+    private ImageView imgQRPicture;
+
+    @FXML
     private TextField barcodeTextField;
+
+    private Camera camera = new Camera();
+    private boolean isPhotoTaken = false;
 
     private final OperatorManager operatorManager = new OperatorManager(); // Declare it at the top
 
     @FXML
     public void initialize() {
         // Attach a listener to detect when ENTER is pressed
-        barcodeTextField.setOnKeyPressed(this::handleBarcodeScan);
+        camera.initializeCamera();
+        startWebcamStream();
+        //barcodeTextField.setOnKeyPressed(this::handleBarcodeScan);
     }
 
     private void handleBarcodeScan(KeyEvent event) {
@@ -35,6 +49,24 @@ public class OperatorLogInController {
                 welcomeText.setText("Please scan a valid barcode.");
             }
         }
+    }
+
+    private void startWebcamStream() {
+        Thread stream = new Thread(() -> {
+            while(!isPhotoTaken) {
+                BufferedImage image = camera.takePicture();
+                if(image != null) {
+                    Platform.runLater(() -> imgQRPicture.setImage(SwingFXUtils.toFXImage(image, null)));
+                }
+                try {
+                    Thread.sleep(33);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        stream.setDaemon(true);
+        stream.start();
     }
 
     private void loginOperator(String scannedCode) {
