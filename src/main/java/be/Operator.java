@@ -5,11 +5,18 @@ public class Operator {
     private int id;
     private String name;
     private String role;
+    private String qrToken; //Access change by QRcode
 
-    public Operator(int id, String name, String role) {
+    public Operator(int id, String name, String role, String qrToken) {
         this.id = id;
         this.name = name;
         this.role = role;
+        this.qrToken = qrToken;
+    }
+
+
+    public Operator() {
+        this(0, "", "", null);
     }
 
 
@@ -37,6 +44,14 @@ public class Operator {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getQrToken() {
+        return qrToken;
+    }
+
+    public void setQrToken(String qrToken) {
+        this.qrToken = qrToken;
     }
 
     @Override
