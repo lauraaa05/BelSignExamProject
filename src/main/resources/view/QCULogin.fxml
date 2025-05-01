@@ -85,7 +85,14 @@
                                  <HBox.margin>
                                     <Insets left="320.0" />
                                  </HBox.margin></MFXTextField>
-                              <Label fx:id="eyeLabel" text="👀">
+                              <Label fx:id="eyeLabel" translateX="4" translateY="8">
+                                  <graphic>
+                                      <ImageView fitHeight="24" fitWidth="24">
+                                          <image>
+                                              <Image url="@../images/eyeOpen.png" />
+                                          </image>
+                                      </ImageView>
+                                  </graphic>
                                  <HBox.margin>
                                     <Insets left="20.0" top="10.0" />
                                  </HBox.margin></Label>
