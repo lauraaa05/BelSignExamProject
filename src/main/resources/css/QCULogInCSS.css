@@ -1,0 +1,67 @@
+.topVBox {
+    -fx-background-color: white;
+}
+
+.topLabel {
+    -fx-font-weight: bold;
+    -fx-text-fill: #004b88;
+    -fx-font-family: "Arial";
+    -fx-font-size: 48px;
+}
+
+#centerVBox {
+    -fx-background-color: #d3d3d3  ;
+    /*rgba(26, 26, 26, 0.46)*/
+}
+
+#logInLabel {
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+    -fx-font-family: "Arial";
+    -fx-font-size: 34px;
+
+}
+
+.labelUserInfo {
+
+    -fx-text-fill: black;
+    -fx-font-family: "Arial";
+    -fx-font-size: 18px;
+
+}
+
+#eyeLabel {
+    -fx-text-fill: black;
+    -fx-font-family: "Arial";
+    -fx-font-size: 24px;
+    /*-fx-border-color: black;*/
+    /*-fx-border-radius: 6px;*/
+}
+
+#logInButton {
+    -fx-text-fill: black;
+    -fx-font-family: "Arial";
+    -fx-font-size: 16px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+}
+
+#logInButton:hover {
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+}
+
+#logInButton:pressed {
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+}
+
+#errorLabel {
+    -fx-text-fill: red;
+    -fx-font-family: "Arial";
+    -fx-font-size: 16px;
+}
+
+
+
+

@@ -26,6 +26,7 @@ public class OperatorMainController implements Initializable {
         OrderManager om = new OrderManager();
         List<String> orders = om.getOrderNumbersAsList();
         toDoListView.getItems().addAll(orders);
+        toDoListView.setFixedCellSize(48);
     }
 
 }
