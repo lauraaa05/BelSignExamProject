@@ -5,7 +5,7 @@ import com.github.sarxos.webcam.WebcamResolution;
 
 import java.awt.image.BufferedImage;
 
-public class Camera {
+public class CameraManager {
 
     private Webcam webcam;
 
