@@ -1,0 +1,61 @@
+.topVBox {
+    -fx-background-color: white;
+}
+
+.leftVBox {
+    -fx-background-color:  #d3d3d3;
+}
+
+.topLabel {
+    -fx-font-weight: bold;
+    -fx-text-fill: #004b88;
+    -fx-font-family: "Arial";
+    -fx-font-size: 48px;
+}
+
+#signOutButton {
+    -fx-background-color: #cccccc;
+    -fx-background-radius: 20%;
+    -fx-text-fill: black;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 6, 0, 0, 3);
+}
+
+#signOutButton:hover {
+    -fx-background-color: #b3b3b3;
+}
+
+.centerHBox {
+    -fx-background-color: rgba(26,26,26,0.68);
+    -fx-border-radius: 10px;
+    -fx-padding: 20px;
+}
+
+.topLeftButtons {
+    -fx-background-color: #cccccc;
+    -fx-background-radius: 20%;
+    -fx-text-fill: black;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 6, 0, 0, 3);
+}
+
+.topLeftButtons:hover {
+    -fx-background-color: #b3b3b3;
+}
+
+#orderNumberLabel {
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-font-family: "Arial";
+    -fx-font-size: 18px;
+}
+
+#mainBorderPane {
+    -fx-background-color: rgba(26,26,26,0.68);
+}
+
+

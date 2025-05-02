@@ -33,7 +33,7 @@
       </HBox>
    </top>
    <center>
-      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="10.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="5.0" BorderPane.alignment="CENTER">
          <children>
             <Label text="Log In">
                <font>
@@ -45,8 +45,7 @@
                   <Font name="Arial" size="18.0" />
                </font>
             </Label>
-            <ImageView fx:id="imgQRPicture" fitHeight="211.0" fitWidth="245.0" pickOnBounds="true" preserveRatio="true" />
-            <Label fx:id="welcomeText" />
+            <ImageView fx:id="imgQRPicture" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </VBox>
    </center>
