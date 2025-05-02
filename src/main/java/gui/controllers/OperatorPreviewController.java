@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import bll.OrderManager;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,11 +26,32 @@ public class OperatorPreviewController {
     @FXML
     private TilePane imageTilePane;
 
-    // I'm gonna use this arrayList to save maximum 5 image next to each other in the OperatorPriview
+    // To save images (maximum 5) for the preview
     private final List<ImageView> imageViews = new ArrayList<>();
     private static final int MAX_IMAGES = 5;
 
-    // You need to call this when operator takes a photo
+    // Set the order number and load its images
+    public void setOrderNumber(String orderNumber) {
+        orderNumberLabel.setText("Order: " + orderNumber);
+
+        // Load existing images for this order (retrieve them from a database or file system)
+        loadOrderImages(orderNumber);
+    }
+
+    // Load the images associated with the given order number
+    private void loadOrderImages(String orderNumber) {
+        // Example: Here you would typically fetch the images from a database or a folder structure.
+        // For now, we'll simulate that by loading images from a folder specific to the order number.
+
+        OrderManager orderManager = new OrderManager();
+        List<File> orderImages = orderManager.getOrderImages(orderNumber);
+
+        for (File imageFile : orderImages) {
+            addImage(imageFile);  // Add each image to the view
+        }
+    }
+
+    // Add an image to the TilePane and track it
     public void addImage(File imageFile) {
         if (imageViews.size() >= MAX_IMAGES) {
             System.out.println("Maximum of 5 images reached");
@@ -39,7 +61,7 @@ public class OperatorPreviewController {
         Image image = new Image(imageFile.toURI().toString());
         ImageView imageView = new ImageView(image);
 
-        // To set size
+        // Set image size
         imageView.setFitWidth(270);
         imageView.setFitHeight(180);
         imageView.setPreserveRatio(true);
@@ -49,9 +71,7 @@ public class OperatorPreviewController {
         imageViews.add(imageView);
     }
 
-    //This is for testing purposes later change this with camera application which operator take photos of a product
-    //and saves them
-
+    // For testing purposes, this method simulates the camera app where the operator can select an image from their file system
     public void openAndAddImage(Stage stage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Image");
@@ -64,8 +84,7 @@ public class OperatorPreviewController {
         }
     }
 
-
-    //Change and connect this with opertor camera app later!
+    // Handle the camera button click event (opens file chooser to select an image)
     @FXML
     private void handleCameraButtonClick(ActionEvent actionEvent) {
         Stage stage = (Stage) imageTilePane.getScene().getWindow();
