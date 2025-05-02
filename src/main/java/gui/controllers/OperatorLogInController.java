@@ -3,6 +3,9 @@ package gui.controllers;
 import be.Operator;
 import bll.Camera;
 import bll.OperatorManager;
+import bll.QRCodeService;
+import com.google.zxing.qrcode.QRCodeReader;
+import dal.OperatorDAO;
 import io.github.palexdev.materialfx.utils.SwingFXUtils;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -29,7 +32,7 @@ public class OperatorLogInController {
     private Camera camera = new Camera();
     private boolean isPhotoTaken = false;
 
-    private final OperatorManager operatorManager = new OperatorManager(); // Declare it at the top
+    private final OperatorDAO operatorDAO = new OperatorDAO();
 
     @FXML
     public void initialize() {
@@ -53,13 +56,26 @@ public class OperatorLogInController {
 
     private void startWebcamStream() {
         Thread stream = new Thread(() -> {
+            QRCodeService qrCodeService = new QRCodeService();
+
             while(!isPhotoTaken) {
                 BufferedImage image = camera.takePicture();
                 if(image != null) {
                     Platform.runLater(() -> imgQRPicture.setImage(SwingFXUtils.toFXImage(image, null)));
+
+                    try {
+                        String content = qrCodeService.readQRCodeFromImage(image);
+
+                        if (content != null &&  !content.isEmpty()) {
+                            isPhotoTaken = true;
+                            Platform.runLater(() -> loginOperator(content));
+                        }
+                    }  catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 try {
-                    Thread.sleep(33);
+                    Thread.sleep(250);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -72,18 +88,20 @@ public class OperatorLogInController {
     private void loginOperator(String scannedCode) {
         try {
             int operatorId = Integer.parseInt(scannedCode);
+            Operator operator = operatorDAO.getOperatorById(operatorId);
 
-            Operator operator = operatorManager.getOperatorById(operatorId);
-
-            if (operator != null) {
+            if (operator != null && operator.getRole().equalsIgnoreCase("Operator")) {
                 welcomeText.setText("Welcome " + operator.getName() + "! Role: " + operator.getRole());
                 // TODO: Navigate to Dashboard Scene
             } else {
                 welcomeText.setText("Operator not found.");
+                isPhotoTaken = false;
             }
 
         } catch (NumberFormatException e) {
             welcomeText.setText("Invalid barcode format. Please try again.");
+            isPhotoTaken = false;
         }
+        System.out.println("Scanned QR content: " + scannedCode);
     }
 }

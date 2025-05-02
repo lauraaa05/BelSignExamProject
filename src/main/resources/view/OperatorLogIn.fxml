@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane id="logInScreen" styleClass="logInScreen" stylesheets="@../css/logInScreenCSS.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.OperatorLogInController">
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -47,6 +46,7 @@
                </font>
             </Label>
             <ImageView fx:id="imgQRPicture" fitHeight="211.0" fitWidth="245.0" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="welcomeText" />
          </children>
       </VBox>
    </center>
