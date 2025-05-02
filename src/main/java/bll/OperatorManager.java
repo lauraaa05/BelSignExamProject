@@ -19,7 +19,7 @@ public class OperatorManager{
             operatorMap.put(1003, new Operator());
         }
 
-        // Method to get an operator by barcode ID
+        // Method to get an operator by QR cdode ID
         public Operator getOperatorById(int id) {
             return operatorMap.get(id); // Returns null if not found
         }
