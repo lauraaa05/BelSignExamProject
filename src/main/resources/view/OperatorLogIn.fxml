@@ -46,6 +46,7 @@
                </font>
             </Label>
             <ImageView fx:id="imgQRPicture" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="welcomeText" />
          </children>
       </VBox>
    </center>
