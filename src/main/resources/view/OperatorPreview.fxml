@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane id="mainBorderPane" fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/OperatorPreviewCSS.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.OperatorPreviewController">
+<BorderPane id="mainBorderPane" fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/OperatorPreviewCSS.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.OperatorPreviewController">
     <top>
         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" styleClass="topVBox" BorderPane.alignment="CENTER">
             <children>
@@ -79,7 +79,7 @@
          <children>
             <HBox prefHeight="61.0" prefWidth="570.0">
                <children>
-                  <Label fx:id="orderNumberLabel" prefHeight="62.0" prefWidth="205.0" text="Order Number: ?????">
+                  <Label fx:id="orderNumberLabel" prefHeight="61.0" prefWidth="554.0" text="Order Number: ?????">
                      <HBox.margin>
                         <Insets left="30.0" />
                      </HBox.margin>
