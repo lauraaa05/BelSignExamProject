@@ -93,4 +93,11 @@ public class QRCodeService {
             return false;
         }
     }
+
+    public String readQRCodeFromImage(BufferedImage image) throws NotFoundException {
+        LuminanceSource source = new BufferedImageLuminanceSource(image);
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+        Result result = new MultiFormatReader().decode(bitmap);
+        return result.getText();
+    }
 }
