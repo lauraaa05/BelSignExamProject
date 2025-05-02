@@ -1,9 +1,13 @@
 package gui.controllers;
 
 import bll.OrderManager;
+import dk.easv.belsignexamproject.OperatorLogInApp;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,6 +16,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,7 +92,16 @@ public class OperatorPreviewController {
     // Handle the camera button click event (opens file chooser to select an image)
     @FXML
     private void handleCameraButtonClick(ActionEvent actionEvent) {
-        Stage stage = (Stage) imageTilePane.getScene().getWindow();
-        openAndAddImage(stage);
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/PictureView.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+
+            // Get the current stage from the ActionEvent
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
