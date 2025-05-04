@@ -1,6 +1,6 @@
 package gui.controllers;
 
-import bll.Camera;
+import bll.CameraManager;
 import io.github.palexdev.materialfx.utils.SwingFXUtils;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -18,7 +18,7 @@ public class PictureController {
     @FXML
     private Button btnCapture, btnRetake, btnSave, btnExit;
 
-    private Camera camera = new Camera();
+    private CameraManager camera = new CameraManager();
     private BufferedImage capturedImage;
     private boolean isPhotoTaken = false;
 

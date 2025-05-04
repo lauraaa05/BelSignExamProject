@@ -1,7 +1,7 @@
 package gui.controllers;
 
 import be.Operator;
-import bll.Camera;
+import bll.CameraManager;
 import bll.OperatorManager;
 import bll.QRCodeService;
 import com.google.zxing.qrcode.QRCodeReader;
@@ -29,7 +29,7 @@ public class OperatorLogInController {
     @FXML
     private TextField barcodeTextField;
 
-    private Camera camera = new Camera();
+    private CameraManager camera = new CameraManager();
     private boolean isPhotoTaken = false;
 
     private final OperatorDAO operatorDAO = new OperatorDAO();

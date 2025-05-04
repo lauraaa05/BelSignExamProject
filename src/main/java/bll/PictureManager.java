@@ -13,9 +13,9 @@ import java.time.format.DateTimeFormatter;
 public class PictureManager {
 
     private final PictureDAO pictureDAO;
-    private final Camera camera;
+    private CameraManager camera = new CameraManager();
 
-    public PictureManager(PictureDAO pictureDAO, Camera camera) {
+    public PictureManager(PictureDAO pictureDAO, CameraManager camera) {
         this.pictureDAO = pictureDAO;
         this.camera = camera;
     }

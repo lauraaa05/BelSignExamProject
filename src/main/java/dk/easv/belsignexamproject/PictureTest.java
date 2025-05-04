@@ -16,11 +16,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import bll.Camera; // your Camera class from bll
+import bll.CameraManager; // your Camera class from bll
 
 public class PictureTest extends Application {
 
-    private Camera camera; // Renamed from cameraService
+    private CameraManager camera = new CameraManager(); // Renamed from cameraService
     private ImageView imageView;
 
     @Override
@@ -31,61 +31,5 @@ public class PictureTest extends Application {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Picture Taking");
         primaryStage.show();
-
-
-//        camera = new Camera();
-//        camera.initializeCamera(); // Open webcam through Camera
-//
-//        imageView = new ImageView();
-//        Button captureButton = new Button("Capture Photo");
-//
-//        captureButton.setOnAction(e -> captureImage());
-//
-//        VBox root = new VBox(10, imageView, captureButton);
-//        Scene scene = new Scene(root, 640, 520);
-//
-//        primaryStage.setScene(scene);
-//        primaryStage.setTitle("Picture Test");
-//        primaryStage.show();
-//
-//        Thread webcamStream = new Thread(() -> {
-//            while (true) {
-//                BufferedImage grabbedImage = camera.takePicture();
-//                if (grabbedImage != null) {
-//                    javafx.scene.image.Image fxImage = SwingFXUtils.toFXImage(grabbedImage, null);
-//                    javafx.application.Platform.runLater(() -> imageView.setImage(fxImage));
-//                }
-//                try {
-//                    Thread.sleep(33);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//        webcamStream.setDaemon(true);
-//        webcamStream.start();
-//    }
-//
-//    private void captureImage() {
-//        BufferedImage image = camera.takePicture();
-//        try {
-//            ImageIO.write(image, "PNG", new File("snapshot.png"));
-//            System.out.println("Picture taken!");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    @Override
-//    public void stop() throws Exception {
-//        if (camera != null) {
-//            camera.closeCamera();
-//        }
-//        super.stop();
-//    }
-//
-//    public static void main(String[] args) {
-//        launch(args);
-//    }
     }
 }
