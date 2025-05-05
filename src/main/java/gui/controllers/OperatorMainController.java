@@ -2,10 +2,14 @@ package gui.controllers;
 
 import be.Operator;
 import bll.OrderManager;
+import dal.OrderStatusDAO;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
@@ -14,12 +18,16 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class OperatorMainController implements Initializable {
 
     @FXML
     private ListView<String> toDoListView;
+
+    @FXML
+    private ListView<String> doneListView;
 
     @FXML
     private Label loggedUsernameLbl;
@@ -72,6 +80,36 @@ public class OperatorMainController implements Initializable {
 
     public void setLoggedInOperator(Operator operator) {
         loggedUsernameLbl.setText(operator.getName());
+    }
+
+    private final String currentUserRole = "Operator";
+
+    private final OrderStatusDAO  orderStatusDAO = new OrderStatusDAO();
+
+    @FXML
+    private void onMarkAsDone() {
+        String selectedOrder = toDoListView.getSelectionModel().getSelectedItem();
+
+        if (selectedOrder != null) {
+            Alert alert  = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation");
+            alert.setHeaderText("Mark order as done?");
+            alert.setContentText("Do you want to mark this " + selectedOrder + "as done?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                orderStatusDAO.updateOrderStatus(selectedOrder, currentUserRole, "done");
+                refreshLists();
+            }
+        }
+    }
+
+    private void refreshLists() {
+        List<String> toDo = orderStatusDAO.getOrdersByRoleAndStatus(currentUserRole, "todo");
+        List<String> done = orderStatusDAO.getOrdersByRoleAndStatus(currentUserRole, "done");
+
+        toDoListView.getItems().setAll(toDo);
+        doneListView.getItems().setAll(done);
     }
 }
 
