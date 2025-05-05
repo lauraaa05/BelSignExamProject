@@ -87,14 +87,15 @@ public class OperatorLogInController {
             if (operator != null && operator.getRole().equalsIgnoreCase("Operator")) {
                 welcomeText.setText("Welcome " + operator.getName() + "! Role: " + operator.getRole());
 
-                // ✅ Switch to OperatorPreview scene
-                FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorPreview.fxml"));
+                // Switch to OperatorMain scene
+                FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorMain.fxml"));
                 Scene scene = new Scene(fxmlLoader.load());
 
                 Stage currentStage = (Stage) welcomeText.getScene().getWindow();
-                currentStage.setTitle("Operator Preview");
+                currentStage.setTitle("Operator Main");
                 currentStage.setScene(scene);
                 currentStage.show();
+                camera.closeCamera();
 
             } else {
                 welcomeText.setText("Operator not found.");
