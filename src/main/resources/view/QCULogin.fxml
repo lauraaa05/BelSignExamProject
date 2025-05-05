@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -42,40 +41,40 @@
                <children>
                   <Label fx:id="logInLabel" text="Log in">
                      <HBox.margin>
-                        <Insets left="392.0" />
+                        <Insets left="380.0" />
                      </HBox.margin></Label>
                </children>
                <VBox.margin>
                   <Insets top="80.0" />
                </VBox.margin>
             </HBox>
-            <HBox prefHeight="36.0" prefWidth="900.0">
+            <HBox prefHeight="27.0" prefWidth="900.0">
                <children>
                   <Label fx:id="errorLabel" text="Incorrect Password Text">
                      <HBox.margin>
-                        <Insets left="345.0" />
+                        <Insets left="330.0" />
                      </HBox.margin>
                   </Label>
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <VBox prefHeight="100.0" prefWidth="918.0">
+                  <VBox prefHeight="74.0" prefWidth="900.0">
                      <children>
                         <Label styleClass="labelUserInfo" text="User">
                            <VBox.margin>
                               <Insets left="320.0" />
                            </VBox.margin></Label>
-                         <MFXTextField fx:id="usernameField" prefHeight="50.0" prefWidth="240.0">
+                         <TextField fx:id="usernameField" prefHeight="20.0" prefWidth="240.0">
                              <VBox.margin>
-                                 <Insets left="320.0" />
+                                 <Insets left="320.0" right="345.0" top="8.0" />
                              </VBox.margin>
-                         </MFXTextField>
+                         </TextField>
                      </children>
                   </VBox>
                </children>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox prefHeight="100.0" prefWidth="900.0">
                <children>
                   <VBox prefHeight="100.0" prefWidth="918.0">
                      <children>
@@ -88,17 +87,17 @@
                                <StackPane>
                                    <PasswordField fx:id="passwordFieldMasked" prefWidth="240" promptText="Password">
                                     <StackPane.margin>
-                                       <Insets left="320.0" />
+                                       <Insets bottom="40.0" left="320.0" />
                                     </StackPane.margin></PasswordField>
                                    <TextField fx:id="passwordFieldVisible" prefWidth="240" promptText="Password">
                                     <StackPane.margin>
-                                       <Insets left="320.0" />
+                                       <Insets bottom="40.0" left="320.0" />
                                     </StackPane.margin></TextField>
                                </StackPane>
 
-                               <Label fx:id="eyeLabel" translateX="4" translateY="8">
+                               <Label fx:id="eyeLabel" prefHeight="40.0" prefWidth="40.0" translateX="4" translateY="8">
                                    <HBox.margin>
-                                       <Insets left="16.0" top="16.0" />
+                                       <Insets left="16.0" top="-8.0" />
                                    </HBox.margin>
                                </Label>
                            </children>

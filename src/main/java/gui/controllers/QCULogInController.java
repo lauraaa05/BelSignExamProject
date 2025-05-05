@@ -18,7 +18,8 @@ public class QCULogInController {
 
 
     @FXML
-    private MFXTextField usernameField;
+    private TextField usernameField;
+
 
     @FXML
     private PasswordField passwordFieldMasked;
