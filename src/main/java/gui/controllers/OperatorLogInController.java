@@ -9,13 +9,18 @@ import dal.OperatorDAO;
 import io.github.palexdev.materialfx.utils.SwingFXUtils;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 
 public class OperatorLogInController {
@@ -91,16 +96,25 @@ public class OperatorLogInController {
             Operator operator = operatorDAO.getOperatorById(operatorId);
 
             if (operator != null && operator.getRole().equalsIgnoreCase("Operator")) {
-                welcomeText.setText("Welcome " + operator.getName() + "! Role: " + operator.getRole());
-                // TODO: Navigate to Dashboard Scene
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/OperatorMain.fxml"));
+                Parent mainView = loader.load();
+
+                Stage stage = (Stage) welcomeText.getScene().getWindow();
+
+                OperatorMainController operatorMainController = loader.getController();
+                operatorMainController.setLoggedInOperator(operator);
+
+                stage.setScene(new Scene(mainView));
+                stage.show();
             } else {
                 welcomeText.setText("Operator not found.");
                 isPhotoTaken = false;
             }
 
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | IOException e) {
             welcomeText.setText("Invalid barcode format. Please try again.");
             isPhotoTaken = false;
+            e.printStackTrace();
         }
         System.out.println("Scanned QR content: " + scannedCode);
     }

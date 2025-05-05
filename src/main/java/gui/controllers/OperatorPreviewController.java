@@ -104,4 +104,9 @@ public class OperatorPreviewController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void markAsDone(ActionEvent actionEvent) {
+
+    }
 }

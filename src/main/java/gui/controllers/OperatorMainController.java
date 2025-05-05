@@ -1,10 +1,12 @@
 package gui.controllers;
 
+import be.Operator;
 import bll.OrderManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -18,6 +20,9 @@ public class OperatorMainController implements Initializable {
 
     @FXML
     private ListView<String> toDoListView;
+
+    @FXML
+    private Label loggedUsernameLbl;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -63,6 +68,10 @@ public class OperatorMainController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setLoggedInOperator(Operator operator) {
+        loggedUsernameLbl.setText(operator.getName());
     }
 }
 
