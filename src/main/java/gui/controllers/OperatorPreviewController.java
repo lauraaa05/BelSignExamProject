@@ -6,8 +6,8 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -26,37 +26,31 @@ public class OperatorPreviewController {
     private MFXButton cameraButton;
 
     @FXML
+    private Button signOutButton; // Asegúrate de que esté en tu FXML
+
+    @FXML
     private Label orderNumberLabel;
 
     @FXML
     private TilePane imageTilePane;
 
-    // To save images (maximum 5) for the preview
     private final List<ImageView> imageViews = new ArrayList<>();
     private static final int MAX_IMAGES = 5;
 
-    // Set the order number and load its images
     public void setOrderNumber(String orderNumber) {
         orderNumberLabel.setText("Order: " + orderNumber);
-
-        // Load existing images for this order (retrieve them from a database or file system)
         loadOrderImages(orderNumber);
     }
 
-    // Load the images associated with the given order number
     private void loadOrderImages(String orderNumber) {
-        // Example: Here you would typically fetch the images from a database or a folder structure.
-        // For now, we'll simulate that by loading images from a folder specific to the order number.
-
         OrderManager orderManager = new OrderManager();
         List<File> orderImages = orderManager.getOrderImages(orderNumber);
 
         for (File imageFile : orderImages) {
-            addImage(imageFile);  // Add each image to the view
+            addImage(imageFile);
         }
     }
 
-    // Add an image to the TilePane and track it
     public void addImage(File imageFile) {
         if (imageViews.size() >= MAX_IMAGES) {
             System.out.println("Maximum of 5 images reached");
@@ -65,8 +59,6 @@ public class OperatorPreviewController {
 
         Image image = new Image(imageFile.toURI().toString());
         ImageView imageView = new ImageView(image);
-
-        // Set image size
         imageView.setFitWidth(270);
         imageView.setFitHeight(180);
         imageView.setPreserveRatio(true);
@@ -76,7 +68,6 @@ public class OperatorPreviewController {
         imageViews.add(imageView);
     }
 
-    // For testing purposes, this method simulates the camera app where the operator can select an image from their file system
     public void openAndAddImage(Stage stage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Image");
@@ -89,19 +80,29 @@ public class OperatorPreviewController {
         }
     }
 
-    // Handle the camera button click event (opens file chooser to select an image)
-    @FXML
-    private void handleCameraButtonClick(ActionEvent actionEvent) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/PictureView.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
+    // Método reutilizable para cambiar a la escena de login
+    private void switchToLoginScene(Stage currentStage) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorLogIn.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        currentStage.setTitle("Operator Login");
+        currentStage.setScene(scene);
+        currentStage.show();
+    }
 
-            // Get the current stage from the ActionEvent
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
+    // Method "Sign Out"//
+    @FXML
+    private void handleSignOutButtonClick(ActionEvent event) {
+        Stage currentStage = (Stage) signOutButton.getScene().getWindow();
+        try {
+            switchToLoginScene(currentStage);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void handleCameraButtonClick(ActionEvent actionEvent) {
+        Stage stage = (Stage) imageTilePane.getScene().getWindow();
+        openAndAddImage(stage);
     }
 }

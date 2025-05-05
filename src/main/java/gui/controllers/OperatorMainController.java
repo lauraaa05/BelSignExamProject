@@ -17,7 +17,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static gui.controllers.OperatorLogInController.switchToLoginScene;
+
 
 public class OperatorMainController implements Initializable {
 
