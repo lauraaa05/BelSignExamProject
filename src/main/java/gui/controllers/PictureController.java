@@ -3,9 +3,13 @@ package gui.controllers;
 import bll.CameraManager;
 import io.github.palexdev.materialfx.utils.SwingFXUtils;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -29,7 +33,13 @@ public class PictureController {
         btnCapture.setOnAction(e -> captureImage());
         btnRetake.setOnAction(e -> retakeImage());
         btnSave.setOnAction(e -> saveImage());
-        btnExit.setOnAction(e -> exit());
+        btnExit.setOnAction(e -> {
+            try {
+                exit();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
     private void startWebcamStream() {
@@ -74,8 +84,19 @@ public class PictureController {
         }
     }
 
-    private void exit() {
+    private void switchToPreviewScene(Stage currentStage) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/OperatorPreview.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+
+        currentStage.setTitle("Operator Preview");
+        currentStage.setScene(scene);
+        currentStage.show();
+        System.out.println("Switching to OperatorPreview scene");
+    }
+
+    private void exit() throws IOException {
+        Stage currentStage = (Stage) btnExit.getScene().getWindow();
         camera.closeCamera();
-        Platform.exit();
+        switchToPreviewScene(currentStage);
     }
 }

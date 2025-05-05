@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/pictureScreen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.PictureController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/pictureScreen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.PictureController">
    <center>
       <ImageView id="imgVPicture" fx:id="imgVPicture" fitHeight="600.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
    </center>
@@ -39,7 +39,7 @@
                </HBox.margin>
             </ImageView>
             <Region prefHeight="100.0" prefWidth="120.0" HBox.hgrow="ALWAYS" />
-            <Label styleClass="topLabel" text="Belsign">
+            <Label styleClass="topLabel" text="BelSign">
                <HBox.margin>
                   <Insets top="15.0" />
                </HBox.margin>
