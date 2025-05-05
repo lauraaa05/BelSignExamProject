@@ -26,7 +26,7 @@ public class OperatorPreviewController {
     private MFXButton cameraButton;
 
     @FXML
-    private Button signOutButton; // Asegúrate de que esté en tu FXML
+    private Button signOutButton, btnExit; // Asegúrate de que esté en tu FXML
 
     @FXML
     private Label orderNumberLabel;
@@ -36,6 +36,16 @@ public class OperatorPreviewController {
 
     private final List<ImageView> imageViews = new ArrayList<>();
     private static final int MAX_IMAGES = 5;
+
+    public void initialize() {
+        btnExit.setOnAction(e -> {
+            try {
+                exit();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+    }
 
     public void setOrderNumber(String orderNumber) {
         orderNumberLabel.setText("Order: " + orderNumber);
@@ -104,5 +114,20 @@ public class OperatorPreviewController {
     private void handleCameraButtonClick(ActionEvent actionEvent) {
         Stage stage = (Stage) imageTilePane.getScene().getWindow();
         openAndAddImage(stage);
+    }
+
+    private void switchToMainScene(Stage currentStage) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/OperatorMain.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+
+        currentStage.setTitle("Operator Main");
+        currentStage.setScene(scene);
+        currentStage.show();
+        System.out.println("Switching to OperatorMain scene");
+    }
+
+    private void exit() throws IOException {
+        Stage currentStage = (Stage) btnExit.getScene().getWindow();
+        switchToMainScene(currentStage);
     }
 }

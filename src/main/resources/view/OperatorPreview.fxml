@@ -45,17 +45,7 @@
                               <Insets left="20.0" top="30.0" />
                            </VBox.margin>
                         </MFXButton>
-                        <MFXButton prefHeight="45.0" prefWidth="56.0" styleClass="topLeftButtons" text="💾">
-                           <VBox.margin>
-                              <Insets left="20.0" top="20.0" />
-                           </VBox.margin>
-                        </MFXButton>
-                        <MFXButton prefHeight="45.0" prefWidth="56.0" styleClass="topLeftButtons" text="🗑">
-                           <VBox.margin>
-                              <Insets left="20.0" top="20.0" />
-                           </VBox.margin>
-                        </MFXButton>
-                        <MFXButton prefHeight="45.0" prefWidth="56.0" styleClass="topLeftButtons" text="🔄">
+                        <MFXButton fx:id="btnExit" prefHeight="45.0" prefWidth="56.0" styleClass="topLeftButtons" text="🔙">
                            <VBox.margin>
                               <Insets left="20.0" top="20.0" />
                            </VBox.margin>
@@ -63,8 +53,7 @@
                      </children>
                   </VBox>
                </children></Pane>
-                <Button id="signOutButton" fx:id="signOutButton" onAction="#handleSignOutButtonClick"
-                        alignment="CENTER" mnemonicParsing="false" prefHeight="45.0" prefWidth="56.0" text="🚪">
+                <Button id="signOutButton" fx:id="signOutButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleSignOutButtonClick" prefHeight="45.0" prefWidth="56.0" text="🚪">
                     <VBox.margin>
                         <Insets left="20.0" />
                     </VBox.margin>
@@ -95,4 +84,15 @@
          </children>
       </VBox>
    </center>
+   <right>
+      <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button id="signOutButton" mnemonicParsing="false" text="✔" textFill="#2a8820">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+   </right>
 </BorderPane>
