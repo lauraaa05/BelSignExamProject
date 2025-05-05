@@ -4,11 +4,14 @@
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane id="mainBorderPane" fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/QCULogInCSS.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCULogInController">
@@ -50,7 +53,7 @@
                <children>
                   <Label fx:id="errorLabel" text="Incorrect Password Text">
                      <HBox.margin>
-                        <Insets left="355.0" />
+                        <Insets left="345.0" />
                      </HBox.margin>
                   </Label>
                </children>
@@ -63,10 +66,11 @@
                            <VBox.margin>
                               <Insets left="320.0" />
                            </VBox.margin></Label>
-                        <MFXTextField prefHeight="50.0" prefWidth="240.0">
-                           <VBox.margin>
-                              <Insets left="320.0" />
-                           </VBox.margin></MFXTextField>
+                         <MFXTextField fx:id="usernameField" prefHeight="50.0" prefWidth="240.0">
+                             <VBox.margin>
+                                 <Insets left="320.0" />
+                             </VBox.margin>
+                         </MFXTextField>
                      </children>
                   </VBox>
                </children>
@@ -81,22 +85,26 @@
                            </VBox.margin></Label>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <MFXTextField prefWidth="240.0">
-                                 <HBox.margin>
-                                    <Insets left="320.0" />
-                                 </HBox.margin></MFXTextField>
-                              <Label fx:id="eyeLabel" translateX="4" translateY="8">
-                                  <graphic>
-                                      <ImageView fitHeight="24" fitWidth="24">
-                                          <image>
-                                              <Image url="@../images/eyeOpen.png" />
-                                          </image>
-                                      </ImageView>
-                                  </graphic>
-                                 <HBox.margin>
-                                    <Insets left="20.0" top="10.0" />
-                                 </HBox.margin></Label>
+                               <StackPane>
+                                   <PasswordField fx:id="passwordFieldMasked" prefWidth="240" promptText="Password">
+                                    <StackPane.margin>
+                                       <Insets left="320.0" />
+                                    </StackPane.margin></PasswordField>
+                                   <TextField fx:id="passwordFieldVisible" prefWidth="240" promptText="Password">
+                                    <StackPane.margin>
+                                       <Insets left="320.0" />
+                                    </StackPane.margin></TextField>
+                               </StackPane>
+
+                               <Label fx:id="eyeLabel" translateX="4" translateY="8">
+                                   <HBox.margin>
+                                       <Insets left="16.0" top="16.0" />
+                                   </HBox.margin>
+                               </Label>
                            </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
                         </HBox>
                      </children>
                   </VBox>
