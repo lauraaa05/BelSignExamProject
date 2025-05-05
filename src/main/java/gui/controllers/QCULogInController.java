@@ -1,24 +1,28 @@
 package gui.controllers;
 
 import bll.LoginManager;
-import dal.LoginDAO;
+import dk.easv.belsignexamproject.OperatorLogInApp;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 
 import javafx.scene.image.Image;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 
 public class QCULogInController {
 
 
     @FXML
-    private MFXTextField usernameField;
+    private TextField usernameField;
+
 
     @FXML
     private PasswordField passwordFieldMasked;
@@ -54,11 +58,17 @@ public class QCULogInController {
         // Set initial eye icon
         setEyeIcon("eyeOpened.png");
 
-        logInButton.setOnAction(e -> handleLogin());
+        logInButton.setOnAction(e -> {
+            try {
+                handleLogin();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         eyeLabel.setOnMouseClicked(e -> togglePasswordVisibility());
     }
 
-    private void handleLogin() {
+    private void handleLogin() throws IOException {
         String username = usernameField.getText().trim();
         String password = passwordVisible
                 ? passwordFieldVisible.getText().trim()
@@ -68,7 +78,9 @@ public class QCULogInController {
 
         if (isValid) {
             errorLabel.setVisible(false);
-            System.out.println("Login Successful"); // TODO: Load QCU main scene here
+            //Opens the QCUMain
+            Stage currentStage = (Stage) logInButton.getScene().getWindow();
+            switchToMainSceneSameWindow(currentStage);
         } else {
             errorLabel.setText("Incorrect username or password");
             errorLabel.setStyle("-fx-text-fill: red;");
@@ -102,5 +114,14 @@ public class QCULogInController {
         } else {
             System.out.println("Image not found: " + imageName);
         }
+    }
+
+    private void switchToMainSceneSameWindow(Stage currentStage) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/QCUMain.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+
+        currentStage.setTitle("QCU Main");
+        currentStage.setScene(scene);
+        currentStage.show();  // Not strictly necessary (stage is already showing), but safe to call
     }
 }
