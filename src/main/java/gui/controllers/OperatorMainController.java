@@ -1,10 +1,13 @@
 package gui.controllers;
 
 import bll.OrderManager;
+import dk.easv.belsignexamproject.OperatorLogInApp;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -14,10 +17,18 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static gui.controllers.OperatorLogInController.switchToLoginScene;
+
 public class OperatorMainController implements Initializable {
 
     @FXML
+    private Button signOutButton;
+
+    @FXML
     private ListView<String> toDoListView;
+
+    public OperatorMainController() throws IOException {
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -63,6 +74,22 @@ public class OperatorMainController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    private void switchToMainSceneSameWindow(Stage currentStage) throws IOException {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorLogin.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+
+        currentStage.setTitle("OperatorLogin");
+        currentStage.setScene(scene);
+        currentStage.show();
+
+    }
+
+    @FXML
+    public void handleSignOutButtonClick(ActionEvent actionEvent) throws IOException {
+        Stage currentStage = (Stage) signOutButton.getScene().getWindow();
+        switchToMainSceneSameWindow(currentStage);
     }
 }
 
