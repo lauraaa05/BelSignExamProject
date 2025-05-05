@@ -34,7 +34,8 @@
                <children>
                   <Label fx:id="loggedUsernameLbl" layoutX="23.0" layoutY="22.0" styleClass="leftUserLabel" text="Martin" />
                </children></Pane>
-            <Button id="signOutButton" fx:id="signOutButton" alignment="CENTER" mnemonicParsing="false" prefHeight="45.0" prefWidth="56.0" text="🚪">
+            <Button id="signOutButton" fx:id="signOutButton" onAction="#handleSignOutButtonClick"
+                    alignment="CENTER" mnemonicParsing="false" prefHeight="45.0" prefWidth="56.0" text="🚪">
                <VBox.margin>
                   <Insets left="20.0" />
                </VBox.margin>
