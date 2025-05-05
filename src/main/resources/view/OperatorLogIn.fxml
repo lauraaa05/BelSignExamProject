@@ -23,12 +23,12 @@
                </HBox.margin>
             </ImageView>
             <Region prefHeight="125.0" prefWidth="100.0" HBox.hgrow="ALWAYS" />
-            <Label styleClass="topLabel" text="Belsign">
+            <Label styleClass="topLabel" text="BelSign">
                <HBox.margin>
                   <Insets top="25.0" />
                </HBox.margin>
             </Label>
-            <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+            <Region prefHeight="125.0" prefWidth="189.0" HBox.hgrow="ALWAYS" />
          </children>
       </HBox>
    </top>

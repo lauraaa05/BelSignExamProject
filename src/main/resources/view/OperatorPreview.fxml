@@ -25,7 +25,7 @@
                     </HBox.margin>
                 </ImageView>
                 <Pane prefHeight="100.0" prefWidth="134.0" HBox.hgrow="ALWAYS" />
-                <Label styleClass="topLabel" text="Belsign" />
+                <Label styleClass="topLabel" text="BelSign" />
                 <Pane prefHeight="100.0" prefWidth="167.0" HBox.hgrow="ALWAYS" />
             </children>
             <padding>
