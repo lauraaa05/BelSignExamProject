@@ -1,7 +1,6 @@
 package gui.controllers;
 
 import be.Picture;
-import bll.OrderManager;
 import dal.OrderStatusDAO;
 import dal.PictureDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
@@ -15,14 +14,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.TilePane;
-import javafx.stage.FileChooser;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public class OperatorPreviewController {
     private Label orderNumberLabel;
 
     @FXML
-    private TilePane imageTilePane;
+    private FlowPane imageFlowPane;
 
     @FXML
     private Button doneButton;
@@ -67,7 +66,7 @@ public class OperatorPreviewController {
     }
 
     private void loadOrderImages(String orderNumber) {
-        imageTilePane.getChildren().clear();
+        imageFlowPane.getChildren().clear();
         imageViews.clear();
 
         PictureDAO pictureDAO = new PictureDAO();
@@ -90,6 +89,7 @@ public class OperatorPreviewController {
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
 
+        imageView.setEffect(new DropShadow(10, Color.rgb(0,0,0,0.5)));
         imageView.setOnMouseClicked(event -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ImageViewer.fxml"));
@@ -106,7 +106,7 @@ public class OperatorPreviewController {
                 e.printStackTrace();
             }
         });
-        imageTilePane.getChildren().add(imageView);
+        imageFlowPane.getChildren().add(imageView);
     }
 
     // Método reutilizable para cambiar a la escena de login
