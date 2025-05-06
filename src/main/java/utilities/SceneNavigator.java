@@ -13,7 +13,7 @@ import java.io.IOException;
     public class SceneNavigator {
         public static void switchTo(ActionEvent event, String fxmlFile) {
             try {
-                Parent root = FXMLLoader.load(SceneNavigator.class.getResource("/view/OperatorLogInController.java" + fxmlFile));
+                Parent root = FXMLLoader.load(SceneNavigator.class.getResource("/view/" + fxmlFile));
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.setScene(new Scene(root));
                 stage.show();
