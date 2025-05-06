@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.ScrollPane?>
+<BorderPane id="mainBorderPane" fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/QCUFolderScreenCSS.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCUFolderController">
+   <top>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" styleClass="topVBox" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="98.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/belmanlogo.png" />
+               </image>
+               <HBox.margin>
+                  <Insets left="18.0" />
+               </HBox.margin>
+            </ImageView>
+            <Pane prefHeight="100.0" prefWidth="134.0" HBox.hgrow="ALWAYS" />
+            <Label styleClass="topLabel" text="BelSign" />
+            <Pane prefHeight="100.0" prefWidth="167.0" HBox.hgrow="ALWAYS" />
+         </children>
+         <padding>
+            <Insets left="5.0" />
+         </padding>
+      </HBox>
+   </top>
+   <left>
+      <VBox prefHeight="400.0" prefWidth="140.0" styleClass="leftVBox" BorderPane.alignment="CENTER">
+         <children>
+            <Pane prefHeight="251.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox prefHeight="334.0" prefWidth="121.0">
+                     <children>
+                        <MFXButton id="buttonClass" fx:id="homeButton" prefHeight="45.0" prefWidth="56.0" styleClass="buttonClass" text="🏠">
+                           <VBox.margin>
+                              <Insets left="20.0" top="30.0" />
+                           </VBox.margin>
+                        </MFXButton>
+                        <MFXButton id="buttonClass" fx:id="folderButton" prefHeight="45.0" prefWidth="56.0" styleClass="buttonClass" text="📁">
+                           <VBox.margin>
+                              <Insets left="20.0" top="20.0" />
+                           </VBox.margin>
+                        </MFXButton>
+                     </children>
+                  </VBox>
+               </children>
+            </Pane>
+            <Button id="buttonClass" fx:id="signOutButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleSignOutButtonClick" prefHeight="45.0" prefWidth="56.0" styleClass="buttonClass" text="🚪">
+               <VBox.margin>
+                  <Insets left="20.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+         <padding>
+            <Insets bottom="15.0" left="20.0" />
+         </padding>
+      </VBox>
+   </left>
+   <center>
+      <VBox fx:id="centerVBox" prefHeight="400.0" prefWidth="499.0" spacing="20.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <children>
+            <VBox alignment="CENTER">
+               <children>
+                  <ScrollPane fx:id="scrollPane" fitToWidth="true" pannable="true">
+                     <FlowPane fx:id="folderFlowPane" style="-fx-padding: 30 30 30 50; -fx-background-color: #f4f4f4;" hgap="30.0" prefHeight="600.0" prefWidth="1000.0" prefWrapLength="600.0" vgap="30.0" />
+                  </ScrollPane>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>
