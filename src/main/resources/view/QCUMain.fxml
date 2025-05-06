@@ -52,7 +52,7 @@
                   <Insets left="20.0" />
                </VBox.margin>
             </Button>
-            <Region prefHeight="332.0" prefWidth="120.0" />
+            <Region  prefHeight="332.0" prefWidth="120.0" />
             <Button id="buttonClass" fx:id="signOutButton" alignment="CENTER" mnemonicParsing="false" prefHeight="45.0" prefWidth="56.0" styleClass="signOutButton" text="🚪">
                <VBox.margin>
                   <Insets left="20.0" />
