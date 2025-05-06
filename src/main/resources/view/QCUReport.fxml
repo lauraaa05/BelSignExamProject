@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+
+<BorderPane prefHeight="620.0" prefWidth="900.0" stylesheets="@../css/QCUReport.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+    <!-- Top Section (Header) -->
+    <top>
+        <HBox fx:id="header" prefHeight="80.0" prefWidth="900.0">
+            <!-- Belman Logo -->
+            <ImageView fx:id="logo" fitHeight="81.0" fitWidth="123.0" preserveRatio="true">
+                <image>
+                    <Image url="@../images/belmanlogo.png" />
+                </image>
+            <HBox.margin>
+               <Insets left="-12.0" />
+            </HBox.margin>
+            </ImageView>
+            <!-- Help Icon -->
+            <StackPane fx:id="helpIcon" prefHeight="78.0" prefWidth="459.0" style="-fx-background-color: #007ACC; -fx-background-radius: 15;">
+                <Label style="-fx-text-fill: white; -fx-font-weight: bold;" text="?" />
+               <!-- Title -->
+               <Label fx:id="title" alignment="CENTER" prefHeight="22.0" prefWidth="152.0" text="QCU Report" />
+            <HBox.margin>
+               <Insets bottom="2.0" left="155.0" top="2.0" />
+            </HBox.margin>
+            </StackPane>
+        </HBox>
+    </top>
+
+    <!-- Center Section (Main Content) -->
+    <center>
+        <VBox fx:id="mainContent" alignment="CENTER" prefHeight="337.0" prefWidth="900.0" spacing="10">
+            <!-- Order Number -->
+            <Label fx:id="orderNumberLabel" text="ORDER NUMBER: 34/24-0019" />
+
+            <!-- Photo Upload Section -->
+            <VBox fx:id="photoSection" alignment="CENTER" spacing="10">
+                <Label fx:id="photoLabel" text="UPLOAD PHOTOS (UP TO 5)" />
+                <GridPane fx:id="photoGrid" alignment="CENTER" hgap="10" vgap="10">
+                    <Rectangle fx:id="photo2" height="120" width="120" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+               <columnConstraints>
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+                  <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints />
+               </rowConstraints>
+                </GridPane>
+            </VBox>
+        </VBox>
+    </center>
+
+    <!-- Bottom Section (Comments) -->
+    <bottom>
+        <VBox fx:id="commentSection" alignment="CENTER" prefHeight="181.0" prefWidth="900.0" spacing="10">
+            <Label fx:id="commentLabel" text="COMMENTS:" />
+            <TextArea fx:id="commentsTextArea" prefHeight="100" promptText="Enter your comments here..." wrapText="true" BorderPane.alignment="CENTER" />
+            <Button fx:id="submitButton" alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="158.0" text="SUBMIT REPORT">
+            <VBox.margin>
+               <Insets bottom="6.0" />
+            </VBox.margin></Button>
+        </VBox>
+    </bottom>
+</BorderPane>
