@@ -70,7 +70,7 @@ public class QCULogInController {
 
         if (username.isEmpty() || password.isEmpty()) {
             errorLabel.setText("Please enter username and password");
-            errorLabel.setStyle("-fx-text-fill: orange;");
+            errorLabel.setStyle("-fx-text-fill: red;");
             errorLabel.setVisible(true);
             return;
         }
