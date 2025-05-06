@@ -115,8 +115,14 @@ public class PictureController {
 
     private void exit() throws IOException {
         try {
+            camera.closeCamera();
+
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/OperatorPreview.fxml"));
             Parent root = fxmlLoader.load();
+
+            OperatorPreviewController controller = fxmlLoader.getController();
+            controller.setOrderNumber(orderNumber);
+
             Stage stage = (Stage) btnExit.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (IOException e) {
