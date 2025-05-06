@@ -36,20 +36,23 @@
    <left>
       <VBox prefHeight="400.0" prefWidth="140.0" styleClass="leftVBox" BorderPane.alignment="CENTER">
          <children>
-            <Pane prefHeight="251.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
-               <children>
-                  <Label fx:id="loggedUsernameLbl" layoutX="23.0" layoutY="22.0" styleClass="leftUserLabel" text="Martin" />
-               </children></Pane>
-            <Button id="signOutButton" fx:id="signOutButton" onAction="#handleSignOutButtonClick"
-                    alignment="CENTER" mnemonicParsing="false" prefHeight="45.0" prefWidth="56.0" text="🚪">
+            <VBox alignment="TOP_CENTER" spacing="5" VBox.vgrow="ALWAYS">
+               <padding>
+                  <Insets top="20.0"/>
+               </padding>
+               <Label text="Welcome" styleClass="leftUserLabel"/>
+               <Label fx:id="loggedUsernameLbl" styleClass="leftUserLabel"/>
+            </VBox>
+            <HBox alignment="CENTER">
                <VBox.margin>
-                  <Insets left="20.0" />
+                  <Insets bottom="20.0"/>
                </VBox.margin>
-            </Button>
+               <Button fx:id="signOutButton"
+                       prefHeight="45.0"
+                       prefWidth="56.0"
+                       text="🚪"/>
+            </HBox>
          </children>
-         <padding>
-            <Insets bottom="15.0" left="20.0" />
-         </padding>
       </VBox>
    </left>
    <center>

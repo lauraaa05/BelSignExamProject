@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import be.Operator;
 import bll.OrderManager;
 import dk.easv.belsignexamproject.OperatorLogInApp;
 import javafx.event.ActionEvent;
@@ -8,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -26,6 +28,12 @@ public class OperatorMainController implements Initializable {
 
     @FXML
     private ListView<String> toDoListView;
+
+    @FXML
+    private ListView<String> doneListView;
+
+    @FXML
+    private Label loggedUsernameLbl;
 
     public OperatorMainController() throws IOException {
     }
@@ -58,7 +66,6 @@ public class OperatorMainController implements Initializable {
     // Open the OperatorPreviewController scene and pass the order number
     private void openOrderPreviewScene(String orderNumber) {
         try {
-            // Ensure this is the correct path to your FXML
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/OperatorPreview.fxml"));
 
             // Load the scene
@@ -91,6 +98,12 @@ public class OperatorMainController implements Initializable {
         Stage currentStage = (Stage) signOutButton.getScene().getWindow();
         switchToMainSceneSameWindow(currentStage);
     }
+
+    public void setLoggedInOperator(Operator operator) {
+        loggedUsernameLbl.setText(operator.getName());
+    }
+
+    private final String currentUserRole = "Operator";
 }
 
 
