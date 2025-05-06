@@ -77,6 +77,9 @@ public class QCULogInController {
 
         boolean isValid = loginManager.checkQCULogin(username, password);
 
+//        QCUMainController qcuMainController = fxmlLoader.getController();
+//        qcuMainController.setLoggedInQCU(qcu);
+
         if (isValid) {
             errorLabel.setVisible(false);
             Stage currentStage = (Stage) logInButton.getScene().getWindow();

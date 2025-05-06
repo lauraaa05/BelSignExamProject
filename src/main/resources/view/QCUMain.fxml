@@ -37,7 +37,7 @@
    <left>
       <VBox prefHeight="400.0" prefWidth="140.0" spacing="20.0" styleClass="leftVBox" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="loggedUsernameLbl" styleClass="leftUserLabel" text="Martin">
+            <Label fx:id="loggedQCUUsernameLbl" styleClass="leftUserLabel" text="Martin">
                <VBox.margin>
                   <Insets left="20.0" top="20.0" />
                </VBox.margin>
@@ -47,7 +47,7 @@
                   <Insets left="20.0" />
                </VBox.margin>
             </Button>
-            <Button id="buttonClass" fx:id="folderButton" onAction="#handleFolderButtonClick" alignment="CENTER" mnemonicParsing="false" prefHeight="45.0" prefWidth="56.0" styleClass="folderButton" text="📁">
+            <Button id="buttonClass" fx:id="folderButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleFolderButtonClick" prefHeight="45.0" prefWidth="56.0" styleClass="folderButton" text="📁">
                <VBox.margin>
                   <Insets left="20.0" />
                </VBox.margin>

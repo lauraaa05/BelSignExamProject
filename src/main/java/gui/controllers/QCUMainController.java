@@ -1,5 +1,7 @@
 package gui.controllers;
 
+import be.Operator;
+import be.QualityControl;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,6 +9,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import java.io.IOException;
 
@@ -14,6 +18,12 @@ public class QCUMainController {
 
     @FXML
     private Button folderButton, homeButton;
+
+    @FXML
+    private TextField usernameField;
+
+    @FXML
+    private Label loggedQCUUsernameLbl;
 
     @FXML
     private void initialize() {
@@ -57,5 +67,9 @@ public class QCUMainController {
         homeButton.getStyleClass().remove("active");
         activeButton.getStyleClass().add("active");
     }
+//
+//    public void setLoggedInQCU(QualityControl qcu) {
+//        loggedQCUUsernameLbl.setText(qcu.getName());
+//    }
 }
 
