@@ -30,7 +30,7 @@ public class PictureDAO {
         String sql = "SELECT Image, FileName, Timestamp, OrderNumber FROM Pictures WHERE OrderNumber = ?";
 
         try (Connection conn = db.DBConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, orderNumber);
             ResultSet rs = pstmt.executeQuery();

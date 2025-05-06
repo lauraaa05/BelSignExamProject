@@ -3,13 +3,13 @@ package gui.controllers;
 import be.Operator;
 import bll.OrderManager;
 import dal.OrderStatusDAO;
+import dk.easv.belsignexamproject.OperatorLogInApp;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
@@ -18,10 +18,14 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
+
+
 public class OperatorMainController implements Initializable {
+
+    @FXML
+    private Button signOutButton;
 
     @FXML
     private ListView<String> toDoListView;
@@ -31,6 +35,9 @@ public class OperatorMainController implements Initializable {
 
     @FXML
     private Label loggedUsernameLbl;
+
+    public OperatorMainController() throws IOException {
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -60,7 +67,6 @@ public class OperatorMainController implements Initializable {
     // Open the OperatorPreviewController scene and pass the order number
     private void openOrderPreviewScene(String orderNumber) {
         try {
-            // Ensure this is the correct path to your FXML
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/OperatorPreview.fxml"));
 
             // Load the scene
@@ -77,6 +83,22 @@ public class OperatorMainController implements Initializable {
             e.printStackTrace();
         }
     }
+    private void switchToMainSceneSameWindow(Stage currentStage) throws IOException {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorLogin.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+
+        currentStage.setTitle("OperatorLogin");
+        currentStage.setScene(scene);
+        currentStage.show();
+
+    }
+
+    @FXML
+    public void handleSignOutButtonClick(ActionEvent actionEvent) throws IOException {
+        Stage currentStage = (Stage) signOutButton.getScene().getWindow();
+        switchToMainSceneSameWindow(currentStage);
+    }
 
     public void setLoggedInOperator(Operator operator) {
         loggedUsernameLbl.setText(operator.getName());
@@ -85,24 +107,6 @@ public class OperatorMainController implements Initializable {
     private final String currentUserRole = "Operator";
 
     private final OrderStatusDAO  orderStatusDAO = new OrderStatusDAO();
-
-    @FXML
-    private void onMarkAsDone() {
-        String selectedOrder = toDoListView.getSelectionModel().getSelectedItem();
-
-        if (selectedOrder != null) {
-            Alert alert  = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmation");
-            alert.setHeaderText("Mark order as done?");
-            alert.setContentText("Do you want to mark this " + selectedOrder + "as done?");
-
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                orderStatusDAO.updateOrderStatus(selectedOrder, currentUserRole, "done");
-                refreshLists();
-            }
-        }
-    }
 
     public void refreshLists() {
         OrderStatusDAO dao = new OrderStatusDAO();
@@ -113,3 +117,7 @@ public class OperatorMainController implements Initializable {
         doneListView.getItems().setAll(doneOrders);
     }
 }
+
+
+
+

@@ -9,7 +9,6 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -23,7 +22,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -37,6 +35,9 @@ public class OperatorPreviewController {
     private MFXButton cameraButton;
 
     @FXML
+    private Button signOutButton, btnExit; // Asegúrate de que esté en tu FXML
+
+    @FXML
     private Label orderNumberLabel;
 
     @FXML
@@ -45,20 +46,26 @@ public class OperatorPreviewController {
     @FXML
     private Button doneButton;
 
-    // To save images (maximum 5) for the preview
     private final List<ImageView> imageViews = new ArrayList<>();
     private static final int MAX_IMAGES = 5;
     private String currentOrderNumber;
 
-    // Set the order number and load its images
+    public void initialize() {
+        btnExit.setOnAction(e -> {
+            try {
+                exit();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+    }
+
     public void setOrderNumber(String orderNumber) {
         this.currentOrderNumber = orderNumber;
         orderNumberLabel.setText("Order: " + orderNumber);
-        // Load existing images for this order
         loadOrderImages(orderNumber);
     }
 
-    // Load the images associated with the given order number
     private void loadOrderImages(String orderNumber) {
         imageTilePane.getChildren().clear();
         imageViews.clear();
@@ -74,7 +81,6 @@ public class OperatorPreviewController {
         }
     }
 
-    // Add an image to the TilePane and track it
     public void addImage(Picture picture) {
         Image image = new Image(new ByteArrayInputStream(picture.getImage()));
         ImageView imageView = new ImageView(image);
@@ -100,23 +106,29 @@ public class OperatorPreviewController {
                 e.printStackTrace();
             }
         });
-                imageTilePane.getChildren().add(imageView);
+        imageTilePane.getChildren().add(imageView);
     }
 
-    // For testing purposes, this method simulates the camera app where the operator can select an image from their file system
-//    public void openAndAddImage(Stage stage) {
-//        FileChooser fileChooser = new FileChooser();
-//        fileChooser.setTitle("Select Image");
-//        fileChooser.getExtensionFilters().add(
-//                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
-//        );
-//        File selectedFile = fileChooser.showOpenDialog(stage);
-//        if (selectedFile != null) {
-//            addImage(selectedFile);
-//        }
-//    }
+    // Método reutilizable para cambiar a la escena de login
+    private void switchToLoginScene(Stage currentStage) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorLogIn.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        currentStage.setTitle("Operator Login");
+        currentStage.setScene(scene);
+        currentStage.show();
+    }
 
-    // Handle the camera button click event (opens file chooser to select an image)
+    // Method "Sign Out"//
+    @FXML
+    private void handleSignOutButtonClick(ActionEvent event) {
+        Stage currentStage = (Stage) signOutButton.getScene().getWindow();
+        try {
+            switchToLoginScene(currentStage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     private void handleCameraButtonClick() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/PictureView.fxml"));
@@ -127,6 +139,21 @@ public class OperatorPreviewController {
 
         Stage currentStage = (Stage) cameraButton.getScene().getWindow();
         currentStage.setScene(new Scene(root));
+    }
+
+    private void switchToMainScene(Stage currentStage) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/OperatorMain.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+
+        currentStage.setTitle("Operator Main");
+        currentStage.setScene(scene);
+        currentStage.show();
+        System.out.println("Switching to OperatorMain scene");
+    }
+
+    private void exit() throws IOException {
+        Stage currentStage = (Stage) btnExit.getScene().getWindow();
+        switchToMainScene(currentStage);
     }
 
     @FXML
