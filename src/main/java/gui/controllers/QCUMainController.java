@@ -19,6 +19,28 @@ public class QCUMainController {
     private final SceneNavigator sceneNavigator = new SceneNavigator();
 
     @FXML
+    private Button folderButton, homeButton;
+
+    @FXML
+    private void switchToFolderScene(Stage currentStage) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/QCUFolderScreen.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        currentStage.setTitle("QCU Folder Screen");
+        currentStage.setScene(scene);
+        currentStage.show();
+    }
+
+    @FXML
+    private void handleFolderButtonClick(ActionEvent actionEvent) {
+        Stage currentStage = (Stage) folderButton.getScene().getWindow();
+        try {
+            switchToFolderScene(currentStage);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @FXML
     private void handleSignOutButtonClick(ActionEvent event) {
         try {
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
