@@ -52,6 +52,7 @@
                         </MFXButton>
                      </children>
                   </VBox>
+                  <Button fx:id="doneButton" layoutX="10.0" layoutY="346.0" mnemonicParsing="false" onAction="#markAsDone" prefHeight="25.0" prefWidth="101.0" text="Mark as done" />
                </children></Pane>
                 <Button id="signOutButton" fx:id="signOutButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleSignOutButtonClick" prefHeight="45.0" prefWidth="56.0" text="🚪">
                     <VBox.margin>
