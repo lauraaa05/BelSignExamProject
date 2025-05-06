@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane id="mainBorderPane" fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/QCULogInCSS.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCULogInController">
+<BorderPane id="mainBorderPane" fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/QCULogInCSS.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCULogInController">
     <top>
         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" styleClass="topVBox" BorderPane.alignment="CENTER">
             <children>
@@ -52,7 +52,7 @@
                <children>
                   <Label fx:id="errorLabel" text="Incorrect Password Text">
                      <HBox.margin>
-                        <Insets left="330.0" />
+                        <Insets left="305.0" />
                      </HBox.margin>
                   </Label>
                </children>
