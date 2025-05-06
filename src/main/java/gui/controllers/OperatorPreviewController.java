@@ -2,6 +2,7 @@ package gui.controllers;
 
 import be.Picture;
 import bll.OrderManager;
+import dal.OrderStatusDAO;
 import dal.PictureDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -128,17 +129,17 @@ public class OperatorPreviewController {
         }
     }
 
-//    @FXML
-//    private void handleCameraButtonClick() throws IOException {
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/PictureView.fxml"));
-//        Parent root = fxmlLoader.load();
-//
-//        PictureController pictureController = fxmlLoader.getController();
-//        pictureController.setOrderNumber(currentOrderNumber);
-//
-//        Stage currentStage = (Stage) cameraButton.getScene().getWindow();
-//        currentStage.setScene(new Scene(root));
-//    }
+    @FXML
+    private void handleCameraButtonClick() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/PictureView.fxml"));
+        Parent root = fxmlLoader.load();
+
+        PictureController pictureController = fxmlLoader.getController();
+        pictureController.setOrderNumber(currentOrderNumber);
+
+        Stage currentStage = (Stage) cameraButton.getScene().getWindow();
+        currentStage.setScene(new Scene(root));
+    }
 
     private void switchToMainScene(Stage currentStage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/OperatorMain.fxml"));
@@ -155,55 +156,55 @@ public class OperatorPreviewController {
         switchToMainScene(currentStage);
     }
 
-//    @FXML
-//    private void markAsDone(ActionEvent actionEvent) {
-//        if (currentOrderNumber == null ||  currentOrderNumber.isEmpty()) {
-//            Alert alert = new Alert(Alert.AlertType.WARNING);
-//            alert.setTitle("No order selected");
-//            alert.setHeaderText(null);
-//            alert.setContentText("Please select an order");
-//            alert.showAndWait();
-//            return;
-//        }
-//
-//        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-//        confirmation.setTitle("Confirm completion");
-//        confirmation.setHeaderText("Mark order as done?");
-//        confirmation.setContentText("Are you sure you want to mark order " +  currentOrderNumber + " as done?");
-//
-//        Optional<ButtonType> result = confirmation.showAndWait();
-//        if (result.isPresent() && result.get() == ButtonType.OK) {
-//            try {
-//                OrderStatusDAO orderStatusDAO =  new OrderStatusDAO();
-//
-//                String codeOnly = currentOrderNumber.substring(currentOrderNumber.lastIndexOf('-') + 1);
-//
-//                System.out.println("Extracted code: " + codeOnly);
-//
-//                orderStatusDAO.updateOrderStatus(codeOnly, "operator", "done");
-//
-//                Alert succes =  new Alert(Alert.AlertType.INFORMATION);
-//                succes.setTitle("Order updated");
-//                succes.setHeaderText(null);
-//                succes.setContentText("Order " + currentOrderNumber + " marked as done.");
-//                succes.showAndWait();
-//
-//                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/OperatorMain.fxml"));
-//                Parent root = fxmlLoader.load();
-//
-//                OperatorMainController operatorMainController = fxmlLoader.getController();
-//                operatorMainController.refreshLists();
-//
-//                Stage currentStage = (Stage) doneButton.getScene().getWindow();
-//                currentStage.setScene(new Scene(root));
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                Alert error = new Alert(Alert.AlertType.ERROR);
-//                error.setTitle("Error");
-//                error.setHeaderText("Could not update order status.");
-//                error.setContentText(e.getMessage());
-//                error.showAndWait();
-//            }
-//        }
-//    }
+    @FXML
+    private void markAsDone(ActionEvent actionEvent) {
+        if (currentOrderNumber == null ||  currentOrderNumber.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No order selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select an order");
+            alert.showAndWait();
+            return;
+        }
+
+        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmation.setTitle("Confirm completion");
+        confirmation.setHeaderText("Mark order as done?");
+        confirmation.setContentText("Are you sure you want to mark order " +  currentOrderNumber + " as done?");
+
+        Optional<ButtonType> result = confirmation.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                OrderStatusDAO orderStatusDAO =  new OrderStatusDAO();
+
+                String codeOnly = currentOrderNumber.substring(currentOrderNumber.lastIndexOf('-') + 1);
+
+                System.out.println("Extracted code: " + codeOnly);
+
+                orderStatusDAO.updateOrderStatus(codeOnly, "operator", "done");
+
+                Alert succes =  new Alert(Alert.AlertType.INFORMATION);
+                succes.setTitle("Order updated");
+                succes.setHeaderText(null);
+                succes.setContentText("Order " + currentOrderNumber + " marked as done.");
+                succes.showAndWait();
+
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/OperatorMain.fxml"));
+                Parent root = fxmlLoader.load();
+
+                OperatorMainController operatorMainController = fxmlLoader.getController();
+                operatorMainController.refreshLists();
+
+                Stage currentStage = (Stage) doneButton.getScene().getWindow();
+                currentStage.setScene(new Scene(root));
+            } catch (Exception e) {
+                e.printStackTrace();
+                Alert error = new Alert(Alert.AlertType.ERROR);
+                error.setTitle("Error");
+                error.setHeaderText("Could not update order status.");
+                error.setContentText(e.getMessage());
+                error.showAndWait();
+            }
+        }
+    }
 }

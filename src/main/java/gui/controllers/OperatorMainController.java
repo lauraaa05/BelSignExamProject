@@ -2,6 +2,7 @@ package gui.controllers;
 
 import be.Operator;
 import bll.OrderManager;
+import dal.OrderStatusDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -104,6 +105,17 @@ public class OperatorMainController implements Initializable {
     }
 
     private final String currentUserRole = "Operator";
+
+    private final OrderStatusDAO  orderStatusDAO = new OrderStatusDAO();
+
+    public void refreshLists() {
+        OrderStatusDAO dao = new OrderStatusDAO();
+        List<String> todoOrders = dao.getFormattedOrdersByRoleAndStatus("operator", "todo");
+        List<String> doneOrders = dao.getFormattedOrdersByRoleAndStatus("operator", "done");
+
+        toDoListView.getItems().setAll(todoOrders);
+        doneListView.getItems().setAll(doneOrders);
+    }
 }
 
 
