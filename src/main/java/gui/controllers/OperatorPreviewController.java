@@ -35,7 +35,7 @@ public class OperatorPreviewController {
     private MFXButton cameraButton;
 
     @FXML
-    private Button signOutButton, btnExit; // Asegúrate de que esté en tu FXML
+    private Button signOutButton, btnExit;
 
     @FXML
     private Label orderNumberLabel;

@@ -15,7 +15,7 @@ public class QCUMainController {
     private void handleSignOutButtonClick(ActionEvent event) {
         try {
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/QCUMain.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/QCULogin.fxml"));
             Scene scene = new Scene(loader.load());
             currentStage.setTitle("QCU Login");
             currentStage.setScene(scene);
