@@ -87,9 +87,11 @@ public class OperatorLogInController {
             if (operator != null && operator.getRole().equalsIgnoreCase("Operator")) {
                 welcomeText.setText("Welcome " + operator.getName() + "! Role: " + operator.getRole());
 
-                // Switch to OperatorMain scene
                 FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorMain.fxml"));
                 Scene scene = new Scene(fxmlLoader.load());
+
+                OperatorMainController operatorMainController = fxmlLoader.getController();
+                operatorMainController.setLoggedInOperator(operator);
 
                 Stage currentStage = (Stage) welcomeText.getScene().getWindow();
                 currentStage.setTitle("Operator Main");
