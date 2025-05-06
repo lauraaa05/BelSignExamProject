@@ -6,7 +6,7 @@ import com.microsoft.sqlserver.jdbc.SQLServerException;
 
 public class DBAccess {
     //Connection to the database
-    public Connection DBConnection() throws SQLServerException {
+    public static Connection DBConnection() throws SQLServerException {
         SQLServerDataSource ds;
         ds = new SQLServerDataSource();
         ds.setDatabaseName("Belsign_Exam_LEEK");

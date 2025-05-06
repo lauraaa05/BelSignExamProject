@@ -7,13 +7,11 @@ import java.sql.SQLException;
 
 public class LoginDAO {
 
-    private DBAccess dbAccess = new DBAccess();
-
     public boolean validateQualityControlUser(String username, String password) {
         String sql = "SELECT Role FROM LoginInfo WHERE Username = ? AND Password = ?";
 
-        try (Connection conn = dbAccess.DBConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBAccess.DBConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, username);
             stmt.setString(2, password);
@@ -23,12 +21,10 @@ public class LoginDAO {
             if (rs.next()) {
                 String roleFromDB = rs.getString("Role");
 
-                //to check if the role matches with the Quality Control in Enum
                 try {
                     UserRole role = UserRole.fromString(roleFromDB);
                     return role == UserRole.QUALITY_CONTROL;
                 } catch (IllegalArgumentException e) {
-                    //Invalid role
                     return false;
                 }
             }
@@ -37,7 +33,5 @@ public class LoginDAO {
         }
 
         return false;
-
     }
-
 }

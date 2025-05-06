@@ -1,7 +1,5 @@
 package gui.controllers;
-
 import bll.LoginManager;
-import dk.easv.belsignexamproject.OperatorLogInApp;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,19 +8,20 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
+import javafx.event.ActionEvent;
+
+
+
+
 
 public class QCULogInController {
 
-
     @FXML
     private TextField usernameField;
-
 
     @FXML
     private PasswordField passwordFieldMasked;
@@ -33,20 +32,15 @@ public class QCULogInController {
     @FXML
     private Label errorLabel;
 
-
-
     @FXML
     private Label eyeLabel;
-//    @FXML
-//    private Label eyeLabel;
 
     @FXML
     private MFXButton logInButton;
 
     private boolean passwordVisible = false;
-    private LoginManager loginManager = new LoginManager();
 
-
+    private final LoginManager loginManager = new LoginManager();
 
     @FXML
     private void initialize() {
@@ -55,16 +49,16 @@ public class QCULogInController {
         passwordFieldMasked.setVisible(true);
         passwordFieldVisible.setVisible(false);
 
-        // Set initial eye icon
         setEyeIcon("eyeOpened.png");
 
-        logInButton.setOnAction(e -> {
+        logInButton.setOnAction(_ -> {
             try {
                 handleLogin();
             } catch (IOException ex) {
-                throw new RuntimeException(ex);
+                ex.printStackTrace();
             }
         });
+
         eyeLabel.setOnMouseClicked(e -> togglePasswordVisibility());
     }
 
@@ -74,15 +68,21 @@ public class QCULogInController {
                 ? passwordFieldVisible.getText().trim()
                 : passwordFieldMasked.getText().trim();
 
+        if (username.isEmpty() || password.isEmpty()) {
+            errorLabel.setText("Please enter username and password");
+            errorLabel.setStyle("-fx-text-fill: orange;");
+            errorLabel.setVisible(true);
+            return;
+        }
+
         boolean isValid = loginManager.checkQCULogin(username, password);
 
         if (isValid) {
             errorLabel.setVisible(false);
-            //Opens the QCUMain
             Stage currentStage = (Stage) logInButton.getScene().getWindow();
             switchToMainSceneSameWindow(currentStage);
         } else {
-            errorLabel.setText("Incorrect username or password");
+            errorLabel.setText("Incorrect username or password for Quality Control");
             errorLabel.setStyle("-fx-text-fill: red;");
             errorLabel.setVisible(true);
         }
@@ -117,11 +117,30 @@ public class QCULogInController {
     }
 
     private void switchToMainSceneSameWindow(Stage currentStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/QCUMain.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/QCUMain.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
         currentStage.setTitle("QCU Main");
         currentStage.setScene(scene);
-        currentStage.show();  // Not strictly necessary (stage is already showing), but safe to call
+        currentStage.show();
+    }
+
+    // handle sign out
+    @FXML
+    private void handleSignOutButtonClick(ActionEvent event) {
+        try {
+            // Get current stage from the button source
+            Stage currentStage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+
+            // Load login screen again
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/QCULogIn.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+
+            currentStage.setTitle("QCU Login");
+            currentStage.setScene(scene);
+            currentStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
