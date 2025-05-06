@@ -1,6 +1,7 @@
 package gui.controllers;
 
 import dk.easv.belsignexamproject.OperatorLogInApp;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,13 +25,17 @@ public class QCUFolderController {
     private FlowPane folderFlowPane;
 
     @FXML
-    private Button signOutButton;
+    private Button signOutButton, homeButton;
+
+    @FXML
+    private Button folderButton;
 
     private final List<String> folderDates = new ArrayList<>();
 
     @FXML
     public void initialize() {
 
+        highlightActiveButton(folderButton);
         for(int year = 2025; year <= 2026; year++) {
             for(int month = 1; month <= 12; month++) {
                 folderDates.add(String.format("%d-%02d", year, month));
@@ -60,6 +65,25 @@ public class QCUFolderController {
     }
 
     @FXML
+    private void switchToMainScene(Stage currentStage) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/QCUMain.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        currentStage.setTitle("QCU Folder Screen");
+        currentStage.setScene(scene);
+        currentStage.show();
+    }
+
+    @FXML
+    private void handleMainButtonClick(ActionEvent actionEvent) {
+        Stage currentStage = (Stage) homeButton.getScene().getWindow();
+        try {
+            switchToMainScene(currentStage);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @FXML
     private void handleSignOutButtonClick(ActionEvent event) {
         Stage currentStage = (Stage) signOutButton.getScene().getWindow();
         try {
@@ -75,6 +99,12 @@ public class QCUFolderController {
         currentStage.setTitle("QCU Login");
         currentStage.setScene(scene);
         currentStage.show();
+    }
+
+    private void highlightActiveButton(Button activeButton) {
+        folderButton.getStyleClass().remove("active");
+
+        activeButton.getStyleClass().add("active");
     }
 }
 
