@@ -11,52 +11,39 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<BorderPane prefHeight="620.0" prefWidth="900.0" stylesheets="@../css/QCUReport.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="620.0" prefWidth="900.0" stylesheets="@../css/QCUReport.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCUReportController">
     <!-- Top Section (Header) -->
     <top>
-        <HBox fx:id="header" prefHeight="80.0" prefWidth="900.0">
+        <HBox fx:id="header" alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="900.0" spacing="10">
             <!-- Belman Logo -->
             <ImageView fx:id="logo" fitHeight="81.0" fitWidth="123.0" preserveRatio="true">
                 <image>
                     <Image url="@../images/belmanlogo.png" />
                 </image>
-            <HBox.margin>
-               <Insets left="-12.0" />
-            </HBox.margin>
             </ImageView>
-            <!-- Help Icon -->
-            <StackPane fx:id="helpIcon" prefHeight="78.0" prefWidth="459.0" style="-fx-background-color: #007ACC; -fx-background-radius: 15;">
-                <Label style="-fx-text-fill: white; -fx-font-weight: bold;" text="?" />
-               <!-- Title -->
-               <Label fx:id="title" alignment="CENTER" prefHeight="22.0" prefWidth="152.0" text="QCU Report" />
+
+            <!-- Title -->
+            <Label fx:id="title" text="QCU Report">
             <HBox.margin>
-               <Insets bottom="2.0" left="155.0" top="2.0" />
-            </HBox.margin>
-            </StackPane>
+               <Insets left="285.0" />
+            </HBox.margin></Label>
         </HBox>
     </top>
 
     <!-- Center Section (Main Content) -->
     <center>
-        <VBox fx:id="mainContent" alignment="CENTER" prefHeight="337.0" prefWidth="900.0" spacing="10">
-            <!-- Order Number -->
+        <VBox fx:id="mainContent" alignment="CENTER" spacing="10">
             <Label fx:id="orderNumberLabel" text="ORDER NUMBER: 34/24-0019" />
-
-            <!-- Photo Upload Section -->
             <VBox fx:id="photoSection" alignment="CENTER" spacing="10">
-                <Label fx:id="photoLabel" text="UPLOAD PHOTOS (UP TO 5)" />
+                <Label fx:id="photoLabel" text="PHOTOS" />
                 <GridPane fx:id="photoGrid" alignment="CENTER" hgap="10" vgap="10">
                     <Rectangle fx:id="photo2" height="120" width="120" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                <columnConstraints>
                   <ColumnConstraints />
                   <ColumnConstraints />
-                  <ColumnConstraints />
-                  <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints />
@@ -68,13 +55,25 @@
 
     <!-- Bottom Section (Comments) -->
     <bottom>
-        <VBox fx:id="commentSection" alignment="CENTER" prefHeight="181.0" prefWidth="900.0" spacing="10">
+        <VBox fx:id="commentSection" alignment="CENTER" spacing="10">
             <Label fx:id="commentLabel" text="COMMENTS:" />
-            <TextArea fx:id="commentsTextArea" prefHeight="100" promptText="Enter your comments here..." wrapText="true" BorderPane.alignment="CENTER" />
-            <Button fx:id="submitButton" alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="158.0" text="SUBMIT REPORT">
-            <VBox.margin>
-               <Insets bottom="6.0" />
-            </VBox.margin></Button>
+            <TextArea fx:id="commentsTextArea" prefHeight="100" promptText="Enter your comments here..." wrapText="true" />
+         <HBox prefHeight="41.0" prefWidth="900.0">
+            <children>
+                  <Button fx:id="submitButton" text="SUBMIT REPORT">
+                  <HBox.margin>
+                     <Insets left="368.0" />
+                  </HBox.margin>
+               </Button>
+      
+                  <!-- Go Back Button -->
+                  <Button fx:id="goBackButton" onAction="#goBackButtonAction" text="← Back">
+                  <HBox.margin>
+                     <Insets left="200.0" />
+                  </HBox.margin>
+               </Button>
+            </children>
+         </HBox>
         </VBox>
     </bottom>
 </BorderPane>

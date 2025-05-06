@@ -1,34 +1,25 @@
 package gui.controllers;
 
-import be.Operator;
-import be.QualityControl;
-import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import utilities.SceneNavigator;
+
 import java.io.IOException;
 
 public class QCUMainController {
 
     @FXML
+    private Button btnOpenReport;
+
+    private final SceneNavigator sceneNavigator = new SceneNavigator();
+
+    @FXML
     private Button folderButton, homeButton;
-
-    @FXML
-    private TextField usernameField;
-
-    @FXML
-    private Label loggedQCUUsernameLbl;
-
-    @FXML
-    private void initialize() {
-        highlightActiveButton(homeButton);
-    }
 
     @FXML
     private void switchToFolderScene(Stage currentStage) throws IOException {
@@ -63,13 +54,12 @@ public class QCUMainController {
         }
     }
 
-    private void highlightActiveButton(Button activeButton) {
-        homeButton.getStyleClass().remove("active");
-        activeButton.getStyleClass().add("active");
+    @FXML
+    private void btnOpenReportAction(ActionEvent actionEvent) {
+        sceneNavigator.switchTo(actionEvent,"QCUReport.fxml");
     }
-//
-//    public void setLoggedInQCU(QualityControl qcu) {
-//        loggedQCUUsernameLbl.setText(qcu.getName());
-//    }
+
+    private void sceneNavigator(String s) {
+    }
 }
 
