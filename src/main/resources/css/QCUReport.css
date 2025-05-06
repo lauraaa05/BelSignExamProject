@@ -1,6 +1,6 @@
-/* Root styling for the entire application */
 .root {
     -fx-font-family: "Arial";
+    -fx-background-color: #f0f0f0; /* Light grey background */
 }
 
 /* Header Section */
@@ -8,11 +8,7 @@
     -fx-background-color: #FFFFFF;
     -fx-border-color: #D3D3D3;
     -fx-border-width: 0 0 2 0;
-    -fx-padding: 0 10 0 10;
-}
-
-#logo {
-    -fx-padding: 10 0 0 10;
+    -fx-padding: 10;
 }
 
 #title {
@@ -21,19 +17,20 @@
     -fx-text-fill: #004b88;
 }
 
-#helpIcon {
-    -fx-fill: #666666;
-    -fx-padding: 0 10 0 0;
+#goBackButton {
+    -fx-background-color: transparent;
+    -fx-text-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-color: #004b88;
+    -fx-font-size: 16px;
+    -fx-border-radius: 10px;
+    -fx-border-color: blue;
+    -fx-cursor: hand;
 }
 
-#helpIcon Label {
-    -fx-font-size: 18px;
-    -fx-text-fill: #FFFFFF;
-}
-
-/* Main Content Section */
+/* Main Section */
 #mainContent {
-    -fx-background-color: #F5F5F5;
+    -fx-background-color: #f0f0f0;
 }
 
 #orderNumberLabel {
@@ -41,10 +38,6 @@
     -fx-font-weight: bold;
     -fx-text-fill: #000000;
     -fx-padding: 10 20 10 20;
-}
-
-#photoSection {
-    /* No additional styling needed here, handled by children */
 }
 
 #photoLabel {
@@ -58,13 +51,6 @@
     -fx-stroke: #666666;
     -fx-stroke-dash-array: 5 5;
     -fx-fill: #FFFFFF;
-}
-
-#addPhotoButton {
-    -fx-background-color: #003087;
-    -fx-text-fill: #FFFFFF;
-    -fx-font-size: 14px;
-    -fx-background-radius: 5;
 }
 
 /* Comment Section */
@@ -91,12 +77,12 @@
 #submitButton {
     -fx-background-color: #33ad71;
     -fx-text-fill: #FFFFFF;
-    -fx-font-size: 14px;
+    -fx-font-size: 18px;
     -fx-background-radius: 5;
-    -fx-padding: 0 10 10 0;
+    -fx-padding: 5 20;
 }
 
-/* Hover Effects for Buttons */
-#addPhotoButton:hover, #submitButton:hover {
+/* Hover Effects */
+#submitButton:hover, #goBackButton:hover {
     -fx-opacity: 0.8;
 }
