@@ -104,15 +104,12 @@ public class OperatorMainController implements Initializable {
         }
     }
 
-    private void refreshLists() {
-        List<String> toDo = orderStatusDAO.getOrdersByRoleAndStatus(currentUserRole, "todo");
-        List<String> done = orderStatusDAO.getOrdersByRoleAndStatus(currentUserRole, "done");
+    public void refreshLists() {
+        OrderStatusDAO dao = new OrderStatusDAO();
+        List<String> todoOrders = dao.getFormattedOrdersByRoleAndStatus("operator", "todo");
+        List<String> doneOrders = dao.getFormattedOrdersByRoleAndStatus("operator", "done");
 
-        toDoListView.getItems().setAll(toDo);
-        doneListView.getItems().setAll(done);
+        toDoListView.getItems().setAll(todoOrders);
+        doneListView.getItems().setAll(doneOrders);
     }
 }
-
-
-
-

@@ -3,6 +3,7 @@ package dal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,10 +36,4 @@ public class OrderDAO {
         }
         return orders;
     }
-
-//    public List<String> getOrdersByStatus(String status) {
-//        List<String> orders = new ArrayList<>();
-//        try (Connection conn = new DBAccess().DBConnection();
-//             String sql = "SELECT order{}
-//    }
 }

@@ -1,16 +1,22 @@
 package gui.controllers;
 
 import bll.CameraManager;
+import bll.PictureManager;
+import dal.PictureDAO;
 import io.github.palexdev.materialfx.utils.SwingFXUtils;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class PictureController {
     @FXML
@@ -19,8 +25,10 @@ public class PictureController {
     private Button btnCapture, btnRetake, btnSave, btnExit;
 
     private CameraManager camera = new CameraManager();
+    private PictureManager pictureManager;
     private BufferedImage capturedImage;
     private boolean isPhotoTaken = false;
+    private String orderNumber;
 
     public void initialize() {
         camera.initializeCamera();
@@ -30,6 +38,8 @@ public class PictureController {
         btnRetake.setOnAction(e -> retakeImage());
         btnSave.setOnAction(e -> saveImage());
         btnExit.setOnAction(e -> exit());
+
+        pictureManager = new PictureManager(new PictureDAO());
     }
 
     private void startWebcamStream() {
@@ -64,18 +74,43 @@ public class PictureController {
     }
 
     private void saveImage() {
-        if(capturedImage != null) {
+        if (capturedImage != null) {
             try {
-                ImageIO.write(capturedImage, "PNG", new File("snapshot.png"));
-                System.out.println("Picture Saved!");
-            } catch (IOException e) {
+                pictureManager.savePictureToDB(capturedImage, orderNumber);
+                showAlert(Alert.AlertType.INFORMATION, "Picture saved");
+                isPhotoTaken = false;
+                startWebcamStream();
+            } catch (SQLException | IOException e) {
                 e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Failed to save picture");
             }
+        } else  {
+            showAlert(Alert.AlertType.ERROR, "No picture to save");
         }
     }
 
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
+        System.out.println("Order number received in PictureController: " + orderNumber);
+    }
+
     private void exit() {
-        camera.closeCamera();
-        Platform.exit();
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/OperatorPreview.fxml"));
+            Parent root = fxmlLoader.load();
+            Stage stage = (Stage) btnExit.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Failed to load operator preview");
+        }
+    }
+
+    private void showAlert(Alert.AlertType alertType, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle("Save Picture");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
