@@ -64,7 +64,6 @@ public class OperatorLogInController {
                             Platform.runLater(() -> loginOperator(content));
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
                     }
                 }
 
