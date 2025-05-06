@@ -52,7 +52,6 @@
                         </MFXButton>
                      </children>
                   </VBox>
-                  <Button fx:id="doneButton" layoutX="10.0" layoutY="346.0" mnemonicParsing="false" onAction="#markAsDone" prefHeight="25.0" prefWidth="101.0" text="Mark as done" />
                </children></Pane>
                 <Button id="signOutButton" fx:id="signOutButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleSignOutButtonClick" prefHeight="45.0" prefWidth="56.0" text="🚪">
                     <VBox.margin>
@@ -88,7 +87,7 @@
    <right>
       <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Button id="signOutButton" mnemonicParsing="false" text="✔" textFill="#2a8820">
+            <Button id="signOutButton" fx:id="doneButton" mnemonicParsing="false" onAction="#markAsDone" text="✔" textFill="#2a8820">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
