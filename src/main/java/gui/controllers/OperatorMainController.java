@@ -2,6 +2,7 @@ package gui.controllers;
 
 import be.Operator;
 import bll.OrderManager;
+import bll.OrderStatusManager;
 import dal.OrderStatusDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
 import javafx.event.ActionEvent;
@@ -42,16 +43,24 @@ public class OperatorMainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadOrdersIntoToDoList();
+        loadOrdersIntoDoneList();
 
         // Adding click event listener on the ListView
         toDoListView.setOnMouseClicked(this::handleOrderClick);
     }
 
     private void loadOrdersIntoToDoList() {
-        OrderManager om = new OrderManager();
-        List<String> orders = om.getOrderNumbersAsList();
-        toDoListView.getItems().addAll(orders);
+        OrderStatusManager osm = new OrderStatusManager();
+        List<String> toDoOrders = osm.getToDoOrders();
+        toDoListView.getItems().setAll(toDoOrders);
         toDoListView.setFixedCellSize(48);
+    }
+
+    private void loadOrdersIntoDoneList() {
+        OrderStatusManager osm = new OrderStatusManager();
+        List<String> doneOrders = osm.getDoneOrders();
+        doneListView.getItems().setAll(doneOrders);
+        doneListView.setFixedCellSize(48);
     }
 
     // Handle order click

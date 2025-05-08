@@ -11,7 +11,7 @@ public class OrderStatusDAO {
 
     private DBAccess dbAccess = new DBAccess();
 
-    public List<String> getFormattedOrdersByRoleAndStatus(String role,  String status) {
+    public List<String> getFormattedOrdersByRoleAndStatus(String role, String status) {
         List<String> orders = new ArrayList<>();
         String query = """
                 SELECT o.CountryNumber, o.Year, o.Month, o.OrderCode FROM Orders o
