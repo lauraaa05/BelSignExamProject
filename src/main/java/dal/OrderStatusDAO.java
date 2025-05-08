@@ -11,7 +11,7 @@ public class OrderStatusDAO {
 
     private DBAccess dbAccess = new DBAccess();
 
-    public List<String> getFormattedOrdersByRoleAndStatus(String role,  String status) {
+    public List<String> getFormattedOrdersByRoleAndStatus(String role, String status) {
         List<String> orders = new ArrayList<>();
         String query = """
                 SELECT o.CountryNumber, o.Year, o.Month, o.OrderCode FROM Orders o
@@ -60,5 +60,13 @@ public class OrderStatusDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<String> getToDOOrders(String orderCode, String role, String status) {
+        List<String> toDoOrders = new ArrayList<>();
+        String query = """
+                SELECT o.CountryNumber, o.Year, o.Month, o.OrderCode FROM Orders o
+                INNER JOIN OrderStatus s ON o.OrderCode = s.OrderCode
+                WHERE s.Role = ? AND s.Status = ?;""";
     }
 }
