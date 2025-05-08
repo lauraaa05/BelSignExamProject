@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-
+import java.util.stream.Collectors;
 
 
 public class OperatorMainController implements Initializable {
@@ -74,6 +74,7 @@ public class OperatorMainController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
     private void switchToMainSceneSameWindow(Stage currentStage) throws IOException {
 
