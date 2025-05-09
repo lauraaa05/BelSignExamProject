@@ -43,12 +43,12 @@
                <children>
                   <Label styleClass="leftUserLabel" text="Welcome" />
                   <Label fx:id="loggedUsernameLbl" styleClass="leftUserLabel" />
-                  <Button id="buttonClass" mnemonicParsing="false" styleClass="buttonClass" text="📝">
+                  <Button id="buttonClass" mnemonicParsing="false" styleClass="buttonClass" text="👤">
                      <VBox.margin>
                         <Insets bottom="20.0" />
                      </VBox.margin>
                   </Button>
-                  <Button id="buttonClass" mnemonicParsing="false" styleClass="buttonClass" text="👤" />
+                  <Button id="buttonClass" mnemonicParsing="false" styleClass="buttonClass" text="📝" />
                </children>
             </VBox>
             <HBox alignment="CENTER">
