@@ -1,4 +1,4 @@
-package dk.easv.belsignexamproject;
+package dk.easv.belsignexamproject.TestApps;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

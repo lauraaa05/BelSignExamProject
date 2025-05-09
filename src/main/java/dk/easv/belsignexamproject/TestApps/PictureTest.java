@@ -1,20 +1,10 @@
-package dk.easv.belsignexamproject;
+package dk.easv.belsignexamproject.TestApps;
 
-import com.github.sarxos.webcam.Webcam;
-import com.github.sarxos.webcam.WebcamResolution;
-import io.github.palexdev.materialfx.utils.SwingFXUtils;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 import bll.CameraManager; // your Camera class from bll
 
