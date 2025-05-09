@@ -14,6 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import utilities.SceneNavigator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class QCUFolderController {
 
     private final List<String> folderDates = new ArrayList<>();
 
+    private final SceneNavigator sceneNavigator = new SceneNavigator();
     @FXML
     public void initialize() {
 
@@ -105,6 +107,11 @@ public class QCUFolderController {
         folderButton.getStyleClass().remove("active");
 
         activeButton.getStyleClass().add("active");
+    }
+
+    @FXML
+    private void btnOpenReportAction(ActionEvent actionEvent) {
+        sceneNavigator.switchTo(actionEvent, "QCUReport.fxml");
     }
 }
 

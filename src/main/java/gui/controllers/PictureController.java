@@ -12,6 +12,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
@@ -19,13 +21,18 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.rmi.server.RemoteObject;
 import java.sql.SQLException;
+
+import static utilities.AlertHelper.showAlert;
 
 public class PictureController {
     @FXML
     private ImageView imgVPicture;
     @FXML
     private Button btnCapture, btnRetake, btnSave, btnExit;
+    @FXML
+    private ChoiceBox cBoxSide;
 
     private CameraManager camera = new CameraManager();
     private PictureManager pictureManager;
@@ -78,23 +85,24 @@ public class PictureController {
 
     private void retakeImage() {
         isPhotoTaken = false;
+        capturedImage = null;
         startWebcamStream();
         System.out.println("Image retaken!");
     }
 
     private void saveImage() {
-        if (capturedImage != null) {
+        if (capturedImage != null && isPhotoTaken) {
             try {
                 pictureManager.savePictureToDB(capturedImage, orderNumber);
-                showAlert(Alert.AlertType.INFORMATION, "Picture saved");
+                showAlert(Alert.AlertType.INFORMATION, "Save successful", null, "Picture saved");
                 isPhotoTaken = false;
                 startWebcamStream();
             } catch (SQLException | IOException e) {
                 e.printStackTrace();
-                showAlert(Alert.AlertType.ERROR, "Failed to save picture");
+                showAlert(Alert.AlertType.ERROR, "Error", null, "Failed to save picture");
             }
         } else  {
-            showAlert(Alert.AlertType.ERROR, "No picture to save");
+            showAlert(Alert.AlertType.ERROR, "Error",  null, "No picture to save");
         }
     }
 
@@ -127,15 +135,7 @@ public class PictureController {
             stage.setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Failed to load operator preview");
+            showAlert(Alert.AlertType.ERROR, "Error", null, "Failed to load operator preview");
         }
-    }
-
-    private void showAlert(Alert.AlertType alertType, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle("Save Picture");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

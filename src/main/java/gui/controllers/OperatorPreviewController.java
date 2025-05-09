@@ -20,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import utilities.AlertHelper;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -27,6 +28,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static utilities.AlertHelper.showAlert;
+import static utilities.AlertHelper.showConfirmationAlert;
 
 public class OperatorPreviewController {
 
@@ -46,7 +50,7 @@ public class OperatorPreviewController {
     private Button doneButton;
 
     private final List<ImageView> imageViews = new ArrayList<>();
-    private static final int MAX_IMAGES = 5;
+    private static final int MIN_IMAGES = 5;
     private String currentOrderNumber;
 
     public void initialize() {
@@ -159,52 +163,54 @@ public class OperatorPreviewController {
     @FXML
     private void markAsDone(ActionEvent actionEvent) {
         if (currentOrderNumber == null ||  currentOrderNumber.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No order selected");
-            alert.setHeaderText(null);
-            alert.setContentText("Please select an order");
-            alert.showAndWait();
+            showAlert(Alert.AlertType.WARNING, "No order selected", null, "Please select an order");
             return;
         }
 
-        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmation.setTitle("Confirm completion");
-        confirmation.setHeaderText("Mark order as done?");
-        confirmation.setContentText("Are you sure you want to mark order " +  currentOrderNumber + " as done?");
+        try {
+            PictureDAO pictureDAO = new PictureDAO();
+            int imageCount = pictureDAO.countImagesForOrderNumber(currentOrderNumber);
 
-        Optional<ButtonType> result = confirmation.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            try {
-                OrderStatusDAO orderStatusDAO =  new OrderStatusDAO();
-
-                String codeOnly = currentOrderNumber.substring(currentOrderNumber.lastIndexOf('-') + 1);
-
-                System.out.println("Extracted code: " + codeOnly);
-
-                orderStatusDAO.updateOrderStatus(codeOnly, "operator", "done");
-
-                Alert succes =  new Alert(Alert.AlertType.INFORMATION);
-                succes.setTitle("Order updated");
-                succes.setHeaderText(null);
-                succes.setContentText("Order " + currentOrderNumber + " marked as done.");
-                succes.showAndWait();
-
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/OperatorMain.fxml"));
-                Parent root = fxmlLoader.load();
-
-                OperatorMainController operatorMainController = fxmlLoader.getController();
-                operatorMainController.refreshLists();
-
-                Stage currentStage = (Stage) doneButton.getScene().getWindow();
-                currentStage.setScene(new Scene(root));
-            } catch (Exception e) {
-                e.printStackTrace();
-                Alert error = new Alert(Alert.AlertType.ERROR);
-                error.setTitle("Error");
-                error.setHeaderText("Could not update order status.");
-                error.setContentText(e.getMessage());
-                error.showAndWait();
+            if (imageCount < MIN_IMAGES) {
+                AlertHelper.showAlert(
+                        Alert.AlertType.WARNING,
+                        "Too few images",
+                        "Order has only " + imageCount + " image(s).",
+                        "You must upload at least " + MIN_IMAGES + " images to mark this order as done.");
+                return;
             }
+
+            boolean confirmed = AlertHelper.showConfirmationAlert(
+                    "Confirm completion",
+                    "Mark order as done?",
+                    "Are you sure you want to mark order " + currentOrderNumber + " as done?");
+            if (!confirmed) {
+                return;
+            }
+
+            OrderStatusDAO orderStatusDAO = new OrderStatusDAO();
+
+            String codeOnly = currentOrderNumber.substring(currentOrderNumber.lastIndexOf('-') + 1);
+
+            System.out.println("Extracted code: " + codeOnly);
+
+            orderStatusDAO.updateOrderStatus(codeOnly, "operator", "done");
+
+            showAlert(Alert.AlertType.INFORMATION, "Order updated", null,
+                    "Order " + currentOrderNumber + " marked as done.");
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/OperatorMain.fxml"));
+            Parent root = fxmlLoader.load();
+
+            OperatorMainController operatorMainController = fxmlLoader.getController();
+            operatorMainController.refreshLists();
+
+            Stage currentStage = (Stage) doneButton.getScene().getWindow();
+            currentStage.setScene(new Scene(root));
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            showAlert(Alert.AlertType.ERROR, "Error", "Could not update order status", e.getMessage());
         }
     }
 }

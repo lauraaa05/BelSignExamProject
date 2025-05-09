@@ -47,4 +47,18 @@ public class PictureDAO {
         }
         return pictures;
     }
+
+    public int countImagesForOrderNumber(String orderNumber) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Pictures WHERE OrderNumber = ?";
+        try (Connection conn = db.DBConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, orderNumber);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
 }
