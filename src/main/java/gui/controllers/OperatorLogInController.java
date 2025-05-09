@@ -64,12 +64,11 @@ public class OperatorLogInController {
                             Platform.runLater(() -> loginOperator(content));
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
                     }
                 }
 
                 try {
-                    Thread.sleep(250);
+                    Thread.sleep(33);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

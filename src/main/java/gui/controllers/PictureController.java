@@ -19,6 +19,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.rmi.server.RemoteObject;
 import java.sql.SQLException;
 
 public class PictureController {
@@ -78,12 +79,13 @@ public class PictureController {
 
     private void retakeImage() {
         isPhotoTaken = false;
+        capturedImage = null;
         startWebcamStream();
         System.out.println("Image retaken!");
     }
 
     private void saveImage() {
-        if (capturedImage != null) {
+        if (capturedImage != null && isPhotoTaken) {
             try {
                 pictureManager.savePictureToDB(capturedImage, orderNumber);
                 showAlert(Alert.AlertType.INFORMATION, "Picture saved");

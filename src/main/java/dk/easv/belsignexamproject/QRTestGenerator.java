@@ -8,7 +8,7 @@ public class QRTestGenerator {
         QRCodeService qrService = new QRCodeService();
         QRCodeDAO qrDao = new QRCodeDAO();
 
-        int userId = 1;
+        int userId = 3;
         String qrContent = String.valueOf(userId);
 
         try {

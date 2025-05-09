@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/QCUMainCSS.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCUMainController">
+<BorderPane id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/QCUMainCSS.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCUMainController">
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" styleClass="topVBox" BorderPane.alignment="CENTER">
          <children>
@@ -47,12 +47,17 @@
                   <Insets left="20.0" />
                </VBox.margin>
             </Button>
-            <Button id="buttonClass" fx:id="folderButton" alignment="CENTER" mnemonicParsing="false" prefHeight="45.0" prefWidth="56.0" styleClass="folderButton" text="📁">
+            <Button id="buttonClass" fx:id="folderButton" onAction="#handleFolderButtonClick" alignment="CENTER" mnemonicParsing="false" prefHeight="45.0" prefWidth="56.0" styleClass="folderButton" text="📁">
                <VBox.margin>
                   <Insets left="20.0" />
                </VBox.margin>
             </Button>
-            <Region prefHeight="332.0" prefWidth="120.0" />
+            <Button id="buttonClass" fx:id="btnOpenReport" alignment="CENTER" mnemonicParsing="false" onAction="#btnOpenReportAction" prefHeight="45.0" prefWidth="56.0" styleClass="homeButton" text="📝">
+               <VBox.margin>
+                  <Insets left="20.0" />
+               </VBox.margin>
+            </Button>
+            <Region prefHeight="194.0" prefWidth="120.0" />
             <Button id="buttonClass" fx:id="signOutButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleSignOutButtonClick" prefHeight="45.0" prefWidth="56.0" styleClass="signOutButton" text="🚪">
                <VBox.margin>
                   <Insets left="20.0" />
