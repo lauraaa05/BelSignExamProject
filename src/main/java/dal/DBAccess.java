@@ -17,4 +17,8 @@ public class DBAccess {
         ds.setTrustServerCertificate(true);
         return ds.getConnection();
     }
+
+    public static Connection getConnection() {
+        return null;
+    }
 }
