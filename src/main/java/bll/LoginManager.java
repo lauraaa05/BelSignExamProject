@@ -10,5 +10,9 @@ public class LoginManager {
         return lgn.validateQualityControlUser(username, password);
     }
 
+    public boolean checkOperatorLogin(String username, String password) {
+        return lgn.validateOperatorUser(username, password);
+    }
+
 }
 
