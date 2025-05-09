@@ -1,4 +1,4 @@
-package dk.easv.belsignexamproject;
+package dk.easv.belsignexamproject.TestApps;
 
 import be.QRCodeInfo;
 import dal.QRCodeDAO;
