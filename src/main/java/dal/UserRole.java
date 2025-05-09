@@ -2,7 +2,9 @@ package dal;
 
 public enum UserRole {
     OPERATOR("Operator"),
-    QUALITY_CONTROL("Quality Control");
+    QUALITY_CONTROL("Quality Control"),
+    ADMIN("Admin");
+
 
     private final String roleName;
 

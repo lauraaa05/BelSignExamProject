@@ -76,11 +76,19 @@ public class QCULogInController {
         }
 
         boolean isValid = loginManager.checkQCULogin(username, password);
+        boolean isValidAdmin = loginManager.checkAdminLogin(username, password);
+
+//        QCUMainController qcuMainController = fxmlLoader.getController();
+//        qcuMainController.setLoggedInQCU(qcu);
 
         if (isValid) {
             errorLabel.setVisible(false);
             Stage currentStage = (Stage) logInButton.getScene().getWindow();
             switchToMainSceneSameWindow(currentStage);
+        } else if (isValidAdmin) {
+            errorLabel.setVisible(false);
+            Stage currentStage = (Stage) logInButton.getScene().getWindow();
+            switchToAdminMainScreen(currentStage);
         } else {
             errorLabel.setText("Incorrect username or password for Quality Control");
             errorLabel.setStyle("-fx-text-fill: red;");
@@ -121,6 +129,15 @@ public class QCULogInController {
         Scene scene = new Scene(fxmlLoader.load());
 
         currentStage.setTitle("QCU Main");
+        currentStage.setScene(scene);
+        currentStage.show();
+    }
+
+    private void switchToAdminMainScreen(Stage currentStage) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/AdminMain.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+
+        currentStage.setTitle("Admin Main");
         currentStage.setScene(scene);
         currentStage.show();
     }
