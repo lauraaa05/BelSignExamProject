@@ -14,5 +14,9 @@ public class LoginManager {
         return lgn.validateOperatorUser(username, password);
     }
 
+    public boolean checkAdminLogin(String username, String password) {
+        return lgn.validateAdminUser(username, password);
+    }
+
 }
 
