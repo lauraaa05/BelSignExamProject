@@ -15,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
@@ -32,7 +33,9 @@ public class PictureController {
     @FXML
     private Button btnCapture, btnRetake, btnSave, btnExit;
     @FXML
-    private ChoiceBox cBoxSide;
+    private ComboBox cBoxSide;
+    @FXML
+    private StackPane stackPane;
 
     private CameraManager camera = new CameraManager();
     private PictureManager pictureManager;
@@ -43,6 +46,9 @@ public class PictureController {
     public void initialize() {
         camera.initializeCamera();
         startWebcamStream();
+
+        imgVPicture.fitWidthProperty().bind(stackPane.widthProperty());
+        imgVPicture.fitHeightProperty().bind(stackPane.heightProperty());
 
         btnCapture.setOnAction(e -> captureImage());
         btnRetake.setOnAction(e -> retakeImage());
