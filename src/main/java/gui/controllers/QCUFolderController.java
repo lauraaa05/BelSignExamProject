@@ -114,4 +114,3 @@ public class QCUFolderController {
         sceneNavigator.switchTo(actionEvent, "QCUReport.fxml");
     }
 }
-

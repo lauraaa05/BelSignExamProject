@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/QCUMainCSS.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCUMainController">
+<BorderPane id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/QCUMainCSS.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCUMainController">
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" styleClass="topVBox" BorderPane.alignment="CENTER">
          <children>
@@ -82,23 +82,7 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <ListView fx:id="toApproveListView" prefHeight="420.0" prefWidth="255.0" styleClass="listView">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin></ListView>
-               </children>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </VBox>
-            <VBox alignment="TOP_CENTER" prefHeight="360.0" prefWidth="255.0" spacing="10.0">
-               <children>
-                  <Label style="-fx-font-weight: bold;" text="IN PROGRESS" textFill="WHITE">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <ListView fx:id="doneListView" prefHeight="420.0" prefWidth="255.0" styleClass="listView">
+                  <ListView fx:id="toApproveListView" prefHeight="420.0" prefWidth="201.0" styleClass="listView">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin></ListView>
