@@ -52,7 +52,10 @@
          <padding>
             <Insets top="10.0" right="10.0" bottom="10.0" left="10.0"/>
          </padding>
-         <ComboBox fx:id="cBoxSide" promptText="Choose side" prefWidth="300.0" prefHeight="60.0" style="-fx-font-size: 18px;" />
+         <StackPane fx:id="comboStack" alignment="TOP_LEFT">
+            <ComboBox fx:id="cBoxSide" prefWidth="300.0" prefHeight="60.0" />
+            <Label fx:id="comboPlaceholder" text="Choose side" mouseTransparent="true" />
+         </StackPane>
          <StackPane fx:id="stackPane" VBox.vgrow="ALWAYS">
             <ImageView fx:id="imgVPicture" preserveRatio="true" pickOnBounds="true" />
          </StackPane>
