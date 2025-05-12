@@ -14,14 +14,14 @@ public class OrderDAO {
     public OrderDAO() {
     }
 
-    private String formatOrderData(int countryNumber, int year, String month, String orderCode) {
+    private static String formatOrderData(int countryNumber, int year, String month, String orderCode) {
         if (month.length() == 1) {
             month = "0" + month;
         }
         return countryNumber + "-" + year + "-" + month + "-" + orderCode;
     }
 
-    public List<String> getFormattedOrderNumbers() {
+    public static List<String> getFormattedOrderNumbers() {
         List<String> orders = new ArrayList<>();
         String query = "SELECT CountryNumber, Year, Month, OrderCode FROM Orders";
 
