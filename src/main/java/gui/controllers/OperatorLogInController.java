@@ -9,6 +9,7 @@ import dal.OperatorDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
 import io.github.palexdev.materialfx.utils.SwingFXUtils;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import utilities.SceneNavigator;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -38,6 +40,7 @@ public class OperatorLogInController {
     private boolean isPhotoTaken = false;
 
     private final OperatorDAO operatorDAO = new OperatorDAO();
+    private final SceneNavigator sceneNavigator = new SceneNavigator();
 
     @FXML
     public void initialize() {
@@ -121,6 +124,11 @@ public class OperatorLogInController {
         currentStage.setTitle("Operator Login");
         currentStage.setScene(scene);
         currentStage.show();
+    }
+
+    @FXML
+    private void openUsernamePasswordLoginAct(ActionEvent actionEvent) {
+        sceneNavigator.switchTo(actionEvent, "OperatorLogInbyUsername.fxml");
     }
 }
 

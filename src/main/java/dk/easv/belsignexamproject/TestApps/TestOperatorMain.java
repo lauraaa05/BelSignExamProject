@@ -1,5 +1,6 @@
-package dk.easv.belsignexamproject;
+package dk.easv.belsignexamproject.TestApps;
 
+import dk.easv.belsignexamproject.OperatorLogInApp;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -7,13 +8,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import static javafx.application.Application.launch;
-
-public class TestOperatorPreview extends Application {
+public class TestOperatorMain extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorPreview.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorMain.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Operator Log In");
         stage.setScene(scene);
