@@ -6,20 +6,26 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import utilities.SceneNavigator;
-
 import java.io.IOException;
+import java.util.List;
+
+import dal.OrderDAO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 
 public class QCUMainController {
 
     @FXML
-    private Button btnOpenReport;
-
-    private final SceneNavigator sceneNavigator = new SceneNavigator();
+    private Button btnOpenReport, folderButton, homeButton;
 
     @FXML
-    private Button folderButton, homeButton;
+    private ListView<String> toApproveListView;
+
+    private final SceneNavigator sceneNavigator = new SceneNavigator();
 
     @FXML
     private void switchToFolderScene(Stage currentStage) throws IOException {
@@ -56,10 +62,18 @@ public class QCUMainController {
 
     @FXML
     private void btnOpenReportAction(ActionEvent actionEvent) {
-        sceneNavigator.switchTo(actionEvent,"QCUReport.fxml");
+        sceneNavigator.switchTo(actionEvent, "QCUReport.fxml");
     }
 
-    private void sceneNavigator(String s) {
+    // Method to load orders into the ListView
+    @FXML
+    public void initialize() {
+        try {
+            List<String> orders = OrderDAO.getFormattedOrderNumbers(); // <- trae los datos
+            ObservableList<String> observableOrders = FXCollections.observableArrayList(orders);
+            toApproveListView.setItems(observableOrders); // <- muestra los datos
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
-
