@@ -1,9 +1,15 @@
 package dal;
 
+import be.Operator;
+import be.QualityControl;
+import be.User;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginDAO {
 
@@ -88,6 +94,41 @@ public class LoginDAO {
         }
 
         return false;
+    }
+
+    public List<User> getAllUsers() {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT UserId, Username, Role, FirstName, LastName FROM LoginInfo";
+
+        try (Connection conn = DBAccess.DBConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery()) {
+
+            while(rs.next()) {
+                int id = rs.getInt("UserId");
+                String username = rs.getString("Username");
+                String role = rs.getString("Role");
+                String firstName = rs.getString("FirstName");
+                String lastName = rs.getString("LastName");
+
+                switch (role.toLowerCase()) {
+                    case "operator":
+                        users.add(new Operator(id, username, role, null, firstName, lastName));
+                        break;
+                    case "quality control":
+                        users.add(new QualityControl(id, username, role, firstName, lastName));
+                        break;
+                    case "admin":
+                        break;
+                    default:
+                        System.out.println("Unknown role: " + role);
+                }
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
     }
 
 }

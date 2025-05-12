@@ -33,26 +33,49 @@
 	-fx-padding: 20px;
 }
 
-.listView {
-	-fx-padding: 12px;
-	-fx-font-size: 16px;
-	-fx-background-color: white;
-	-fx-background-radius: 8px;
+.tableView {
+	-fx-background-color: transparent;
+	-fx-background-insets: 0;
+	-fx-border-radius: 15;
+	-fx-background-radius: 15;
+	-fx-padding: 10;
 	-fx-border-color: #cccccc;
-	-fx-border-width: 1px;
-	-fx-border-radius: 8px;
-	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 4, 0, 0, 2);
-	-fx-text-fill: black;
+	-fx-border-width: 1;
 }
 
-.listView .list-cell:hover {
-	-fx-background-color: #f2f2f2;
+.tableView .column-header {
+	-fx-background-color: #004a99;
+	-fx-border-radius: 15 15 0 0;
+	-fx-background-radius: 0;
+	-fx-padding: 0 10 0 10;
 }
 
-.list-view .list-cell:filled:selected {
-	-fx-background-color: #e6f0ff;
-	-fx-border-color: #4a90e2;
-	-fx-text-fill: black;
+.tableView .column-header .label {
+	-fx-text-fill: white;
+	-fx-font-weight: bold;
+	-fx-background-color: transparent;
+	-fx-alignment: center;
+}
+
+.tableView .table-row-cell {
+	-fx-background-color: white;
+	-fx-border-color: transparent transparent #dddddd transparent;
+	-fx-border-width: 0 0 1 0;
+	-fx-padding: 10px;
+}
+
+.tableView .table-cell {
+	-fx-padding: 8px;
+	-fx-text-fill: #333333;
+	-fx-font-size: 14px;
+}
+
+.tableView .table-row-cell:filled:selected, .tableView .table-row-cell:focused:selected {
+	-fx-background-color: #cce5ff;
+}
+
+.tableView .filler {
+	-fx-background-color: transparent;
 }
 
 .leftUserLabel {
@@ -76,5 +99,9 @@
 
 #centerButton:hover {
 	-fx-background-color: #b3b3b3;
+}
+
+#editButton {
+	-fx-font-size: 18px;
 }
 
