@@ -9,20 +9,29 @@ public class Picture {
     private LocalDateTime timestamp;
     private String fileName;
     private String orderNumber;
+    private String side;
 
-    public Picture(int imageId, byte[] image, LocalDateTime timestamp, String fileName, String orderNumber) {
+    public Picture(int imageId, byte[] image, LocalDateTime timestamp, String fileName, String orderNumber,  String side) {
         this.imageId = imageId;
         this.image = image;
         this.timestamp = timestamp;
         this.fileName = fileName;
         this.orderNumber = orderNumber;
+        this.side = side;
     }
 
-    public Picture(byte[] image, String fileName, LocalDateTime timestamp, String orderNumber) {
+    public Picture(byte[] image, String fileName, LocalDateTime timestamp, String orderNumber, String side) {
         this.image = image;
         this.fileName = fileName;
         this.timestamp = timestamp;
         this.orderNumber = orderNumber;
+        this.side = side;
+    }
+
+    public Picture(byte[] image, LocalDateTime timestamp, String side) {
+        this.image = image;
+        this.timestamp = timestamp;
+        this.side = side;
     }
 
     public int getImageId() {
@@ -45,6 +54,10 @@ public class Picture {
         return orderNumber;
     }
 
+    public String getSide() {
+        return side;
+    }
+
     public void setImageId(int imageId) {
         this.imageId = imageId;
     }
@@ -63,5 +76,9 @@ public class Picture {
 
     public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
+    }
+
+    public void setSide(String side) {
+        this.side = side;
     }
 }

@@ -11,7 +11,7 @@ public class PictureDAO {
     DBAccess db = new DBAccess();
 
     public void savePicture(Picture picture) throws SQLException {
-        String sql = "INSERT INTO Pictures (Image, Timestamp, FileName, OrderNumber) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Pictures (Image, Timestamp, FileName, OrderNumber, Side) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = db.DBConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -20,6 +20,7 @@ public class PictureDAO {
             pstmt.setTimestamp(2, Timestamp.valueOf(picture.getTimestamp()));
             pstmt.setString(3, picture.getFileName());
             pstmt.setString(4, picture.getOrderNumber());
+            pstmt.setString(5, picture.getSide());
 
             pstmt.executeUpdate();
         }
@@ -27,7 +28,7 @@ public class PictureDAO {
 
     public List<Picture> getPicturesByOrderNumber(String orderNumber) throws SQLException {
         List<Picture> pictures = new ArrayList<>();
-        String sql = "SELECT Image, FileName, Timestamp, OrderNumber FROM Pictures WHERE OrderNumber = ?";
+        String sql = "SELECT Image, FileName, Timestamp, OrderNumber, Side FROM Pictures WHERE OrderNumber = ?";
 
         try (Connection conn = db.DBConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -40,8 +41,9 @@ public class PictureDAO {
                 String fileName = rs.getString("FileName");
                 Timestamp timestamp = rs.getTimestamp("Timestamp");
                 String dbOrderNumber = rs.getString("OrderNumber");
+                String dbSide = rs.getString("Side");
 
-                Picture picture = new Picture(imageBytes, fileName, timestamp.toLocalDateTime(), dbOrderNumber);
+                Picture picture = new Picture(imageBytes, fileName, timestamp.toLocalDateTime(), dbOrderNumber, dbSide);
                 pictures.add(picture);
             }
         }
@@ -60,5 +62,21 @@ public class PictureDAO {
             }
         }
         return 0;
+    }
+
+    public List<String> getTakenSidesForOrderNumber(String orderNumber) throws SQLException {
+        List<String> sides = new ArrayList<>();
+
+        String sql = "SELECT DISTINCT Side FROM Pictures WHERE OrderNumber = ?";
+        try (Connection conn = db.DBConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, orderNumber);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                sides.add(rs.getString("Side"));
+            }
+        }
+        return sides;
     }
 }
