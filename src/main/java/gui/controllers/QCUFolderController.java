@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import dal.OrderDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
@@ -7,10 +8,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -22,9 +26,8 @@ import java.util.List;
 
 public class QCUFolderController {
 
-    @FXML
-    private FlowPane folderFlowPane;
 
+    public BorderPane mainBorderPane;
     @FXML
     private Button signOutButton, homeButton;
 
@@ -34,6 +37,21 @@ public class QCUFolderController {
     private final List<String> folderDates = new ArrayList<>();
 
     private final SceneNavigator sceneNavigator = new SceneNavigator();
+
+    @FXML
+    private TextField orderCodeField; // Your input field
+
+    @FXML
+    private Label statusLabel; //
+
+    private final OrderDAO orderDAO = new OrderDAO();
+
+    @FXML
+    private FlowPane folderFlowPane;
+
+    @FXML
+    private TextField searchTextField;
+
     @FXML
     public void initialize() {
 
@@ -56,7 +74,7 @@ public class QCUFolderController {
             folderButton.setGraphic(icon);
             folderButton.getStyleClass().add("folder-button");
 
-            folderButton.setOnAction(e -> System.out.println("Open folder: " + date));
+            folderButton.setOnAction(_ -> System.out.println("Open folder: " + date));
 
             Label label = new Label(date);
             label.setStyle("-fx-font-size: 13px;");
@@ -65,6 +83,34 @@ public class QCUFolderController {
             folderFlowPane.getChildren().add(folderBox);
         }
     }
+
+    @FXML
+    private void handleCheckOrderCode() {
+        String inputCode = orderCodeField.getText().trim();
+
+        if (inputCode.isEmpty()) {
+            showAlert("Input Error", "Please enter an Order Code.");
+            return;
+        }
+
+        boolean exists = orderDAO.orderCodeExists(inputCode);
+
+        if (exists) {
+            statusLabel.setText("✅ Order exists: " + inputCode);
+        } else {
+            showAlert("Order Not Found", "No order found with code: " + inputCode);
+            statusLabel.setText("❌ Order not found.");
+        }
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
 
     @FXML
     private void switchToMainScene(Stage currentStage) throws IOException {
@@ -112,6 +158,23 @@ public class QCUFolderController {
     @FXML
     private void btnOpenReportAction(ActionEvent actionEvent) {
         sceneNavigator.switchTo(actionEvent, "QCUReport.fxml");
+    }
+
+    @FXML
+    private void handleSearchAction(ActionEvent event) {
+        String searchText = searchTextField.getText().toLowerCase().trim();
+
+        for (var node : folderFlowPane.getChildren()) {
+            if (node instanceof VBox folderBox) {
+                // Assume Label is second child (index 1)
+                Label label = (Label) folderBox.getChildren().get(1);
+                String labelText = label.getText().toLowerCase();
+                boolean matches = labelText.contains(searchText);
+
+                folderBox.setVisible(matches);
+                folderBox.setManaged(matches); // Avoid leaving blank space
+            }
+        }
     }
 }
 
