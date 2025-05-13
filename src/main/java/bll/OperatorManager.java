@@ -14,9 +14,9 @@ public class OperatorManager{
             this.operatorMap = new HashMap<>();
 
 
-            operatorMap.put(1001, new Operator());
-            operatorMap.put(1002, new Operator());
-            operatorMap.put(1003, new Operator());
+//            operatorMap.put(1001, new Operator());
+//            operatorMap.put(1002, new Operator());
+//            operatorMap.put(1003, new Operator());
         }
 
         // Method to get an operator by QR cdode ID

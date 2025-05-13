@@ -1,19 +1,34 @@
 package be;
 
-public class Admin {
+public class Admin implements User {
 
     private int id;
     private String role;
     private String name;
+    private String firstName;
+    private String lastName;
 
-    public Admin(int id, String role, String name) {
+    public Admin(int id, String role, String name, String firstName, String lastName) {
         this.id = id;
         this.role = role;
         this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
-    public Admin() { this(0, "", ""); }
+    public Admin() { this(0, "", "", "", ""); }
 
+
+    public String getFirstName() {
+        return firstName;
+    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    public String getLastName() {
+        return lastName;
+    }
+    public void setLastName(String lastName) {}
 
     public int getId() {
         return this.id;
