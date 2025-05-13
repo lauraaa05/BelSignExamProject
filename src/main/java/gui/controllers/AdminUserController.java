@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -19,6 +20,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import utilities.SceneNavigator;
 
 import java.io.IOException;
 import java.net.URL;
@@ -38,9 +40,11 @@ public class AdminUserController implements Initializable {
     private TableColumn<User, String> roleColumn;
 
     @FXML
-    private Button signOutButton;
+    private Button signOutButton, addButton;
 
     private final LoginDAO loginDAO = new LoginDAO();
+
+    private final SceneNavigator sceneNavigator = new SceneNavigator();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -70,5 +74,23 @@ public class AdminUserController implements Initializable {
     public void handleSignOutButtonClick(ActionEvent actionEvent) throws IOException {
         Stage currentStage = (Stage) signOutButton.getScene().getWindow();
         switchToLogInScreen(currentStage);
+    }
+
+    @FXML
+    private void handleAddUserPopup() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/AddUserPopup.fxml"));
+        Parent root = fxmlLoader.load();
+
+        AddUserPopupController controller = fxmlLoader.getController();
+        controller.setAdminUserController(this);
+
+        Stage stage = new Stage();
+        stage.setTitle("Add User");
+        stage.setScene(new Scene(root));
+        stage.showAndWait();
+    }
+
+    public void refreshUserTable() {
+        tableViewUsers.setItems(FXCollections.observableArrayList(loginDAO.getAllUsers()));
     }
 }

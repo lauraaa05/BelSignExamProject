@@ -7,6 +7,7 @@ public class QualityControl implements User {
     private String name;
     private String firstName;
     private String lastName;
+    private String email;
 
     public QualityControl(int id, String name, String role, String firstName, String lastName) {
         this.id = id;
@@ -18,6 +19,10 @@ public class QualityControl implements User {
 
     public QualityControl() { this(0, "", "", "", ""); }
 
+    public QualityControl(String firstName, String lastName, String username, String password, String email) {
+        this(0, username, "Quality Control", firstName, lastName);
+        this.email = email;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -53,6 +58,10 @@ public class QualityControl implements User {
     public void setRole(String role) {
         this.role = role;
     }
+
+    public String getEmail() { return email; }
+
+    public void setEmail(String email) { this.email = email; }
 
     @Override
     public String toString() {
