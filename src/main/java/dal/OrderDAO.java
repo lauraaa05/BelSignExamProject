@@ -1,102 +1,114 @@
 package dal;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import be.OrderNumber;
+
+import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public class OrderDAO {
 
-    public OrderDAO() {
+    // Helper: Format OrderNumber as "CountryNumber-OrderCode"
+    private static String formatOrderNumber(int countryNumber, String orderCode) {
+        return countryNumber + "-" + orderCode.trim();
     }
 
-    private static String formatOrderData(int countryNumber, int year, String month, String orderCode) {
-        if (month.length() == 1) {
-            month = "0" + month;
-        }
-        return countryNumber + "-" + year + "-" + month + "-" + orderCode;
-    }
-
+    // Get all formatted order numbers
     public static List<String> getFormattedOrderNumbers() {
-        List<String> orders = new ArrayList<>();
-        String query = "SELECT CountryNumber, Year, Month, OrderCode FROM Orders";
+        List<String> orderNumbers = new ArrayList<>();
+        String sql = "SELECT CountryNumber, OrderCode FROM Orders";
 
         try (Connection conn = new DBAccess().DBConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
+             PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 int countryNumber = rs.getInt("CountryNumber");
-                int year = rs.getInt("Year");
-                String month = rs.getString("Month").trim();
                 String orderCode = rs.getString("OrderCode");
 
-                orders.add(formatOrderData(countryNumber, year, month, orderCode));
+                orderNumbers.add(formatOrderNumber(countryNumber, orderCode));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.err.println("Error fetching formatted orders: " + e.getMessage());
         }
-        return orders;
+
+        return orderNumbers;
     }
 
-    public List<String> searchFormattedOrders(String searchTerm) {
-        List<String> orders = new ArrayList<>();
-        String query = "SELECT CountryNumber, Year, Month, OrderCode FROM Orders " +
-                "WHERE CAST(CountryNumber AS TEXT) LIKE ? OR " +
-                "CAST(Year AS TEXT) LIKE ? OR " +
-                "Month LIKE ? OR " +
-                "OrderCode LIKE ?";
+    // Search formatted orders by CountryNumber, OrderCode, or Year
+    public static List<String> searchFormattedOrders(String keyword) {
+        List<String> matchedOrders = new ArrayList<>();
+        String sql = """
+            SELECT CountryNumber, OrderCode FROM Orders 
+            WHERE CAST(CountryNumber AS NVARCHAR) LIKE ? 
+               OR LTRIM(RTRIM(OrderCode)) LIKE ? 
+               OR CAST(Year AS NVARCHAR) LIKE ?
+            """;
 
         try (Connection conn = new DBAccess().DBConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            String pattern = "%" + searchTerm + "%";
-            for (int i = 1; i <= 4; i++) {
-                stmt.setString(i, pattern);
-            }
+            String wildcard = "%" + keyword.trim() + "%";
+            stmt.setString(1, wildcard);
+            stmt.setString(2, wildcard);
+            stmt.setString(3, wildcard);
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 int countryNumber = rs.getInt("CountryNumber");
-                int year = rs.getInt("Year");
-                String month = rs.getString("Month").trim();
                 String orderCode = rs.getString("OrderCode");
 
-                orders.add(formatOrderData(countryNumber, year, month, orderCode));
+                matchedOrders.add(formatOrderNumber(countryNumber, orderCode));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.err.println("Error during order search: " + e.getMessage());
         }
-        return orders;
+
+        return matchedOrders;
     }
 
-    public List<OrderDAO> searchByMonthYearOrOrder(String query) {
-        List<OrderDAO> results = new ArrayList<>();
-        String sql = "SELECT * FROM folders WHERE order_number LIKE ? OR month LIKE ? OR year LIKE ?";
+    // Check if an order code exists
+    public boolean orderCodeExists(String orderCode) {
+        String sql = "SELECT 1 FROM Orders WHERE LTRIM(RTRIM(OrderCode)) = ?";
 
-        try (Connection conn = DBAccess.getConnection();
+        try (Connection conn = new DBAccess().DBConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            String pattern = "%" + query + "%";
-            stmt.setString(1, pattern);
-            stmt.setString(2, pattern);
-            stmt.setString(3, pattern);
+
+            stmt.setString(1, orderCode.trim());
+            ResultSet rs = stmt.executeQuery();
+
+            return rs.next();
+        } catch (SQLException e) {
+            System.err.println("Error checking order code existence: " + e.getMessage());
+        }
+
+        return false;
+    }
+
+    // Get OrderNumbers by Year and Month
+    public List<OrderNumber> getOrderNumbersByFolder(String year, String month) {
+        List<OrderNumber> results = new ArrayList<>();
+        String sql = "SELECT OrderNumber, status, date FROM OrderNumbersTable WHERE Year = ? AND Month = ?";
+
+        try (Connection conn = new DBAccess().DBConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, year);
+            stmt.setString(2, month);
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                OrderDAO folder = new OrderDAO();
-                results.add(folder);
+                OrderNumber order = new OrderNumber(
+                        rs.getInt("OrderNumber"),
+                        rs.getString("status"),
+                        rs.getString("date")
+                );
+                results.add(order);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error retrieving OrderNumbers: " + e.getMessage());
         }
 
         return results;
-    }
-
-    private void add(OrderDAO folder) {
     }
 }

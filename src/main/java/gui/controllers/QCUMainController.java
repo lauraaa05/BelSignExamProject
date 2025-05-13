@@ -69,11 +69,13 @@ public class QCUMainController {
     @FXML
     public void initialize() {
         try {
-            List<String> orders = OrderDAO.getFormattedOrderNumbers(); // <- trae los datos
+            List<String> orders = OrderDAO.getFormattedOrderNumbers();
             ObservableList<String> observableOrders = FXCollections.observableArrayList(orders);
-            toApproveListView.setItems(observableOrders); // <- muestra los datos
+            toApproveListView.setItems(observableOrders);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 }
+
+

@@ -61,4 +61,10 @@ public class OrderStatusDAO {
             e.printStackTrace();
         }
     }
+
+    public List<String> getOrdersByYear(String year) {
+        List<String> orders = new ArrayList<>();
+        String sql = "SELECT OrderCode FROM Orders WHERE Year = ?";
+        return orders;
+    }
 }
