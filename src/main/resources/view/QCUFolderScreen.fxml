@@ -94,12 +94,12 @@
                         <Insets top="7.0" />
                      </HBox.margin>
                   </Label>
-                  <TextField promptText="Search for Order...">
+                  <TextField fx:id="searchTextField" promptText="Search for Order...">
                      <HBox.margin>
                         <Insets top="5.0" />
                      </HBox.margin>
                   </TextField>
-                  <Button mnemonicParsing="false" text="⌕">
+                  <Button onAction="#handleSearchAction" mnemonicParsing="false" text="⌕">
                      <HBox.margin>
                         <Insets right="10.0" top="5.0" />
                      </HBox.margin>

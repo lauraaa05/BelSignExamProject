@@ -1,28 +1,33 @@
 package gui.controllers;
 
+import be.Picture;
 import bll.CameraManager;
 import bll.PictureManager;
 import dal.PictureDAO;
 import io.github.palexdev.materialfx.utils.SwingFXUtils;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.rmi.server.RemoteObject;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static utilities.AlertHelper.showAlert;
 
@@ -32,17 +37,26 @@ public class PictureController {
     @FXML
     private Button btnCapture, btnRetake, btnSave, btnExit;
     @FXML
-    private ChoiceBox cBoxSide;
+    private ComboBox<String> cBoxSide;
+    @FXML
+    private StackPane stackPane;
+    @FXML
+    private Label comboPlaceholder;
 
     private CameraManager camera = new CameraManager();
     private PictureManager pictureManager;
+    private PictureDAO pictureDAO;
     private BufferedImage capturedImage;
     private boolean isPhotoTaken = false;
     private String orderNumber;
+    private OperatorPreviewController operatorPreviewController;
 
     public void initialize() {
         camera.initializeCamera();
         startWebcamStream();
+
+        imgVPicture.fitWidthProperty().bind(stackPane.widthProperty());
+        imgVPicture.fitHeightProperty().bind(stackPane.heightProperty());
 
         btnCapture.setOnAction(e -> captureImage());
         btnRetake.setOnAction(e -> retakeImage());
@@ -54,6 +68,12 @@ public class PictureController {
                 ex.printStackTrace();
             }
         });
+
+        comboPlaceholder.visibleProperty().bind(
+                cBoxSide.getSelectionModel().selectedItemProperty().isNull()
+                        .and(cBoxSide.itemsProperty().isNotNull())
+                        .and(Bindings.isNotEmpty(cBoxSide.getItems()))
+        );
 
         pictureManager = new PictureManager(new PictureDAO());
     }
@@ -92,23 +112,58 @@ public class PictureController {
 
     private void saveImage() {
         if (capturedImage != null && isPhotoTaken) {
+            String selectedSide = cBoxSide.getValue();
+
+            if (selectedSide == null || selectedSide.isEmpty()) {
+                showAlert(Alert.AlertType.WARNING,
+                        "No side selected", null,
+                        "Please choose a side before saving the picture");
+                return;
+            }
+
             try {
-                pictureManager.savePictureToDB(capturedImage, orderNumber);
+                LocalDateTime timestamp = LocalDateTime.now();
+                pictureManager.savePictureToDB(capturedImage, orderNumber, timestamp, selectedSide);
+
+                if (List.of("Front", "Back", "Left", "Right", "Top").contains(selectedSide)) {
+                    cBoxSide.getItems().remove(selectedSide);
+                }
+
+                cBoxSide.getSelectionModel().clearSelection();
+
+                Picture previewPicture = new Picture(convertToByteArray(capturedImage), timestamp, selectedSide);
+                operatorPreviewController.addImage(previewPicture);
+
                 showAlert(Alert.AlertType.INFORMATION, "Save successful", null, "Picture saved");
                 isPhotoTaken = false;
                 startWebcamStream();
             } catch (SQLException | IOException e) {
                 e.printStackTrace();
-                showAlert(Alert.AlertType.ERROR, "Error", null, "Failed to save picture");
+                showAlert(Alert.AlertType.ERROR, "Save failed", null, "Failed to save picture");
             }
-        } else  {
-            showAlert(Alert.AlertType.ERROR, "Error",  null, "No picture to save");
+        } else {
+            showAlert(Alert.AlertType.ERROR, "Save failed", null, "No picture to save");
         }
     }
 
     public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
         System.out.println("Order number received in PictureController: " + orderNumber);
+
+        pictureDAO = new PictureDAO();
+
+        List<String> allSides = new ArrayList<>(List.of("Front", "Back", "Left", "Right", "Top"));
+
+        try {
+            List<String> takenSides = pictureDAO.getTakenSidesForOrderNumber(orderNumber);
+            allSides.removeAll(takenSides);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        allSides.add("Extra");
+        cBoxSide.getItems().setAll(allSides);
+        cBoxSide.getSelectionModel().clearSelection();
     }
 
     private void switchToPreviewScene(Stage currentStage) throws IOException {
@@ -137,5 +192,15 @@ public class PictureController {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Error", null, "Failed to load operator preview");
         }
+    }
+
+    private byte[] convertToByteArray(BufferedImage image) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", baos);
+        return baos.toByteArray();
+    }
+
+    public void setOperatorPreviewController(OperatorPreviewController operatorPreviewController) {
+        this.operatorPreviewController = operatorPreviewController;
     }
 }

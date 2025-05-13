@@ -91,3 +91,16 @@
     -fx-background-radius: 10;
     -fx-padding: 4;
 }
+
+.preview-label {
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-font-family: "Arial";
+    -fx-font-size: 18px;
+}
+
+.preview_box {
+    -fx-background-color: #333;
+    -fx-background-radius: 12px;
+    -fx-padding: 10;
+}

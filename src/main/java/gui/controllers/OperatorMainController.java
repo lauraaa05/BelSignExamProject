@@ -1,6 +1,5 @@
 package gui.controllers;
 
-
 import be.Operator;
 import bll.OrderManager;
 import bll.OrderStatusManager;
@@ -11,9 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -21,8 +18,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
-
 
 public class OperatorMainController implements Initializable {
 
@@ -38,7 +33,14 @@ public class OperatorMainController implements Initializable {
     @FXML
     private Label loggedUsernameLbl;
 
-    public OperatorMainController() throws IOException {
+    @FXML
+    private TextField yearSearchField;
+
+    private final String currentUserRole = "Operator";
+    private final OrderStatusDAO orderStatusDAO = new OrderStatusDAO();
+
+    public OperatorMainController() {
+        // No-arg constructor
     }
 
     @Override
@@ -46,7 +48,7 @@ public class OperatorMainController implements Initializable {
         loadOrdersIntoToDoList();
         loadOrdersIntoDoneList();
 
-        // Adding click event listener on the ListView
+        // Add click listener
         toDoListView.setOnMouseClicked(this::handleOrderClick);
     }
 
@@ -64,9 +66,8 @@ public class OperatorMainController implements Initializable {
         doneListView.setFixedCellSize(48);
     }
 
-    // Handle order click
     private void handleOrderClick(MouseEvent event) {
-        if (event.getClickCount() == 1) {  // Single click
+        if (event.getClickCount() == 1) {
             String selectedOrderNumber = toDoListView.getSelectionModel().getSelectedItem();
             if (selectedOrderNumber != null) {
                 openOrderPreviewScene(selectedOrderNumber);
@@ -74,34 +75,28 @@ public class OperatorMainController implements Initializable {
         }
     }
 
-    // Open the OperatorPreviewController scene and pass the order number
     private void openOrderPreviewScene(String orderNumber) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/OperatorPreview.fxml"));
-
-            // Load the scene
             Scene orderPreviewScene = new Scene(loader.load());
 
-            // Get the controller of the new scene and pass the order number
             OperatorPreviewController previewController = loader.getController();
             previewController.setOrderNumber(orderNumber);
 
-            // Set the new scene to the current stage
             Stage stage = (Stage) toDoListView.getScene().getWindow();
             stage.setScene(orderPreviewScene);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    private void switchToMainSceneSameWindow(Stage currentStage) throws IOException {
 
+    private void switchToMainSceneSameWindow(Stage currentStage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorLogin.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
         currentStage.setTitle("OperatorLogin");
         currentStage.setScene(scene);
         currentStage.show();
-
     }
 
     @FXML
@@ -114,20 +109,39 @@ public class OperatorMainController implements Initializable {
         loggedUsernameLbl.setText(operator.getName());
     }
 
-    private final String currentUserRole = "Operator";
-
-    private final OrderStatusDAO  orderStatusDAO = new OrderStatusDAO();
-
     public void refreshLists() {
-        OrderStatusDAO dao = new OrderStatusDAO();
-        List<String> todoOrders = dao.getFormattedOrdersByRoleAndStatus("operator", "todo");
-        List<String> doneOrders = dao.getFormattedOrdersByRoleAndStatus("operator", "done");
+        List<String> todoOrders = orderStatusDAO.getFormattedOrdersByRoleAndStatus("operator", "todo");
+        List<String> doneOrders = orderStatusDAO.getFormattedOrdersByRoleAndStatus("operator", "done");
 
         toDoListView.getItems().setAll(todoOrders);
         doneListView.getItems().setAll(doneOrders);
     }
+
+    @FXML
+    private void handleSearchByYearAction() {
+        String year = yearSearchField.getText().trim();
+
+        if (year.isEmpty()) {
+            System.out.println("Year is empty");
+            return;
+        }
+
+        // Simulate search - replace with your actual DB call
+        List<String> orders = getOrdersByYear(year);
+
+        toDoListView.getItems().clear();
+        toDoListView.getItems().addAll(orders);
+    }
+
+    private List<String> getOrdersByYear(String year) {
+        return orderStatusDAO.getOrdersByYear(year);
+    }
+
+    public void handleSearchAction(ActionEvent actionEvent) {
+    }
+
+    public void handleLogoutAction(ActionEvent actionEvent) {
+    }
+    public void handleSearchYearAction(ActionEvent actionEvent) {
+    }
 }
-
-
-
-

@@ -19,7 +19,7 @@ public class PictureManager {
         this.pictureDAO = pictureDAO;
     }
 
-    public void savePictureToDB(BufferedImage image, String orderNumber) throws IOException, SQLException {
+    public void savePictureToDB(BufferedImage image, String orderNumber, LocalDateTime timestamp, String side) throws IOException, SQLException {
         System.out.println("Saving picture for order " + orderNumber);
         System.out.println("Image is null= " + (image == null));
         System.out.println("Order number is null? " + (orderNumber == null));
@@ -30,7 +30,7 @@ public class PictureManager {
         ImageIO.write(image, "png", baos);
         byte[] imageBytes = baos.toByteArray();
 
-        Picture picture = new Picture(imageBytes, fileName, LocalDateTime.now(), orderNumber);
+        Picture picture = new Picture(imageBytes, fileName, timestamp, orderNumber, side);
         pictureDAO.savePicture(picture);
     }
 

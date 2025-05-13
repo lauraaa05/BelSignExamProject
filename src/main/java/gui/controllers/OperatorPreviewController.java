@@ -5,9 +5,11 @@ import dal.OrderStatusDAO;
 import dal.PictureDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.mfxlocalization.Language;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -18,6 +20,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import utilities.AlertHelper;
@@ -25,6 +28,7 @@ import utilities.AlertHelper;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -94,7 +98,16 @@ public class OperatorPreviewController {
         imageView.setSmooth(true);
 
         imageView.setEffect(new DropShadow(10, Color.rgb(0,0,0,0.5)));
-        imageView.setOnMouseClicked(event -> {
+
+        Label label = new Label(picture.getSide() + " - " +
+                picture.getTimestamp().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")));
+        label.getStyleClass().add("preview-label");
+
+        VBox vBox = new VBox(5, imageView, label);
+        vBox.setAlignment(Pos.CENTER);
+        label.getStyleClass().add("preview-box");
+
+        vBox.setOnMouseClicked(event -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ImageViewer.fxml"));
                 Parent root = loader.load();
@@ -110,7 +123,7 @@ public class OperatorPreviewController {
                 e.printStackTrace();
             }
         });
-        imageFlowPane.getChildren().add(imageView);
+        imageFlowPane.getChildren().add(vBox);
     }
 
     // Método reusable to change the scene
@@ -140,6 +153,7 @@ public class OperatorPreviewController {
 
         PictureController pictureController = fxmlLoader.getController();
         pictureController.setOrderNumber(currentOrderNumber);
+        pictureController.setOperatorPreviewController(this);
 
         Stage currentStage = (Stage) cameraButton.getScene().getWindow();
         currentStage.setScene(new Scene(root));
@@ -169,6 +183,25 @@ public class OperatorPreviewController {
 
         try {
             PictureDAO pictureDAO = new PictureDAO();
+
+            List<String> takenSides = pictureDAO.getTakenSidesForOrderNumber(currentOrderNumber);
+
+            if (takenSides.containsAll(List.of("Front", "Back", "Left", "Right", "Top"))) {
+                System.out.println("All sides have been photographed");
+            } else {
+                List<String> missingSides = List.of("Front", "Back", "Left", "Right", "Top")
+                        .stream().filter(side -> !takenSides.contains(side))
+                        .toList();
+
+                AlertHelper.showAlert(
+                        Alert.AlertType.WARNING,
+                        "Missing sides",
+                        "Not all required sides have been photographed",
+                        "Missing: " + String.join(", ", missingSides)
+                );
+                return;
+            }
+
             int imageCount = pictureDAO.countImagesForOrderNumber(currentOrderNumber);
 
             if (imageCount < MIN_IMAGES) {
