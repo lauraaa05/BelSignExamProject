@@ -12,4 +12,8 @@ public class QCUReportController {
     private void goBackButtonAction(ActionEvent actionEvent) {
         sceneNavigator.switchTo(actionEvent, "QCUMain.fxml");
     }
+
+    public void setOrderNumber(String orderNumber) {
+        System.out.println("setOrderNumber: " + orderNumber);
+    }
 }

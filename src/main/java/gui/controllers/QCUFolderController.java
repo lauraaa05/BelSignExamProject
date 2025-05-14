@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -162,5 +163,25 @@ public class QCUFolderController {
 
         folderViewPane.setVisible(true);
         folderViewPane.setManaged(true);
+    }
+
+    @FXML
+    private void handleOrderClick(MouseEvent event) {
+        if (event.getClickCount() == 1) {
+            String selectedOrderNumber = orderListView.getSelectionModel().getSelectedItem();
+            if (selectedOrderNumber != null) {
+                String clearOrderNumber = selectedOrderNumber.replace("\uD83D\uDCC4 ", "");
+                openOrderReportScene(selectedOrderNumber);
+            }
+        }
+    }
+
+    private void openOrderReportScene(String orderNumber) {
+        Stage stage = (Stage) orderListView.getScene().getWindow();
+
+        SceneNavigator sceneNavigator = new SceneNavigator();
+        sceneNavigator.<QCUReportController>switchToWithData(stage, "QCUReport.fxml", qcuReportController -> {
+            qcuReportController.setOrderNumber(orderNumber);
+        });
     }
 }

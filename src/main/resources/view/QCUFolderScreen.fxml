@@ -123,7 +123,7 @@
                </padding>
                <children>
                   <Label fx:id="currentFolderLabel" styleClass="breadcrumbLabel" />
-                  <ListView fx:id="orderListView" prefHeight="500.0" prefWidth="800.0" />
+                  <ListView fx:id="orderListView" onMouseClicked="#handleOrderClick" prefHeight="500.0" prefWidth="800.0" />
                   <HBox alignment="CENTER_LEFT">
                      <Button text="⬅ Back" onAction="#handleBackToFolders" />
                   </HBox>
