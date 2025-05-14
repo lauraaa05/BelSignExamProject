@@ -80,13 +80,13 @@
                            </HBox.margin>
                         </Label>
                         <Region prefHeight="33.0" prefWidth="371.0" HBox.hgrow="ALWAYS" />
-                        <Button onAction="#handleAddUserPopup" fx:id="addButton" id="centerButton" mnemonicParsing="false" styleClass="centerButton" text="➕">
+                        <Button id="centerButton" fx:id="addButton" mnemonicParsing="false" onAction="#handleAddUserPopup" styleClass="centerButton" text="➕">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
                         </Button>
-                        <Button id="centerButton" mnemonicParsing="false" styleClass="conterButton" text="➖" />
-                        <Button id="centerButton" fx:id="editButton" mnemonicParsing="false" styleClass="editButton" text="🖍">
+                        <Button onAction="#handleDeleteUser" id="centerButton" fx:id="deleteUserButton" mnemonicParsing="false" styleClass="conterButton" text="➖" />
+                        <Button id="centerButton" fx:id="editButton" mnemonicParsing="false" onAction="#handleEditButtonClick" styleClass="editButton" text="🖍">
                            <font>
                               <Font name="System Bold" size="13.0" />
                            </font></Button>
