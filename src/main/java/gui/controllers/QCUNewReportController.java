@@ -4,6 +4,7 @@ import be.Picture;
 import be.Report;
 import dal.PictureDAO;
 import gui.model.ReportModel;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -69,6 +70,8 @@ public class QCUNewReportController {
     @FXML
     public void initialize() {
         submitButton.setOnAction(e -> submitComment());
+
+
     }
 
     private VBox createImageCard(Picture picture) {

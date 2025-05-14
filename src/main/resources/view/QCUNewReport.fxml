@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.layout.GridPane?>
-<ScrollPane fx:id="scrollPane" prefHeight="1300.0" prefWidth="850.0" stylesheets="@../css/QCUNewReport.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCUNewReportController">
+<ScrollPane fx:id="scrollPane" fitToWidth="true" fitToHeight="true" prefHeight="780.0" prefWidth="850.0" stylesheets="@../css/QCUNewReport.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCUNewReportController">
     <content>
         <VBox spacing="20">
             <padding>
