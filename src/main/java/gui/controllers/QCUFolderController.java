@@ -1,5 +1,7 @@
 package gui.controllers;
 
+import bll.OrderManager;
+import dal.OrderDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
@@ -9,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -30,6 +33,20 @@ public class QCUFolderController {
 
     @FXML
     private Button folderButton;
+
+    @FXML
+    private VBox folderViewPane;
+
+    @FXML
+    private VBox orderListPane;
+
+    @FXML
+    private ListView<String> orderListView;
+
+    @FXML
+    private Label currentFolderLabel;
+
+    private OrderManager orderManager =  new OrderManager();
 
     private final List<String> folderDates = new ArrayList<>();
 
@@ -56,7 +73,7 @@ public class QCUFolderController {
             folderButton.setGraphic(icon);
             folderButton.getStyleClass().add("folder-button");
 
-            folderButton.setOnAction(e -> System.out.println("Open folder: " + date));
+            folderButton.setOnAction(e -> openFolderAndShowOrders(date));
 
             Label label = new Label(date);
             label.setStyle("-fx-font-size: 13px;");
@@ -64,6 +81,8 @@ public class QCUFolderController {
             folderBox.getChildren().addAll(folderButton, label);
             folderFlowPane.getChildren().add(folderBox);
         }
+
+        orderListView.setFixedCellSize(40);
     }
 
     @FXML
@@ -113,5 +132,35 @@ public class QCUFolderController {
     private void btnOpenReportAction(ActionEvent actionEvent) {
         sceneNavigator.switchTo(actionEvent, "QCUReport.fxml");
     }
-}
 
+    private void openFolderAndShowOrders(String date) {
+        String[] parts = date.split("-");
+        int year = Integer.parseInt(parts[0]);
+        int month = Integer.parseInt(parts[1]);
+
+        List<String> orders = orderManager.getOrdersForDate(year, month);
+
+        currentFolderLabel.setText("📁 " + date);
+
+        folderViewPane.setVisible(false);
+        folderViewPane.setManaged(false);
+
+        orderListPane.setVisible(true);
+        orderListPane.setManaged(true);
+
+        List<String> formattedOrders = orders.stream()
+                .map(order -> "\uD83D\uDCC4 " + order)
+                .toList();
+
+        orderListView.getItems().setAll(formattedOrders);
+    }
+
+    @FXML
+    private void handleBackToFolders() {
+        orderListPane.setVisible(false);
+        orderListPane.setManaged(false);
+
+        folderViewPane.setVisible(true);
+        folderViewPane.setManaged(true);
+    }
+}
