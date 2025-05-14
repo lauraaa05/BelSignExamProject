@@ -1,30 +1,36 @@
 package gui.controllers;
 
 import bll.OrderManager;
-import dal.OrderDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
-import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.geometry.Pos;
 import utilities.SceneNavigator;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class QCUFolderController {
+
+    @FXML
+    private TextField searchField;
+
+    @FXML
+    private Button searchButton;
+
+    @FXML
+    private ListView<String> resultsListView;
 
     @FXML
     private FlowPane folderFlowPane;
@@ -47,17 +53,21 @@ public class QCUFolderController {
     @FXML
     private Label currentFolderLabel;
 
-    private OrderManager orderManager =  new OrderManager();
+    private final OrderManager orderManager = new OrderManager();
 
     private final List<String> folderDates = new ArrayList<>();
 
     private final SceneNavigator sceneNavigator = new SceneNavigator();
+
+    private final List<VBox> allFolderNodes = new ArrayList<>();
+
+
     @FXML
     public void initialize() {
-
         highlightActiveButton(folderButton);
-        for(int year = 2025; year <= 2026; year++) {
-            for(int month = 1; month <= 12; month++) {
+
+        for (int year = 2025; year <= 2026; year++) {
+            for (int month = 1; month <= 12; month++) {
                 folderDates.add(String.format("%d-%02d", year, month));
             }
         }
@@ -83,7 +93,55 @@ public class QCUFolderController {
             folderFlowPane.getChildren().add(folderBox);
         }
 
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> {
+            filterFolders(newVal);
+        });
+
         orderListView.setFixedCellSize(40);
+    }
+
+    @FXML
+    private void searchBtnAction(ActionEvent event) {
+        String searchText = searchField.getText().trim().toLowerCase();
+
+        for (javafx.scene.Node node : folderFlowPane.getChildren()) {
+            if (node instanceof VBox folderBox && !folderBox.getChildren().isEmpty()) {
+                Label label = (Label) folderBox.getChildren().get(1); // Assuming second child is always the label
+                String folderDate = label.getText().toLowerCase();
+
+                boolean matches = searchText.isEmpty() || folderDate.contains(searchText);
+                folderBox.setVisible(matches);
+                folderBox.setManaged(matches);
+            }
+        }
+    }
+
+
+    private List<String> performSearch(String searchText) {
+        // Case-insensitive partial match search on folderDates
+        return folderDates.stream()
+                .filter(date -> date.toLowerCase().contains(searchText.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    private void displayResults(List<String> results) {
+        resultsListView.getItems().clear();
+        resultsListView.getItems().addAll(results);
+    }
+
+    private void filterFolders(String searchText) {
+        String lowerSearch = searchText.trim().toLowerCase();
+
+        for (Node node : folderFlowPane.getChildren()) {
+            if (node instanceof VBox folderBox && !folderBox.getChildren().isEmpty()) {
+                Label label = (Label) folderBox.getChildren().get(1);
+                String folderDate = label.getText().toLowerCase();
+
+                boolean matches = lowerSearch.isEmpty() || folderDate.contains(lowerSearch);
+                folderBox.setVisible(matches);
+                folderBox.setManaged(matches);
+            }
+        }
     }
 
     @FXML
@@ -125,7 +183,6 @@ public class QCUFolderController {
 
     private void highlightActiveButton(Button activeButton) {
         folderButton.getStyleClass().remove("active");
-
         activeButton.getStyleClass().add("active");
     }
 
@@ -163,25 +220,5 @@ public class QCUFolderController {
 
         folderViewPane.setVisible(true);
         folderViewPane.setManaged(true);
-    }
-
-    @FXML
-    private void handleOrderClick(MouseEvent event) {
-        if (event.getClickCount() == 1) {
-            String selectedOrderNumber = orderListView.getSelectionModel().getSelectedItem();
-            if (selectedOrderNumber != null) {
-                String clearOrderNumber = selectedOrderNumber.replace("\uD83D\uDCC4 ", "");
-                openOrderReportScene(selectedOrderNumber);
-            }
-        }
-    }
-
-    private void openOrderReportScene(String orderNumber) {
-        Stage stage = (Stage) orderListView.getScene().getWindow();
-
-        SceneNavigator sceneNavigator = new SceneNavigator();
-        sceneNavigator.<QCUReportController>switchToWithData(stage, "QCUReport.fxml", qcuReportController -> {
-            qcuReportController.setOrderNumber(orderNumber);
-        });
     }
 }

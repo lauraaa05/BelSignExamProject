@@ -96,6 +96,29 @@ public class OrderDAO {
 
         return results;
     }
+    public List<String> searchOrdersByYear(int year) {
+        List<String> orders = new ArrayList<>();
+        String query = "SELECT CountryNumber, Year, Month, OrderCode FROM Orders WHERE Year = ?";
+
+        try (Connection conn = new DBAccess().DBConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, year);  // Set the year to filter the orders
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int countryNumber = rs.getInt("CountryNumber");
+                    String month = rs.getString("Month").trim();
+                    String orderCode = rs.getString("OrderCode");
+
+                    orders.add(formatOrderData(countryNumber, year, month, orderCode)); // Format the order data
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
 
     private void add(OrderDAO folder) {
     }

@@ -33,9 +33,6 @@ public class OperatorMainController implements Initializable {
     private ListView<String> toDoListView;
 
     @FXML
-    private ListView<String> doneListView;
-
-    @FXML
     private Label loggedUsernameLbl;
 
     public OperatorMainController() throws IOException {
@@ -44,7 +41,6 @@ public class OperatorMainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadOrdersIntoToDoList();
-        loadOrdersIntoDoneList();
 
         // Adding click event listener on the ListView
         toDoListView.setOnMouseClicked(this::handleOrderClick);
@@ -55,13 +51,6 @@ public class OperatorMainController implements Initializable {
         List<String> toDoOrders = osm.getToDoOrders();
         toDoListView.getItems().setAll(toDoOrders);
         toDoListView.setFixedCellSize(48);
-    }
-
-    private void loadOrdersIntoDoneList() {
-        OrderStatusManager osm = new OrderStatusManager();
-        List<String> doneOrders = osm.getDoneOrders();
-        doneListView.getItems().setAll(doneOrders);
-        doneListView.setFixedCellSize(48);
     }
 
     // Handle order click
@@ -121,10 +110,8 @@ public class OperatorMainController implements Initializable {
     public void refreshLists() {
         OrderStatusDAO dao = new OrderStatusDAO();
         List<String> todoOrders = dao.getFormattedOrdersByRoleAndStatus("operator", "todo");
-        List<String> doneOrders = dao.getFormattedOrdersByRoleAndStatus("operator", "done");
 
         toDoListView.getItems().setAll(todoOrders);
-        doneListView.getItems().setAll(doneOrders);
     }
 }
 

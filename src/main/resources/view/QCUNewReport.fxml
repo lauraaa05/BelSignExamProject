@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<?import javafx.scene.layout.GridPane?>
+<ScrollPane fx:id="scrollPane" fitToWidth="true" fitToHeight="true" prefHeight="780.0" prefWidth="850.0" stylesheets="@../css/QCUNewReport.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCUNewReportController">
+    <content>
+        <VBox spacing="20">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+            <!-- HEADER -->
+            <VBox fx:id="headerSection" alignment="CENTER" prefWidth="800.0" spacing="10">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <ImageView fx:id="logo" fitHeight="117.0" fitWidth="110.0" preserveRatio="true">
+                        <image>
+                            <Image url="@../images/belmanlogo.png" />
+                        </image>
+                    </ImageView>
+                    <Label fx:id="title" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="QCU Report">
+                        <HBox.margin>
+                            <Insets left="190.0" />
+                        </HBox.margin>
+                    </Label>
+                </HBox>
+                <Label fx:id="orderNumberLabel" style="-fx-font-size: 16px;" text="ORDER NUMBER: ???????" />
+            </VBox>
+
+            <!-- PAGE 1 (Photos Section) 1400 height was good-->
+            <VBox alignment="TOP_CENTER" spacing="20">
+                <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Photo Section" />
+
+                <TilePane fx:id="photoTile"  alignment="CENTER" hgap="20" vgap="20" prefTileHeight="220" prefTileWidth="200" prefWidth="800" maxWidth="800">
+                    <!-- Images will be added dynamically -->
+                </TilePane>
+
+                <VBox fx:id="productDetailsSection" alignment="CENTER" spacing="10" style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-border-color: #d3d3d3; -fx-border-width: 1; -fx-background-radius: 8px;">
+                    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Product Details" />
+                    <HBox fx:id="productDetailsBox" spacing="15" alignment="CENTER">
+                        <!-- Labels will be added dynamically -->
+                    </HBox>
+                </VBox>
+                <!-- General Comment Section BELOW photos -->
+                <VBox fx:id="generalCommentSection" alignment="TOP_LEFT" spacing="10" style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-border-color: #d3d3d3; -fx-border-width: 1;">
+                    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="QCU Comments:" />
+                    <Label fx:id="generalCommentsLabel" style="-fx-font-size: 14px;" wrapText="true" />
+                </VBox>
+            </VBox>
+
+            <!-- COMMENTS & BUTTONS -->
+            <VBox fx:id="commentSection" alignment="CENTER" prefWidth="800.0" spacing="10">
+                <Label style="-fx-font-size: 16px;" text="COMMENTS:" />
+                <TextArea fx:id="commentsTextArea" prefHeight="100" prefWidth="600" promptText="Enter your comments here..." wrapText="true" />
+
+                <HBox alignment="CENTER" spacing="20">
+                    <Button fx:id="goBackButton" prefWidth="120" text="← Back">
+                  <HBox.margin>
+                     <Insets left="-155.0" />
+                  </HBox.margin></Button>
+                    <Button fx:id="submitButton" prefHeight="35.0" prefWidth="209.0" text="SUBMIT REPORT">
+                  <HBox.margin>
+                     <Insets />
+                  </HBox.margin></Button>
+                </HBox>
+            </VBox>
+
+        </VBox>
+    </content>
+</ScrollPane>

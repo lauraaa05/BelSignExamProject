@@ -1,22 +1,60 @@
 package be;
 
-    public class Report {
-        private int id;
-        private String title;
-        private String status;
+import java.time.LocalDateTime;
 
-        public Report(int id, String title, String status) {
-            this.id = id;
-            this.title = title;
-            this.status = status;
-        }
+public class Report {
 
-        public int getId() { return id; }
-        public String getTitle() { return title; }
-        public String getStatus() { return status; }
+    private int userId;
+    private String comment;
+    private String orderNumber;
+    private LocalDateTime date;
+    private String orderCode;
 
-        public void setId(int id) { this.id = id; }
-        public void setTitle(String title) { this.title = title; }
-        public void setStatus(String status) { this.status = status; }
+    public Report(int userId, String comment, String orderNumber, LocalDateTime date, String orderCode) {
+        this.userId = userId;
+        this.comment = comment;
+        this.orderNumber = orderNumber;
+        this.date = date;
+        this.orderCode = orderCode;
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
+    }
+}
