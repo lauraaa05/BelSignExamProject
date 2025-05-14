@@ -7,16 +7,18 @@ public class Admin implements User {
     private String name;
     private String firstName;
     private String lastName;
+    private String email;
 
-    public Admin(int id, String role, String name, String firstName, String lastName) {
+    public Admin(int id, String role, String name, String firstName, String lastName, String email) {
         this.id = id;
         this.role = role;
         this.name = name;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
     }
 
-    public Admin() { this(0, "", "", "", ""); }
+    public Admin() { this(0, "", "", "", "", ""); }
 
 
     public String getFirstName() {
@@ -53,6 +55,10 @@ public class Admin implements User {
     public void setRole(String role) {
         this.role = role;
     }
+
+    public String getEmail() { return email; }
+
+    public void setEmail(String email) { this.email = email; }
 
     @Override
     public String toString() {

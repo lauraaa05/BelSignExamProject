@@ -131,4 +131,22 @@ public class LoginDAO {
         return users;
     }
 
+    public void addUser(User user, String password) {
+        try(Connection conn = DBAccess.DBConnection()) {
+            String sql = "INSERT INTO LoginInfo (Username, Password, Role, FirstName, LastName, Email) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, user.getName());
+            stmt.setString(2, password);
+            stmt.setString(3, user.getRole());
+            stmt.setString(4, user.getFirstName());
+            stmt.setString(5, user.getLastName());
+            stmt.setString(6, user.getEmail());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

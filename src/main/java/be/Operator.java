@@ -8,6 +8,7 @@ public class Operator implements User {
     private String qrToken; //Access change by QRcode
     private String firstName;
     private String lastName;
+    private String email;
 
     public Operator(int id, String name, String role, String qrToken, String firstName, String lastName) {
         this.id = id;
@@ -16,6 +17,11 @@ public class Operator implements User {
         this.qrToken = qrToken;
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public Operator(String firstName, String lastName, String username, String password, String email) {
+        this(0, username, "Operator", null, firstName, lastName);
+        this.email = email;
     }
 
 
@@ -70,6 +76,10 @@ public class Operator implements User {
     public void setQrToken(String qrToken) {
         this.qrToken = qrToken;
     }
+
+    public String getEmail() { return email; }
+
+    public void setEmail(String email) { this.email = email; }
 
     @Override
     public String toString() {

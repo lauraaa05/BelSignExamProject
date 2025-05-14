@@ -80,7 +80,7 @@
                            </HBox.margin>
                         </Label>
                         <Region prefHeight="33.0" prefWidth="371.0" HBox.hgrow="ALWAYS" />
-                        <Button id="centerButton" mnemonicParsing="false" styleClass="centerButton" text="➕">
+                        <Button onAction="#handleAddUserPopup" fx:id="addButton" id="centerButton" mnemonicParsing="false" styleClass="centerButton" text="➕">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
