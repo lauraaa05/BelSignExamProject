@@ -99,4 +99,29 @@ public class OrderDAO {
 
     private void add(OrderDAO folder) {
     }
+
+    public List<String> getOrdersForDate(int year, int month) {
+        List<String> filteredOrders = new ArrayList<>();
+        String query = "SELECT CountryNumber, Year, Month, OrderCode FROM Orders WHERE Year = ? AND Month = ?";
+
+        try (Connection conn = DBAccess.DBConnection();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, year);
+            stmt.setString(2, String.format("%02d", month));
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int countryNumber = rs.getInt("CountryNumber");
+                    String monthStr = rs.getString("Month");
+                    String orderCode = rs.getString("OrderCode");
+
+                    filteredOrders.add(formatOrderData(countryNumber, year, monthStr, orderCode));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return filteredOrders;
+    }
 }

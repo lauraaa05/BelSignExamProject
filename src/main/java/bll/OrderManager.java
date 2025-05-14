@@ -6,7 +6,7 @@ import java.util.List;
 
 public class OrderManager {
 
-    private final OrderDAO od = new OrderDAO();
+    private OrderDAO od = new OrderDAO();
 
     public List<String> getOrderNumbersAsList() {
         return od.getFormattedOrderNumbers();
@@ -14,5 +14,9 @@ public class OrderManager {
 
     public List<File> getOrderImages(String orderNumber) {
         return List.of();
+    }
+
+    public List<String> getOrdersForDate(int year, int month) {
+        return od.getOrdersForDate(year, month);
     }
 }
