@@ -7,22 +7,32 @@ public class Picture {
     private int imageId;
     private byte[] image;
     private LocalDateTime timestamp;
+    private String side;
     private String fileName;
     private String orderNumber;
 
-    public Picture(int imageId, byte[] image, LocalDateTime timestamp, String fileName, String orderNumber) {
+    public Picture(int imageId, byte[] image, LocalDateTime timestamp, String side, String fileName, String orderNumber) {
         this.imageId = imageId;
         this.image = image;
         this.timestamp = timestamp;
+        this.side = side;
         this.fileName = fileName;
         this.orderNumber = orderNumber;
     }
 
-    public Picture(byte[] image, String fileName, LocalDateTime timestamp, String orderNumber) {
+    public Picture(byte[] image, LocalDateTime timestamp, String side, String orderNumber) {
         this.image = image;
+        this.timestamp = timestamp;
+        this.side = side;
+        this.orderNumber = orderNumber;
+    }
+
+    public Picture(byte[] imageBytes, String fileName, LocalDateTime timestamp, String orderNumber) {
+        this.image = imageBytes;
         this.fileName = fileName;
         this.timestamp = timestamp;
         this.orderNumber = orderNumber;
+        this.side = ""; // Optional fallback if you don't know side here
     }
 
     public int getImageId() {
@@ -35,6 +45,10 @@ public class Picture {
 
     public LocalDateTime getTimestamp() {
         return timestamp;
+    }
+
+    public String getSide() {
+        return side;
     }
 
     public String getFileName() {
