@@ -13,15 +13,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import utilities.SceneNavigator;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -40,7 +38,7 @@ public class AdminUserController implements Initializable {
     private TableColumn<User, String> roleColumn;
 
     @FXML
-    private Button signOutButton, addButton;
+    private Button signOutButton, addButton, editButton, deleteUserButton;
 
     private final LoginDAO loginDAO = new LoginDAO();
 
@@ -57,6 +55,11 @@ public class AdminUserController implements Initializable {
 
         List<User> allUsers = loginDAO.getAllUsers();
         tableViewUsers.setItems(FXCollections.observableArrayList(allUsers));
+
+        deleteUserButton.setDisable(true);
+        tableViewUsers.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            deleteUserButton.setDisable(newSelection == null);
+        });
     }
 
     private void switchToLogInScreen(Stage currentStage) throws IOException {
@@ -88,6 +91,59 @@ public class AdminUserController implements Initializable {
         stage.setTitle("Add User");
         stage.setScene(new Scene(root));
         stage.showAndWait();
+    }
+
+    @FXML
+    private void handleEditButtonClick(ActionEvent event) throws IOException {
+        User selectedUser = tableViewUsers.getSelectionModel().getSelectedItem();
+        if (selectedUser != null) {
+            handleEditUserPopup(selectedUser);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a user to edit.");
+            alert.showAndWait();
+        }
+
+    }
+
+    @FXML
+    private void handleEditUserPopup(User selectedUser) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EditUserPopup.fxml"));
+        Parent root = loader.load();
+
+        EditUserPopupController controller = loader.getController();
+        controller.setUser(selectedUser);
+        controller.setAdminUserController(this);
+
+        Stage stage = new Stage();
+        stage.setTitle("Edit User");
+        stage.setScene(new Scene(root));
+        stage.show();
+
+        refreshUserTable();
+    }
+
+    @FXML
+    private void handleDeleteUser(ActionEvent event) {
+        User selectedUser = tableViewUsers.getSelectionModel().getSelectedItem();
+
+        if(selectedUser == null) return;
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete confirmation");
+        alert.setHeaderText("Are you sure you want to delete this user?");
+        alert.setContentText("User: " + selectedUser.getFirstName() + " " + selectedUser.getLastName());
+
+        ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+        ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
+        alert.getButtonTypes().setAll(yesButton, noButton);
+
+        alert.showAndWait().ifPresent(type -> {
+            if(type == yesButton) {
+                loginDAO.deleteUser(selectedUser);
+                refreshUserTable();
+            }
+        });
     }
 
     public void refreshUserTable() {

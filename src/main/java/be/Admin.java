@@ -8,6 +8,7 @@ public class Admin implements User {
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
 
     public Admin(int id, String role, String name, String firstName, String lastName, String email) {
         this.id = id;
@@ -59,6 +60,10 @@ public class Admin implements User {
     public String getEmail() { return email; }
 
     public void setEmail(String email) { this.email = email; }
+
+    public String getPassword() { return password; }
+
+    public void setPassword(String password) { this.password = password; }
 
     @Override
     public String toString() {
