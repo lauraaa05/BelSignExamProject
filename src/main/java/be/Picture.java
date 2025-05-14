@@ -7,31 +7,32 @@ public class Picture {
     private int imageId;
     private byte[] image;
     private LocalDateTime timestamp;
+    private String side;
     private String fileName;
     private String orderNumber;
-    private String side;
 
-    public Picture(int imageId, byte[] image, LocalDateTime timestamp, String fileName, String orderNumber,  String side) {
+    public Picture(int imageId, byte[] image, LocalDateTime timestamp, String side, String fileName, String orderNumber) {
         this.imageId = imageId;
         this.image = image;
         this.timestamp = timestamp;
+        this.side = side;
         this.fileName = fileName;
         this.orderNumber = orderNumber;
-        this.side = side;
     }
 
-    public Picture(byte[] image, String fileName, LocalDateTime timestamp, String orderNumber, String side) {
-        this.image = image;
-        this.fileName = fileName;
-        this.timestamp = timestamp;
-        this.orderNumber = orderNumber;
-        this.side = side;
-    }
-
-    public Picture(byte[] image, LocalDateTime timestamp, String side) {
+    public Picture(byte[] image, LocalDateTime timestamp, String side, String orderNumber) {
         this.image = image;
         this.timestamp = timestamp;
         this.side = side;
+        this.orderNumber = orderNumber;
+    }
+
+    public Picture(byte[] imageBytes, String fileName, LocalDateTime timestamp, String orderNumber) {
+        this.image = imageBytes;
+        this.fileName = fileName;
+        this.timestamp = timestamp;
+        this.orderNumber = orderNumber;
+        this.side = ""; // Optional fallback if you don't know side here
     }
 
     public int getImageId() {
@@ -46,16 +47,16 @@ public class Picture {
         return timestamp;
     }
 
+    public String getSide() {
+        return side;
+    }
+
     public String getFileName() {
         return fileName;
     }
 
     public String getOrderNumber() {
         return orderNumber;
-    }
-
-    public String getSide() {
-        return side;
     }
 
     public void setImageId(int imageId) {
@@ -76,9 +77,5 @@ public class Picture {
 
     public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
-    }
-
-    public void setSide(String side) {
-        this.side = side;
     }
 }

@@ -1,0 +1,210 @@
+package gui.controllers;
+
+import be.Picture;
+import be.Report;
+import dal.PictureDAO;
+import gui.model.ReportModel;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+
+import javafx.scene.image.ImageView;
+import java.io.ByteArrayInputStream;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
+
+public class QCUNewReportController {
+
+    @FXML
+    private AnchorPane photoSectionPane;
+
+    @FXML
+    private TextArea commentsTextArea;
+
+    @FXML
+    private Button submitButton;
+
+    @FXML
+    private Label generalCommentsLabel;
+
+    @FXML
+    private TilePane photoTile;
+
+    @FXML
+    private Label orderNumberLabel;
+
+    @FXML
+    private VBox productDetailsSection;
+    @FXML
+    private HBox productDetailsBox;
+//    @FXML
+//    private Label materialTypeLabel;
+//    @FXML
+//    private Label colorLabel;
+//    @FXML
+//    private Label weightLabel;
+//    @FXML
+//    private Label heightLabel;
+//    @FXML
+//    private Label lengthLabel;
+//    @FXML
+//    private Label widthLabel;
+
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+    private PictureDAO pictureDAO = new PictureDAO();
+
+    private ReportModel reportModel = new ReportModel();
+
+    @FXML
+    public void initialize() {
+        submitButton.setOnAction(e -> submitComment());
+
+
+    }
+
+    private VBox createImageCard(Picture picture) {
+        VBox vBox = new VBox(10);
+        vBox.setStyle("-fx-background-color: #fff; -fx-padding: 10px; -fx-border-color: #d1d5db; -fx-border-radius: 5px; -fx-background-radius: 8px;");
+        vBox.setAlignment(javafx.geometry.Pos.CENTER);
+
+        ImageView imageView = new ImageView();
+        imageView.setFitHeight(130);
+        imageView.setFitWidth(180);
+        imageView.setPreserveRatio(true);
+        imageView.setImage((new Image(new ByteArrayInputStream(picture.getImage()))));
+
+        String sideText = (picture.getSide() == null || picture.getSide().isEmpty()) ? "Unknown" : picture.getSide();
+        Label sideLabel = new Label("Side: " + sideText); //File name just be back front up...
+        Label dateLabel = new Label("Date: " + picture.getTimestamp().format(formatter));
+
+        vBox.getChildren().addAll(imageView, sideLabel, dateLabel);
+
+        return vBox;
+    }
+
+    public void setOrderNumber(String orderNumber) {
+        orderNumberLabel.setText("ORDER NUMBER: " + orderNumber);
+
+        loadPictures(orderNumber);
+        loadLatestComment(orderNumber);
+
+        loadProductDetails(orderNumber);
+    }
+
+    private void loadPictures(String orderNumber) {
+        try {
+            List<Picture> pictures = pictureDAO.getPicturesByOrderNumberRaw(orderNumber);
+            photoTile.getChildren().clear();
+
+            for (Picture picture : pictures) {
+                VBox imageCard = createImageCard(picture);
+                photoTile.getChildren().add(imageCard);
+            }
+
+            if (pictures.isEmpty()) {
+                System.out.println("No pictures found for order number: " + orderNumber);
+            }
+        } catch (SQLException e) {
+            System.err.println("Database error while loading pictures: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+
+    private void submitComment() {
+        String commentText = commentsTextArea.getText();
+        if (commentText == null || commentText.isEmpty()) {
+            System.out.println("Comment is empty");
+            return;
+        }
+
+        try {
+            Report report = new Report(4, commentText, extractOrderNumber(), LocalDateTime.now(), "028746");
+            reportModel.insertReport(report);
+            commentsTextArea.clear();
+            loadLatestComment(extractOrderNumber());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadLatestComment(String orderNumber) {
+        try {
+            String latestComment = reportModel.getLatestCommentByOrderNumber(orderNumber);
+            generalCommentsLabel.setText(latestComment != null ? latestComment : "No comments yet.");
+        } catch (Exception e) {
+            generalCommentsLabel.setText("Failed to fetch comment: " + e.getMessage());
+        }
+    }
+
+    private String extractOrderNumber() {
+        return orderNumberLabel.getText().replace("ORDER NUMBER: ", "").trim();
+    }
+
+    private void refreshLatestComment() {
+        try {
+            String latestComment = reportModel.getLatestCommentByOrderNumber(extractOrderNumber());
+            generalCommentsLabel.setText(latestComment);
+        } catch (SQLException e) {
+            generalCommentsLabel.setText("Failed to fetch comment: " + e.getMessage());
+        }
+    }
+
+    private void loadProductDetails(String orderNumber) {
+        try {
+            String orderCode = extractOrderNumber(orderNumber); //I called this to reach to the last 6 digit of order number
+            Map<String, String> details = reportModel.getProductDetailsByOrderCode(orderCode);
+            productDetailsBox.getChildren().clear();
+
+            if (details != null && !details.isEmpty()) {
+                details.forEach((key, value) -> {
+                    VBox detailBox = new VBox(5);
+                    detailBox.getStyleClass().add("product-detail-box");
+                    detailBox.setAlignment(javafx.geometry.Pos.CENTER);
+
+                    Label labelKey = new Label(key);
+                    labelKey.getStyleClass().add("product-detail-key");
+
+                    Label labelValue = new Label(value);
+                    labelValue.getStyleClass().add("product-detail-value");
+
+                    detailBox.getChildren().addAll(labelKey, labelValue);
+                    productDetailsBox.getChildren().add(detailBox);
+                });
+            } else {
+                Label noData = new Label("No product details found");
+                noData.setStyle("-fx-text-fill: #ff0000;");
+                productDetailsBox.getChildren().add(noData);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Label error = new Label("Failed to load product details.");
+            error.setStyle("-fx-text-fill: #ff0000;");
+            productDetailsBox.getChildren().add(error);
+        }
+
+    }
+
+    //This method takes the last 6 digit of orderNumber which is a ORDER CODE!!!!
+    private String extractOrderNumber(String orderNumber) {
+        if (orderNumber != null && orderNumber.length() >= 6) {
+            return orderNumber.substring(orderNumber.length() - 6);
+        } else {
+            return "";
+        }
+    }
+
+}

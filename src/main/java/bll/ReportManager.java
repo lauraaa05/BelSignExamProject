@@ -1,29 +1,24 @@
 package bll;
 
-import java.io.IOException;
-import utilities.SendGridEmailSender;
+import be.Report;
+import dal.ReportDAO;
+
+import java.sql.SQLException;
+import java.util.Map;
 
 public class ReportManager {
 
-    private utilities.SendGridEmailSender emailSender;
+    private final ReportDAO reportDAO = new ReportDAO();
 
-    // Constructor to initialize the SendGridEmailSender
-    public ReportManager() {
-        this.emailSender = new utilities.SendGridEmailSender();
+    public void insertReport(Report report) throws SQLException {
+        reportDAO.insertReport(report);
     }
 
-    public void approveReport(String customerEmail) {
-        // Business logic for approving the report (e.g., update status in DB)
+    public String getLatestCommentByOrderNumber(String orderNumber) throws SQLException {
+        return reportDAO.getLatestCommentByOrderNumber(orderNumber);
+    }
 
-        try {
-            // Use the instance variable emailSender to call sendEmail
-            emailSender.sendEmail(
-                    customerEmail,
-                    "Your Report is Approved",
-                    "Dear Customer,\n\nYour report has been approved and is ready for review."
-            );
-        } catch (IOException e) {
-            System.err.println("Error sending email: " + e.getMessage());
-        }
+    public Map<String, String> getProductDetailsByOrderCode(String orderCode) throws SQLException {
+        return reportDAO.getProductDetailsByOrderCode(orderCode);
     }
 }

@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Rectangle?>
 
 <BorderPane prefHeight="620.0" prefWidth="900.0" stylesheets="@../css/QCUReport.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCUReportController">
     <!-- Top Section (Header) -->
@@ -36,14 +35,30 @@
     <!-- Center Section (Main Content) -->
     <center>
         <VBox fx:id="mainContent" alignment="CENTER" spacing="10">
-            <Label fx:id="orderNumberLabel" text="ORDER NUMBER: 34/24-0019" />
+            <Label fx:id="orderNumberLabel" text="ORDER NUMBER: ???????">
+            <VBox.margin>
+               <Insets top="-30.0" />
+            </VBox.margin></Label>
             <VBox fx:id="photoSection" alignment="CENTER" spacing="10">
-                <Label fx:id="photoLabel" text="PHOTOS" />
                 <GridPane fx:id="photoGrid" alignment="CENTER" hgap="10" vgap="10">
-                    <Rectangle fx:id="photo2" height="120" width="120" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+               <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+                  <children>
+                     <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                     <Label text="Label" />
+                     <Label text="Label" />
+                  </children>
+               </VBox>
+               <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" />
+               <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" />
+               <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="4" />
+               <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="5" />
                <columnConstraints>
                   <ColumnConstraints />
                   <ColumnConstraints />
+                  <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints />
@@ -60,16 +75,19 @@
             <TextArea fx:id="commentsTextArea" prefHeight="100" promptText="Enter your comments here..." wrapText="true" />
          <HBox prefHeight="41.0" prefWidth="900.0">
             <children>
-                  <Button fx:id="submitButton" text="SUBMIT REPORT">
-                  <HBox.margin>
-                     <Insets left="368.0" />
-                  </HBox.margin>
-               </Button>
       
                   <!-- Go Back Button -->
                   <Button fx:id="goBackButton" onAction="#goBackButtonAction" text="← Back">
                   <HBox.margin>
-                     <Insets left="200.0" />
+                     <Insets />
+                  </HBox.margin>
+                  <padding>
+                     <Insets left="50.0" />
+                  </padding>
+               </Button>
+                  <Button fx:id="submitButton" text="SUBMIT REPORT">
+                  <HBox.margin>
+                     <Insets left="252.0" />
                   </HBox.margin>
                </Button>
             </children>
