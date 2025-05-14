@@ -4,6 +4,7 @@ import be.Report;
 import bll.ReportManager;
 
 import java.sql.SQLException;
+import java.util.Map;
 
 public class ReportModel {
 
@@ -15,5 +16,9 @@ public class ReportModel {
 
     public String getLatestCommentByOrderNumber(String orderNumber) throws SQLException {
         return reportManager.getLatestCommentByOrderNumber(orderNumber);
+    }
+
+    public Map<String, String> getProductDetailsByOrderCode(String orderNumber) throws SQLException {
+        return reportManager.getProductDetailsByOrderCode(orderNumber);
     }
 }

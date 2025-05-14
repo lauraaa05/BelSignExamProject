@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.layout.GridPane?>
 <ScrollPane fx:id="scrollPane" prefHeight="1300.0" prefWidth="850.0" stylesheets="@../css/QCUNewReport.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCUNewReportController">
     <content>
         <VBox spacing="20">
@@ -44,9 +45,15 @@
                     <!-- Images will be added dynamically -->
                 </TilePane>
 
+                <VBox fx:id="productDetailsSection" alignment="CENTER" spacing="10" style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-border-color: #d3d3d3; -fx-border-width: 1; -fx-background-radius: 8px;">
+                    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Product Details" />
+                    <HBox fx:id="productDetailsBox" spacing="15" alignment="CENTER">
+                        <!-- Labels will be added dynamically -->
+                    </HBox>
+                </VBox>
                 <!-- General Comment Section BELOW photos -->
                 <VBox fx:id="generalCommentSection" alignment="TOP_LEFT" spacing="10" style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-border-color: #d3d3d3; -fx-border-width: 1;">
-                    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="General Comments:" />
+                    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="QCU Comments:" />
                     <Label fx:id="generalCommentsLabel" style="-fx-font-size: 14px;" wrapText="true" />
                 </VBox>
             </VBox>

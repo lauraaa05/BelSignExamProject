@@ -3,6 +3,8 @@ package dal;
 import be.Report;
 
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ReportDAO {
 
@@ -30,5 +32,26 @@ public class ReportDAO {
             }
         }
         return "No comments yet.";
+    }
+
+    public Map<String, String> getProductDetailsByOrderCode(String orderCode) throws SQLException {
+        String sql = "SELECT MaterialType, Color, Weight, Height, Length, Width FROM ProductDetails WHERE OrderCode = ?";
+        try (Connection conn = DBAccess.DBConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, orderCode);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Map<String, String> details = new HashMap<>();
+                details.put("MaterialType", rs.getString("MaterialType"));
+                details.put("Color", rs.getString("Color"));
+                details.put("Weight",rs.getString("Weight") + " meter");
+                details.put("Height", rs.getString("Height") + " meter");
+                details.put("Length", rs.getString("Length") + " meter");
+                details.put("Width", rs.getString("Width") + " meter");
+                return details;
+
+            }
+        }
+        return null;
     }
 }

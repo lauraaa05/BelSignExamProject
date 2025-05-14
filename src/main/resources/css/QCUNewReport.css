@@ -103,3 +103,28 @@ ImageView {
     -fx-border-radius: 5px;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);
 }
+
+#productDetailsSection {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 4, 0, 0, 1);
+}
+
+#productDetailsBox .label {
+    -fx-font-size: 14px;
+}
+
+.product-detail-box {
+    -fx-background-color: #f9fafb;
+    -fx-padding: 10px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-alignment: center;
+}
+
+.product-detail-key {
+    -fx-font-weight: bold;
+    -fx-text-fill: #004b88;
+}
+
+.product-detail-value {
+    -fx-text-fill: #374151;
+}
