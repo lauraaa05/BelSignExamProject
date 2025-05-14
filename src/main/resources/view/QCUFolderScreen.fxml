@@ -15,6 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.ListView?>
 <BorderPane id="mainBorderPane" fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/QCUFolderScreenCSS.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCUFolderController">
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" styleClass="topVBox" BorderPane.alignment="CENTER">
@@ -106,14 +107,26 @@
                   </Button>
                </children>
                <VBox.margin>
-                  <Insets />
+                  <Insets bottom="10.0" />
                </VBox.margin>
             </HBox>
-            <VBox alignment="CENTER">
+            <VBox fx:id="folderViewPane" alignment="CENTER" visible="true" managed="true">
                <children>
                   <ScrollPane fx:id="scrollPane" fitToWidth="true" pannable="true">
                      <FlowPane fx:id="folderFlowPane" hgap="30.0" prefHeight="600.0" prefWidth="1000.0" prefWrapLength="600.0" style="-fx-padding: 30 30 30 50; -fx-background-color: #f4f4f4;" vgap="30.0" />
                   </ScrollPane>
+               </children>
+            </VBox>
+            <VBox fx:id="orderListPane" alignment="CENTER" visible="false" managed="false" spacing="10.0">
+               <padding>
+                  <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+               </padding>
+               <children>
+                  <Label fx:id="currentFolderLabel" styleClass="breadcrumbLabel" />
+                  <ListView fx:id="orderListView" prefHeight="500.0" prefWidth="800.0" />
+                  <HBox alignment="CENTER_LEFT">
+                     <Button text="⬅ Back" onAction="#handleBackToFolders" />
+                  </HBox>
                </children>
             </VBox>
          </children>
