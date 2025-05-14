@@ -56,25 +56,31 @@
    <center>
       <VBox BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER_RIGHT" prefHeight="54.0" prefWidth="570.0" spacing="10.0" style="-fx-background-color: #1A1A1AAD;">
+            <HBox alignment="CENTER_RIGHT" prefHeight="45.0" prefWidth="570.0" spacing="10.0" style="-fx-background-color: #1A1A1AAD;">
                <children>
                   <Label text="Search:" textFill="WHITE">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                      <font>
-                        <Font name="Arial Bold" size="18.0" />
+                        <Font name="Arial Bold" size="20.0" />
                      </font>
                   </Label>
-                  <TextField promptText="OrderNumber...">
+                  <TextField prefHeight="36.0" prefWidth="171.0" promptText="OrderNumber...">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
                   </TextField>
                   <Button mnemonicParsing="false" text="⌕">
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
                   </Button>
                </children>
                <VBox.margin>
@@ -89,28 +95,14 @@
             </HBox>
             <HBox prefHeight="409.0" prefWidth="570.0" spacing="20.0" styleClass="centerHBox" VBox.vgrow="ALWAYS">
                <children>
-                  <VBox alignment="TOP_CENTER" prefHeight="360.0" prefWidth="255.0" spacing="10.0">
+                  <VBox alignment="TOP_CENTER" prefHeight="330.0" prefWidth="530.0" spacing="10.0">
                      <children>
                         <Label style="-fx-font-weight: bold;" text="TO DO" textFill="WHITE">
                            <font>
-                              <Font size="18.0" />
+                              <Font name="Arial" size="20.0" />
                            </font>
                         </Label>
-                        <ListView fx:id="toDoListView" prefHeight="323.0" prefWidth="250.0" styleClass="listView">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </ListView>
-                     </children>
-                  </VBox>
-                  <VBox alignment="TOP_CENTER" prefHeight="360.0" prefWidth="255.0" spacing="10.0">
-                     <children>
-                        <Label style="-fx-font-weight: bold;" text="DONE" textFill="WHITE">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                        <ListView fx:id="doneListView" prefHeight="323.0" prefWidth="234.0" styleClass="listView">
+                        <ListView fx:id="toDoListView" prefHeight="299.0" prefWidth="255.0" styleClass="listView">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
