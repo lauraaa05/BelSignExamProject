@@ -5,6 +5,7 @@ import be.Report;
 import dal.PictureDAO;
 import gui.model.ReportModel;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,6 +18,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import javafx.scene.image.ImageView;
+import utilities.SceneNavigator;
+
 import java.io.ByteArrayInputStream;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -66,6 +69,8 @@ public class QCUNewReportController {
     private PictureDAO pictureDAO = new PictureDAO();
 
     private ReportModel reportModel = new ReportModel();
+
+    private final SceneNavigator sceneNavigator = new SceneNavigator();
 
     @FXML
     public void initialize() {
@@ -207,4 +212,8 @@ public class QCUNewReportController {
         }
     }
 
+    @FXML
+    private void goBackBtnAction(ActionEvent actionEvent) {
+        sceneNavigator.switchTo(actionEvent, "QCUFolderScreen.fxml");
+    }
 }

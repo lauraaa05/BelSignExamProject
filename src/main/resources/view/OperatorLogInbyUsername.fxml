@@ -29,7 +29,7 @@
                 <Label styleClass="topLabel" text="BelSign" />
                 <Pane prefHeight="100.0" prefWidth="167.0" HBox.hgrow="ALWAYS">
                <children>
-                  <ImageView fx:id="helmetImageView" fitHeight="80.0" fitWidth="80.0" layoutX="265.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="helmetImageView" fitHeight="84.0" fitWidth="84.0" layoutX="261.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
                    <image>
                        <Image url="@../images/belmanHelmet.png" />
                    </image>
