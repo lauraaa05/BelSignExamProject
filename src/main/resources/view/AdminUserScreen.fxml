@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@../css/AdminUserScreen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.AdminUserController">
+<BorderPane id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@../css/AdminUserScreen.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.AdminUserController">
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" styleClass="topVBox" BorderPane.alignment="CENTER">
          <children>
@@ -28,7 +28,14 @@
             </ImageView>
             <Pane prefHeight="100.0" prefWidth="134.0" HBox.hgrow="ALWAYS" />
             <Label styleClass="topLabel" text="BelSign" />
-            <Pane prefHeight="100.0" prefWidth="167.0" HBox.hgrow="ALWAYS" />
+            <Pane prefHeight="100.0" prefWidth="167.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <ImageView fx:id="adminIconImageView" fitHeight="100.0" fitWidth="170.0" layoutX="152.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/AdminIcon.png" />
+                     </image>
+                  </ImageView>
+               </children></Pane>
          </children>
          <padding>
             <Insets left="5.0" />
@@ -85,7 +92,7 @@
                               <Insets />
                            </HBox.margin>
                         </Button>
-                        <Button onAction="#handleDeleteUser" id="centerButton" fx:id="deleteUserButton" mnemonicParsing="false" styleClass="conterButton" text="➖" />
+                        <Button id="centerButton" fx:id="deleteUserButton" mnemonicParsing="false" onAction="#handleDeleteUser" styleClass="conterButton" text="➖" />
                         <Button id="centerButton" fx:id="editButton" mnemonicParsing="false" onAction="#handleEditButtonClick" styleClass="editButton" text="🖍">
                            <font>
                               <Font name="System Bold" size="13.0" />

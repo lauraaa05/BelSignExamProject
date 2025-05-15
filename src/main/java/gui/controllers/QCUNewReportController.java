@@ -6,6 +6,7 @@ import dal.OrderStatusDAO;
 import dal.PictureDAO;
 import gui.model.ReportModel;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -21,6 +22,7 @@ import javafx.scene.text.Text;
 
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import utilities.SceneNavigator;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -73,6 +75,8 @@ public class QCUNewReportController {
 
     private ReportModel reportModel = new ReportModel();
 
+    private final SceneNavigator sceneNavigator = new SceneNavigator();
+
     @FXML
     public void initialize() {
         submitButton.setOnAction(e -> submitComment());
@@ -105,6 +109,7 @@ public class QCUNewReportController {
 
         loadPictures(orderNumber);
         loadLatestComment(orderNumber);
+
         loadProductDetails(orderNumber);
 
         String status = new OrderStatusDAO().getStatusForOrder(orderNumber);
@@ -132,6 +137,8 @@ public class QCUNewReportController {
             e.printStackTrace();
         }
     }
+
+
 
     private void submitComment() {
         String commentText = commentsTextArea.getText();
@@ -243,4 +250,10 @@ public class QCUNewReportController {
             return "";
         }
     }
+
+    @FXML
+    private void goBackBtnAction(ActionEvent actionEvent) {
+        sceneNavigator.switchTo(actionEvent, "QCUFolderScreen.fxml");
+    }
+
 }

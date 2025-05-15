@@ -9,10 +9,10 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.layout.StackPane?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/pictureScreen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.PictureController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/pictureScreen.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.PictureController">
    <left>
       <VBox maxWidth="120.0" minWidth="120.0" prefHeight="300.0" prefWidth="120.0" spacing="20.0" styleClass="leftVBox" BorderPane.alignment="CENTER">
          <children>
@@ -40,24 +40,32 @@
             <Region prefHeight="100.0" prefWidth="120.0" HBox.hgrow="ALWAYS" />
             <Label styleClass="topLabel" text="BelSign">
                <HBox.margin>
-                  <Insets top="15.0" />
+                  <Insets left="45.0" top="15.0" />
                </HBox.margin>
             </Label>
             <Region prefHeight="100.0" prefWidth="175.0" HBox.hgrow="ALWAYS" />
+            <ImageView fx:id="helmetImageView" fitHeight="86.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/belmanHelmet.png" />
+               </image>
+               <HBox.margin>
+                  <Insets right="10.0" top="8.0" />
+               </HBox.margin>
+            </ImageView>
          </children>
       </HBox>
    </top>
    <center>
       <VBox spacing="10.0" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
          <padding>
-            <Insets top="10.0" right="10.0" bottom="10.0" left="10.0"/>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
          <StackPane fx:id="comboStack" alignment="TOP_LEFT">
-            <ComboBox fx:id="cBoxSide" prefWidth="300.0" prefHeight="60.0" />
-            <Label fx:id="comboPlaceholder" text="Choose side" mouseTransparent="true" />
+            <ComboBox fx:id="cBoxSide" prefHeight="60.0" prefWidth="300.0" />
+            <Label fx:id="comboPlaceholder" mouseTransparent="true" text="Choose side" />
          </StackPane>
          <StackPane fx:id="stackPane" VBox.vgrow="ALWAYS">
-            <ImageView fx:id="imgVPicture" preserveRatio="true" pickOnBounds="true" />
+            <ImageView fx:id="imgVPicture" pickOnBounds="true" preserveRatio="true" />
          </StackPane>
       </VBox>
    </center>
