@@ -48,7 +48,7 @@
             </Label>
             <ImageView fx:id="imgQRPicture" fitHeight="273.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
             <Label fx:id="welcomeText" />
-            <Button fx:id="btnOpenUsernmaePasswordLogin" mnemonicParsing="false" onAction="#openUsernamePasswordLoginAct" prefHeight="40.0" prefWidth="200.0" text="Loggin by Username" />
+            <Button fx:id="btnOpenUsernmaePasswordLogin" mnemonicParsing="false" onAction="#openUsernamePasswordLoginAct" prefHeight="40.0" prefWidth="200.0" text="Login by Username" />
          </children>
          <BorderPane.margin>
             <Insets />
