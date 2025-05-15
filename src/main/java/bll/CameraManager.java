@@ -11,6 +11,10 @@ public class CameraManager {
 
     public void initializeCamera() {
         webcam = Webcam.getDefault();
+
+        if (webcam.isOpen()) {
+            webcam.close();
+        }
         webcam.setViewSize(WebcamResolution.VGA.getSize());
         webcam.open();
     }

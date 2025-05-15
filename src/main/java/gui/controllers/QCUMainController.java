@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import dal.OrderStatusDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import utilities.SceneNavigator;
 import java.io.IOException;
@@ -69,11 +71,28 @@ public class QCUMainController {
     @FXML
     public void initialize() {
         try {
-            List<String> orders = OrderDAO.getFormattedOrderNumbers(); // <- trae los datos
+            OrderStatusDAO dao = new OrderStatusDAO();
+            List<String> orders = dao.getFormattedOrdersByRoleAndStatus("qcu", "to_approve");
+
             ObservableList<String> observableOrders = FXCollections.observableArrayList(orders);
-            toApproveListView.setItems(observableOrders); // <- muestra los datos
+            toApproveListView.setItems(observableOrders);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleOrderClick(MouseEvent event) {
+        if (event.getClickCount() == 1) {
+            String selectedOrderNumber = toApproveListView.getSelectionModel().getSelectedItem();
+            if (selectedOrderNumber != null) {
+                String cleanOrder = selectedOrderNumber.replace("\uD83D\uDCC4 ", "");
+
+                Stage stage = (Stage) toApproveListView.getScene().getWindow();
+                sceneNavigator.<QCUNewReportController>switchToWithData(stage, "QCUNewReport.fxml", controller -> {
+                    controller.setOrderNumber(cleanOrder);
+                });
+            }
         }
     }
 }

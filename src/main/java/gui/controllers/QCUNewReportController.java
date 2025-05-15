@@ -2,10 +2,13 @@ package gui.controllers;
 
 import be.Picture;
 import be.Report;
+import dal.OrderStatusDAO;
 import dal.PictureDAO;
 import gui.model.ReportModel;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -17,7 +20,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
+
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -99,8 +105,13 @@ public class QCUNewReportController {
 
         loadPictures(orderNumber);
         loadLatestComment(orderNumber);
-
         loadProductDetails(orderNumber);
+
+        String status = new OrderStatusDAO().getStatusForOrder(orderNumber);
+        if ("done".equalsIgnoreCase(status)) {
+            submitButton.setVisible(false);
+            commentsTextArea.setEditable(false);
+        }
     }
 
     private void loadPictures(String orderNumber) {
@@ -122,8 +133,6 @@ public class QCUNewReportController {
         }
     }
 
-
-
     private void submitComment() {
         String commentText = commentsTextArea.getText();
         if (commentText == null || commentText.isEmpty()) {
@@ -132,11 +141,39 @@ public class QCUNewReportController {
         }
 
         try {
-            Report report = new Report(4, commentText, extractOrderNumber(), LocalDateTime.now(), "028746");
+            String fullOrderNumber = extractOrderNumber();
+            String orderCode = fullOrderNumber.substring(fullOrderNumber.lastIndexOf("-") + 1);
+
+            Report report = new Report(4, commentText, fullOrderNumber, LocalDateTime.now(), orderCode);
             reportModel.insertReport(report);
+
+            OrderStatusDAO dao = new OrderStatusDAO();
+            boolean updated = dao.updateOrderStatus(orderCode, "qcu", "done");
+
+            if (updated) {
+                System.out.println("Order marked as done.");
+            } else {
+                System.out.println("Order status update failed!");
+            }
+
             commentsTextArea.clear();
-            loadLatestComment(extractOrderNumber());
+            loadLatestComment(fullOrderNumber);
+
+            submitButton.setVisible(false);
+            commentsTextArea.setEditable(false);
+
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/QCUMain.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+
+            Stage currentStage = (Stage) submitButton.getScene().getWindow();
+            currentStage.setScene(scene);
+            currentStage.setTitle("QCU Main");
+            currentStage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -206,5 +243,4 @@ public class QCUNewReportController {
             return "";
         }
     }
-
 }

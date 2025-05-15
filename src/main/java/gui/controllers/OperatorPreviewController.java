@@ -227,7 +227,12 @@ public class OperatorPreviewController {
 
             System.out.println("Extracted code: " + codeOnly);
 
-            orderStatusDAO.updateOrderStatus(codeOnly, "operator", "done");
+            boolean updated = orderStatusDAO.updateOrderStatusAndRole(codeOnly, "operator", "qcu", "to_approve");
+
+            if (!updated) {
+                showAlert(Alert.AlertType.ERROR, "Update failed", null, "No matching order found for operator role.");
+                return;
+            }
 
             showAlert(Alert.AlertType.INFORMATION, "Order updated", null,
                     "Order " + currentOrderNumber + " marked as done.");

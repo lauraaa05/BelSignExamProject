@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -188,7 +189,7 @@ public class QCUFolderController {
 
     @FXML
     private void btnOpenReportAction(ActionEvent actionEvent) {
-        sceneNavigator.switchTo(actionEvent, "QCUReport.fxml");
+        sceneNavigator.switchTo(actionEvent, "QCUNewReport.fxml");
     }
 
     private void openFolderAndShowOrders(String date) {
@@ -220,5 +221,20 @@ public class QCUFolderController {
 
         folderViewPane.setVisible(true);
         folderViewPane.setManaged(true);
+    }
+
+    @FXML
+    private void handleOrderClick(MouseEvent event) {
+        if (event.getClickCount() == 1) {
+            String selectedOrderNumber = orderListView.getSelectionModel().getSelectedItem();
+            if (selectedOrderNumber != null) {
+                String cleanOrder = selectedOrderNumber.replace("\uD83D\uDCC4 ", "");
+
+                Stage stage = (Stage) orderListView.getScene().getWindow();
+                sceneNavigator.<QCUNewReportController>switchToWithData(stage, "QCUNewReport.fxml", controller -> {
+                    controller.setOrderNumber(cleanOrder);
+                });
+            }
+        }
     }
 }

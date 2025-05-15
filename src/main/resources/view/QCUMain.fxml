@@ -82,7 +82,7 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <ListView fx:id="toApproveListView" prefHeight="420.0" prefWidth="201.0" styleClass="listView">
+                  <ListView fx:id="toApproveListView" onMouseClicked="#handleOrderClick" prefHeight="420.0" prefWidth="201.0" styleClass="listView">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin></ListView>
