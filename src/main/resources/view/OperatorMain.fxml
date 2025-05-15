@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="710.0" stylesheets="@../css/OperatorMainCSS.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.OperatorMainController">
+<BorderPane id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="710.0" stylesheets="@../css/OperatorMainCSS.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.OperatorMainController">
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" styleClass="topVBox" BorderPane.alignment="CENTER">
          <children>
@@ -81,7 +81,7 @@
                         <Font size="18.0" />
                      </font>
                   </TextField>
-                  <Button mnemonicParsing="false" text="⌕">
+                  <Button mnemonicParsing="false" text="🔍">
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
