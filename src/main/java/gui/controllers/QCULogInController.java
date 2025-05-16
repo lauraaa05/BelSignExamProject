@@ -134,10 +134,10 @@ public class QCULogInController {
     }
 
     private void switchToAdminMainScreen(Stage currentStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/AdminReport.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/AdminUserScreen.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
-        currentStage.setTitle("Admin Main");
+        currentStage.setTitle("Admin User Management");
         currentStage.setScene(scene);
         currentStage.show();
     }
