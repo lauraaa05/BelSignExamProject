@@ -107,7 +107,7 @@ public class QCUFolderController {
 
         for (javafx.scene.Node node : folderFlowPane.getChildren()) {
             if (node instanceof VBox folderBox && !folderBox.getChildren().isEmpty()) {
-                Label label = (Label) folderBox.getChildren().get(1);
+                Label label = (Label) folderBox.getChildren().get(1); // Assuming second child is always the label
                 String folderDate = label.getText().toLowerCase();
 
                 boolean matches = searchText.isEmpty() || folderDate.contains(searchText);
