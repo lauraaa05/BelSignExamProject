@@ -29,7 +29,7 @@
             <Label styleClass="topLabel" text="BelSign" />
             <Pane prefHeight="100.0" prefWidth="167.0" HBox.hgrow="ALWAYS">
                <children>
-                  <ImageView fx:id="helmetImageView" fitHeight="86.0" fitWidth="87.0" layoutX="121.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="helmetImageView" fitHeight="61.0" fitWidth="59.0" layoutX="121.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
                   <image>
                      <Image url="@../images/belmanHelmet.png" />
                   </image>
@@ -73,7 +73,7 @@
                         <Font name="Arial Bold" size="20.0" />
                      </font>
                   </Label>
-                  <TextField prefHeight="36.0" prefWidth="171.0" promptText="OrderNumber...">
+                  <TextField fx:id="searchField" prefHeight="36.0" prefWidth="171.0" promptText="OrderNumber...">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
@@ -81,7 +81,7 @@
                         <Font size="18.0" />
                      </font>
                   </TextField>
-                  <Button mnemonicParsing="false" text="🔍">
+                  <Button fx:id="searchButton" mnemonicParsing="false" onAction="#searchBtnAction" text="🔍">
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
