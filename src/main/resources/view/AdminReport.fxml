@@ -48,7 +48,7 @@
                         <Insets bottom="20.0" />
                      </VBox.margin>
                   </Button>
-                  <Button id="buttonClass" mnemonicParsing="false" styleClass="buttonClass" text="📝" />
+                  <Button fx:id="reportButton" id="buttonClass" mnemonicParsing="false" styleClass="buttonClass" text="📝" />
                </children>
             </VBox>
             <HBox alignment="CENTER">

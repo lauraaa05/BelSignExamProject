@@ -38,7 +38,7 @@ public class AdminUserController implements Initializable {
     private TableColumn<User, String> roleColumn;
 
     @FXML
-    private Button signOutButton, addButton, editButton, deleteUserButton;
+    private Button signOutButton, addButton, editButton, deleteUserButton, reportButton;
 
     private final LoginDAO loginDAO = new LoginDAO();
 
@@ -148,5 +148,22 @@ public class AdminUserController implements Initializable {
 
     public void refreshUserTable() {
         tableViewUsers.setItems(FXCollections.observableArrayList(loginDAO.getAllUsers()));
+    }
+
+    private void switchToReportScreen(Stage currentStage) throws IOException {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/AdminReport.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+
+        currentStage.setTitle("Admin Report Screen");
+        currentStage.setScene(scene);
+        currentStage.show();
+
+    }
+
+    @FXML
+    public void handleReportButtonClick(ActionEvent actionEvent) throws IOException {
+        Stage currentStage = (Stage) reportButton.getScene().getWindow();
+        switchToReportScreen(currentStage);
     }
 }
