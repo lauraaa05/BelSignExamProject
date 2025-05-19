@@ -12,6 +12,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -60,6 +61,22 @@ public class OperatorLogInbyUsernameController {
         });
 
         eyeLabel.setOnMouseClicked(e -> togglePasswordVisibility());
+
+        usernameField.setOnKeyPressed(e -> {
+            if(e.getCode() == KeyCode.ENTER) {
+                passwordFieldMasked.requestFocus();
+            }
+        });
+
+        passwordFieldMasked.setOnKeyPressed(e -> {
+            if(e.getCode() == KeyCode.ENTER) {
+                try {
+                    handleLogin();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 
     private void handleLogin() throws IOException {
