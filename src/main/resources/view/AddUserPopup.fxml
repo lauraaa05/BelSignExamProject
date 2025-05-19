@@ -2,33 +2,37 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
-<VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.AddUserPopupController">
-    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+<?import javafx.geometry.Pos?>
+<?import java.lang.String?>
 
-    <Label text="Add New User" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+<StackPane stylesheets="@../css/popup-style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.AddUserPopupController">
+    <VBox spacing="15" alignment="TOP_CENTER" maxWidth="350" style="-fx-background-color: #ffffff; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 4);">
+        <padding>
+            <Insets top="25" right="25" bottom="25" left="25"/>
+        </padding>
 
-    <TextField fx:id="firstNameField" promptText="First Name"/>
-    <TextField fx:id="lastNameField" promptText="Last Name"/>
-    <TextField fx:id="usernameField" promptText="Username"/>
-    <PasswordField fx:id="passwordField" promptText="Password"/>
-    <TextField fx:id="emailField" promptText="Email" />
+        <Label text="Add New User" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
 
-    <ComboBox fx:id="roleComboBox" promptText="Select Role">
-        <items>
-            <FXCollections fx:factory="observableArrayList">
-                <String fx:value="Operator"/>
-                <String fx:value="Quality Control"/>
-            </FXCollections>
-        </items>
-    </ComboBox>
+        <TextField fx:id="firstNameField" promptText="First Name" styleClass="custom-textfield"/>
+        <TextField fx:id="lastNameField" promptText="Last Name" styleClass="custom-textfield"/>
+        <TextField fx:id="usernameField" promptText="Username" styleClass="custom-textfield"/>
+        <PasswordField fx:id="passwordField" promptText="Password" styleClass="custom-textfield"/>
+        <TextField fx:id="emailField" promptText="Email" styleClass="custom-textfield"/>
 
+        <ComboBox fx:id="roleComboBox" promptText="Select Role" styleClass="custom-combobox">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Operator"/>
+                    <String fx:value="Quality Control"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
 
-    <HBox spacing="10" alignment="CENTER">
-        <Button text="Cancel" onAction="#handleCancel"/>
-        <Button text="Add User" onAction="#handleAddUser"/>
-    </HBox>
-</VBox>
+        <HBox spacing="12" alignment="CENTER">
+            <Button text="Cancel" onAction="#handleCancel" styleClass="cancel-button"/>
+            <Button text="Add User" onAction="#handleAddUser" styleClass="primary-button"/>
+        </HBox>
+    </VBox>
+</StackPane>
