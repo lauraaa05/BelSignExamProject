@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml" fx:controller="gui.controllers.SwipeDraftController" onSwipeRight="#handleSwipeRight" prefHeight="100.0" prefWidth="350.0">
+    <children>
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #5f87ff; -fx-background-radius: 30;" AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.bottomAnchor="20.0">
+            <children>
+                <Button text="▶" style="-fx-font-size: 20; -fx-text-fill: white; -fx-background-radius: 30; -fx-background-color: white; -fx-padding: 10 15;" />
+                <VBox>
+                    <children>
+                        <Label text="Swipe to Confirm" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-text-alignment: center;" />
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</AnchorPane>
