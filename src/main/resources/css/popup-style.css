@@ -1,0 +1,28 @@
+.custom-textfield, .custom-combobox {
+    -fx-pref-width: 260;
+    -fx-background-radius: 6;
+    -fx-padding: 8;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 6;
+}
+
+.primary-button {
+    -fx-background-color: #1976d2;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+}
+
+.primary-button:hover {
+    -fx-background-color: #1565c0;
+}
+
+.cancel-button {
+    -fx-background-color: #e0e0e0;
+    -fx-text-fill: #333;
+    -fx-background-radius: 6;
+}
+
+.cancel-button:hover {
+    -fx-background-color: #d5d5d5;
+}

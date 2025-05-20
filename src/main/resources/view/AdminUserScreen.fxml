@@ -57,7 +57,7 @@
                         <Insets bottom="20.0" />
                      </VBox.margin>
                   </Button>
-                  <Button id="buttonClass" mnemonicParsing="false" styleClass="buttonClass" text="📝" />
+                  <Button onAction="#handleReportButtonClick" fx:id="reportButton" id="buttonClass" mnemonicParsing="false" styleClass="buttonClass" text="📝" />
                </children>
             </VBox>
             <HBox alignment="CENTER">
@@ -92,7 +92,7 @@
                               <Insets />
                            </HBox.margin>
                         </Button>
-                        <Button id="centerButton" fx:id="deleteUserButton" mnemonicParsing="false" onAction="#handleDeleteUser" styleClass="conterButton" text="➖" />
+                        <Button id="centerButton" fx:id="deleteUserButton" mnemonicParsing="false" onAction="#handleDeleteUser" styleClass="conterButton" text="🗑️" />
                         <Button id="centerButton" fx:id="editButton" mnemonicParsing="false" onAction="#handleEditButtonClick" styleClass="editButton" text="🖍">
                            <font>
                               <Font name="System Bold" size="13.0" />
