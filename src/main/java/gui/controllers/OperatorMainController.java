@@ -2,8 +2,7 @@ package gui.controllers;
 
 
 import be.Operator;
-import bll.OrderManager;
-import bll.OrderStatusManager;
+import be.Order;
 import dal.OrderStatusDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
 import javafx.event.ActionEvent;
@@ -32,7 +31,7 @@ public class OperatorMainController implements Initializable {
     private Button signOutButton;
 
     @FXML
-    private ListView<String> toDoListView;
+    private ListView<Order> toDoListView;
 
     @FXML
     private Label loggedUsernameLbl;
@@ -44,7 +43,7 @@ public class OperatorMainController implements Initializable {
     private final String currentUserRole = "operator";
     private final String currentStatus = "todo";
 
-    private List<String> allToDoOrders = new ArrayList<>();
+    private List<Order> allToDoOrders = new ArrayList<>();
 
     public OperatorMainController() throws IOException {
     }
@@ -61,7 +60,7 @@ public class OperatorMainController implements Initializable {
     }
 
     private void loadOrdersIntoToDoList() {
-        allToDoOrders = orderStatusDAO.getFormattedOrdersByRoleAndStatus(currentUserRole, currentStatus);
+        allToDoOrders = orderStatusDAO.getOrdersByRoleAndStatus(currentUserRole, currentStatus);
         toDoListView.getItems().setAll(allToDoOrders);
         toDoListView.setFixedCellSize(48);
     }
@@ -72,8 +71,8 @@ public class OperatorMainController implements Initializable {
         if (searchText.isEmpty()) {
             toDoListView.getItems().setAll(allToDoOrders);
         } else {
-            List<String> filtered = allToDoOrders.stream()
-                    .filter(order -> order.toLowerCase().contains(searchText))
+            List<Order> filtered = allToDoOrders.stream()
+                    .filter(order -> order.getFormattedOrderText().toLowerCase().contains(searchText))
                     .collect(Collectors.toList());
             toDoListView.getItems().setAll(filtered);
         }
@@ -86,20 +85,20 @@ public class OperatorMainController implements Initializable {
 
     private void handleOrderClick(MouseEvent event) {
         if (event.getClickCount() == 1) {
-            String selectedOrderNumber = toDoListView.getSelectionModel().getSelectedItem();
+            Order selectedOrderNumber = toDoListView.getSelectionModel().getSelectedItem();
             if (selectedOrderNumber != null) {
                 openOrderPreviewScene(selectedOrderNumber);
             }
         }
     }
 
-    private void openOrderPreviewScene(String orderNumber) {
+    private void openOrderPreviewScene(Order orderNumber) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/OperatorPreview.fxml"));
             Scene orderPreviewScene = new Scene(loader.load());
 
             OperatorPreviewController previewController = loader.getController();
-            previewController.setOrderNumber(orderNumber);
+            previewController.setOrder(orderNumber);
 
             Stage stage = (Stage) toDoListView.getScene().getWindow();
             stage.setScene(orderPreviewScene);

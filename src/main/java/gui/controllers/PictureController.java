@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import be.Order;
 import be.Picture;
 import bll.CameraManager;
 import bll.PictureManager;
@@ -7,7 +8,6 @@ import dal.PictureDAO;
 import io.github.palexdev.materialfx.utils.SwingFXUtils;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,11 +20,8 @@ import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.rmi.server.RemoteObject;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +45,7 @@ public class PictureController {
     private PictureDAO pictureDAO;
     private BufferedImage capturedImage;
     private boolean isPhotoTaken = false;
-    private String orderNumber;
+    private Order order;
     private OperatorPreviewController operatorPreviewController;
 
     public void initialize() {
@@ -123,7 +120,7 @@ public class PictureController {
 
             try {
                 LocalDateTime timestamp = LocalDateTime.now();
-                pictureManager.savePictureToDB(capturedImage, orderNumber, timestamp, selectedSide);
+                pictureManager.savePictureToDB(capturedImage, order.getOrderCode(), timestamp, selectedSide);
 
                 if (List.of("Front", "Back", "Left", "Right", "Top").contains(selectedSide)) {
                     cBoxSide.getItems().remove(selectedSide);
@@ -146,16 +143,16 @@ public class PictureController {
         }
     }
 
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
-        System.out.println("Order number received in PictureController: " + orderNumber);
+    public void setOrder(Order order) {
+        this.order = order;
+        System.out.println("Order number received in PictureController: " + order.getOrderCode());
 
         pictureDAO = new PictureDAO();
 
         List<String> allSides = new ArrayList<>(List.of("Front", "Back", "Left", "Right", "Top"));
 
         try {
-            List<String> takenSides = pictureDAO.getTakenSidesForOrderNumber(orderNumber);
+            List<String> takenSides = pictureDAO.getTakenSidesForOrderNumber(order.getOrderCode());
             allSides.removeAll(takenSides);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -184,7 +181,7 @@ public class PictureController {
             Parent root = fxmlLoader.load();
 
             OperatorPreviewController controller = fxmlLoader.getController();
-            controller.setOrderNumber(orderNumber);
+            controller.setOrder(order);
 
             Stage stage = (Stage) btnExit.getScene().getWindow();
             stage.setScene(new Scene(root));

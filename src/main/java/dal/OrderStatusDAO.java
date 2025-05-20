@@ -1,5 +1,7 @@
 package dal;
 
+import be.Order;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,11 +57,10 @@ public class OrderStatusDAO {
         return results;
     }
 
-    // Version that returns formatted orders with details from the Orders table
-    public List<String> getFormattedOrdersByRoleAndStatus(String role, String status) {
-        List<String> orders = new ArrayList<>();
+    public List<Order> getOrdersByRoleAndStatus(String role, String status) {
+        List<Order> orders = new ArrayList<>();
         String query = """
-            SELECT o.CountryNumber, o.Year, o.Month, o.OrderCode
+            SELECT o.CountryNumber, o.Year, o.Month, o.OrderCode, o.OrderGroupId
             FROM Orders o
             INNER JOIN OrderStatus s ON o.OrderCode = s.OrderCode
             WHERE s.Role = ? AND s.Status = ?;
@@ -75,15 +76,11 @@ public class OrderStatusDAO {
             while (rs.next()) {
                 int countryNumber = rs.getInt("CountryNumber");
                 int year = rs.getInt("Year");
-                String month = rs.getString("Month").trim();
+                String month = rs.getString("Month");
                 String orderCode = rs.getString("OrderCode");
+                int orderGroupId = rs.getInt("OrderGroupId");
 
-                if (month.length() == 1) {
-                    month = "0" + month;
-                }
-
-                String formattedOrder = countryNumber + "-" + year + "-" + month + "-" + orderCode;
-                orders.add(formattedOrder);
+                orders.add(new Order(countryNumber, year, month, orderCode, orderGroupId));
             }
         } catch (SQLException e) {
             e.printStackTrace();

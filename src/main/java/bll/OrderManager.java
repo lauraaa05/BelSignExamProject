@@ -1,4 +1,5 @@
 package bll;
+import be.Order;
 import dal.DBAccess;
 import dal.OrderDAO;
 
@@ -14,7 +15,7 @@ public class OrderManager {
 
     private OrderDAO od = new OrderDAO();
 
-    public List<String> getOrderNumbersAsList() {
+    public List<Order> getOrderNumbersAsList() {
         return od.getFormattedOrderNumbers();
     }
 

@@ -77,6 +77,11 @@
             <artifactId>materialfx</artifactId>
             <version>21.18.0-alpha</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.2</version>
+        </dependency>
         <!-- Send email look after -->
         <dependency>
             <groupId>com.sendgrid</groupId>

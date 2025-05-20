@@ -1,11 +1,11 @@
 package gui.controllers;
 
+import be.Order;
 import be.Picture;
 import dal.OrderStatusDAO;
 import dal.PictureDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.mfxlocalization.Language;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +14,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -31,10 +30,8 @@ import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static utilities.AlertHelper.showAlert;
-import static utilities.AlertHelper.showConfirmationAlert;
 
 public class OperatorPreviewController {
 
@@ -55,7 +52,7 @@ public class OperatorPreviewController {
 
     private final List<ImageView> imageViews = new ArrayList<>();
     private static final int MIN_IMAGES = 5;
-    private String currentOrderNumber;
+    private Order currentOrder;
 
     public void initialize() {
         btnExit.setOnAction(e -> {
@@ -67,10 +64,10 @@ public class OperatorPreviewController {
         });
     }
 
-    public void setOrderNumber(String orderNumber) {
-        this.currentOrderNumber = orderNumber;
-        orderNumberLabel.setText("Order: " + orderNumber);
-        loadOrderImages(orderNumber);
+    public void setOrder(Order order) {
+        this.currentOrder = order;
+        orderNumberLabel.setText("Order: " + order);
+        loadOrderImages(order.getOrderCode());
     }
 
     private void loadOrderImages(String orderNumber) {
@@ -152,7 +149,7 @@ public class OperatorPreviewController {
         Parent root = fxmlLoader.load();
 
         PictureController pictureController = fxmlLoader.getController();
-        pictureController.setOrderNumber(currentOrderNumber);
+        pictureController.setOrder(currentOrder);
         pictureController.setOperatorPreviewController(this);
 
         Stage currentStage = (Stage) cameraButton.getScene().getWindow();
@@ -176,7 +173,7 @@ public class OperatorPreviewController {
 
     @FXML
     private void markAsDone(ActionEvent actionEvent) {
-        if (currentOrderNumber == null ||  currentOrderNumber.isEmpty()) {
+        if (currentOrder == null) {
             showAlert(Alert.AlertType.WARNING, "No order selected", null, "Please select an order");
             return;
         }
@@ -184,7 +181,7 @@ public class OperatorPreviewController {
         try {
             PictureDAO pictureDAO = new PictureDAO();
 
-            List<String> takenSides = pictureDAO.getTakenSidesForOrderNumber(currentOrderNumber);
+            List<String> takenSides = pictureDAO.getTakenSidesForOrderNumber(currentOrder.getOrderCode());
 
             if (takenSides.containsAll(List.of("Front", "Back", "Left", "Right", "Top"))) {
                 System.out.println("All sides have been photographed");
@@ -202,7 +199,7 @@ public class OperatorPreviewController {
                 return;
             }
 
-            int imageCount = pictureDAO.countImagesForOrderNumber(currentOrderNumber);
+            int imageCount = pictureDAO.countImagesForOrderNumber(currentOrder.getOrderCode());
 
             if (imageCount < MIN_IMAGES) {
                 AlertHelper.showAlert(
@@ -216,14 +213,14 @@ public class OperatorPreviewController {
             boolean confirmed = AlertHelper.showConfirmationAlert(
                     "Confirm completion",
                     "Mark order as done?",
-                    "Are you sure you want to mark order " + currentOrderNumber + " as done?");
+                    "Are you sure you want to mark order " + currentOrder + " as done?");
             if (!confirmed) {
                 return;
             }
 
             OrderStatusDAO orderStatusDAO = new OrderStatusDAO();
 
-            String codeOnly = currentOrderNumber.substring(currentOrderNumber.lastIndexOf('-') + 1);
+            String codeOnly = currentOrder.getOrderCode();
 
             System.out.println("Extracted code: " + codeOnly);
 
@@ -235,7 +232,7 @@ public class OperatorPreviewController {
             }
 
             showAlert(Alert.AlertType.INFORMATION, "Order updated", null,
-                    "Order " + currentOrderNumber + " marked as done.");
+                    "Order " + currentOrder + " marked as done.");
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/OperatorMain.fxml"));
             Parent root = fxmlLoader.load();

@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import be.Order;
 import be.Picture;
 import be.Report;
 import dal.OrderStatusDAO;
@@ -104,15 +105,15 @@ public class QCUNewReportController {
         return vBox;
     }
 
-    public void setOrderNumber(String orderNumber) {
-        orderNumberLabel.setText("ORDER NUMBER: " + orderNumber);
+    public void setOrder(Order order) {
+        orderNumberLabel.setText("ORDER NUMBER: " + order);
 
-        loadPictures(orderNumber);
-        loadLatestComment(orderNumber);
+        loadPictures(order.getOrderCode());
+        loadLatestComment(order.getOrderCode());
 
-        loadProductDetails(orderNumber);
+        loadProductDetails(order.getOrderCode());
 
-        String status = new OrderStatusDAO().getStatusForOrder(orderNumber);
+        String status = new OrderStatusDAO().getStatusForOrder(order.getOrderCode());
         if ("done".equalsIgnoreCase(status)) {
             submitButton.setVisible(false);
             commentsTextArea.setEditable(false);
