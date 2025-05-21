@@ -256,4 +256,6 @@ public class QCUNewReportController {
         sceneNavigator.switchTo(actionEvent, "QCUFolderScreen.fxml");
     }
 
+    public void onRejectAction(ActionEvent actionEvent) {
+    }
 }

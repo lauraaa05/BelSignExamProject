@@ -35,7 +35,7 @@ public class TestQCULogIn extends Application {
 
         ListView<String> toApproveListView = null;
         toApproveListView.setItems(orders);
-        toApproveListView.setFixedCellSize(48); // Opcional para estética
+        toApproveListView.setFixedCellSize(48);
     }
 
 }
