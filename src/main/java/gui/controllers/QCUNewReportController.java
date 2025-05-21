@@ -53,23 +53,6 @@ public class QCUNewReportController {
     @FXML
     private Label orderNumberLabel;
 
-    @FXML
-    private VBox productDetailsSection;
-    @FXML
-    private HBox productDetailsBox;
-//    @FXML
-//    private Label materialTypeLabel;
-//    @FXML
-//    private Label colorLabel;
-//    @FXML
-//    private Label weightLabel;
-//    @FXML
-//    private Label heightLabel;
-//    @FXML
-//    private Label lengthLabel;
-//    @FXML
-//    private Label widthLabel;
-
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     private PictureDAO pictureDAO = new PictureDAO();
@@ -108,7 +91,7 @@ public class QCUNewReportController {
     public void setOrder(Order order) {
         orderNumberLabel.setText("ORDER NUMBER: " + order);
 
-        loadPictures(order.getOrderCode());
+        loadPictures(order.toString());
         loadLatestComment(order.getOrderCode());
 
         String status = new OrderStatusDAO().getStatusForOrder(order.getOrderCode());
@@ -126,6 +109,7 @@ public class QCUNewReportController {
             for (Picture picture : pictures) {
                 VBox imageCard = createImageCard(picture);
                 photoTile.getChildren().add(imageCard);
+                System.out.println("Trying to load pictures for order: " + orderNumber);
             }
 
             if (pictures.isEmpty()) {
@@ -167,6 +151,8 @@ public class QCUNewReportController {
 
             submitButton.setVisible(false);
             commentsTextArea.setEditable(false);
+
+            hideSubmitButton(orderCode);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -211,4 +197,12 @@ public class QCUNewReportController {
         sceneNavigator.switchTo(actionEvent, "QCUFolderScreen.fxml");
     }
 
+    private void hideSubmitButton(String orderCode) {
+        String status = new OrderStatusDAO().getStatusForOrder(orderCode);
+        if ("done".equalsIgnoreCase(status)) {
+            submitButton.setVisible(false);
+            submitButton.setManaged(false);
+            commentsTextArea.setEditable(false);
+        }
+    }
 }
