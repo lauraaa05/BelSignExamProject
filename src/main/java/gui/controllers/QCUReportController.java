@@ -14,6 +14,6 @@ public class QCUReportController {
     }
 
     public void setOrderNumber(String orderNumber) {
-        System.out.println("setOrderNumber: " + orderNumber);
+        System.out.println("setOrder: " + orderNumber);
     }
 }

@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import be.Order;
 import dal.OrderStatusDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,7 +15,6 @@ import utilities.SceneNavigator;
 import java.io.IOException;
 import java.util.List;
 
-import dal.OrderDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -25,7 +25,7 @@ public class QCUMainController {
     private Button btnOpenReport, folderButton, homeButton;
 
     @FXML
-    private ListView<String> toApproveListView;
+    private ListView<Order> toApproveListView;
 
     private final SceneNavigator sceneNavigator = new SceneNavigator();
 
@@ -72,9 +72,9 @@ public class QCUMainController {
     public void initialize() {
         try {
             OrderStatusDAO dao = new OrderStatusDAO();
-            List<String> orders = dao.getFormattedOrdersByRoleAndStatus("qcu", "to_approve");
+            List<Order> orders = dao.getOrdersByRoleAndStatus("qcu", "to_approve");
 
-            ObservableList<String> observableOrders = FXCollections.observableArrayList(orders);
+            ObservableList<Order> observableOrders = FXCollections.observableArrayList(orders);
             toApproveListView.setItems(observableOrders);
         } catch (Exception e) {
             e.printStackTrace();
@@ -84,13 +84,11 @@ public class QCUMainController {
     @FXML
     private void handleOrderClick(MouseEvent event) {
         if (event.getClickCount() == 1) {
-            String selectedOrderNumber = toApproveListView.getSelectionModel().getSelectedItem();
-            if (selectedOrderNumber != null) {
-                String cleanOrder = selectedOrderNumber.replace("\uD83D\uDCC4 ", "");
-
+            Order selectedOrder = toApproveListView.getSelectionModel().getSelectedItem();
+            if (selectedOrder != null) {
                 Stage stage = (Stage) toApproveListView.getScene().getWindow();
                 sceneNavigator.<QCUNewReportController>switchToWithData(stage, "QCUNewReport.fxml", controller -> {
-                    controller.setOrderNumber(cleanOrder);
+                    controller.setOrder(selectedOrder); // Or use getOrderCode() if you only need the code
                 });
             }
         }
