@@ -100,6 +100,18 @@ public class QCUFolderController {
         });
 
         orderListView.setFixedCellSize(40);
+
+        orderListView.setCellFactory(listView -> new ListCell<>() {
+            @Override
+            protected void updateItem(Order order, boolean empty) {
+                super.updateItem(order, empty);
+                if (empty || order == null) {
+                    setText(null);
+                } else {
+                    setText("📄 " + order.toString());
+                }
+            }
+        });
     }
 
     @FXML
@@ -198,8 +210,6 @@ public class QCUFolderController {
         int year = Integer.parseInt(parts[0]);
         int month = Integer.parseInt(parts[1]);
 
-        List<String> orders = orderManager.getOrdersForDate(year, month);
-
         currentFolderLabel.setText("📁 " + date);
 
         folderViewPane.setVisible(false);
@@ -208,11 +218,9 @@ public class QCUFolderController {
         orderListPane.setVisible(true);
         orderListPane.setManaged(true);
 
-        List<String> formattedOrders = orders.stream()
-                .map(order -> "\uD83D\uDCC4 " + order)
-                .toList();
+        List<Order> orders = orderManager.getOrdersForDate(year, month);
+        orderListView.getItems().setAll(orders);
 
-        orderListView.getItems().setAll((Order) formattedOrders);
     }
 
     @FXML
