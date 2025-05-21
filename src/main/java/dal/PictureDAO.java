@@ -90,12 +90,13 @@ public class PictureDAO {
 
             stmt.setString(1,orderNumber);
             ResultSet rs = stmt.executeQuery();
+            System.out.println("DAO received orderNumber: " + orderNumber);
 
             while (rs.next()) {
                 byte[] imageBytes = rs.getBytes("Image");
                 String side = rs.getString("Side");
                 Timestamp timestamp = rs.getTimestamp("Timestamp");
-                String dbOrderNumber = rs.getString("Order");
+                String dbOrderNumber = rs.getString("OrderNumber");
 
                 Picture picture = new Picture(imageBytes, timestamp.toLocalDateTime(), side, dbOrderNumber);
                 pictures.add(picture);
