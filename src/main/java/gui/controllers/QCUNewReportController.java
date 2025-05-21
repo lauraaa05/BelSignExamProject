@@ -111,8 +111,6 @@ public class QCUNewReportController {
         loadPictures(order.getOrderCode());
         loadLatestComment(order.getOrderCode());
 
-        loadProductDetails(order.getOrderCode());
-
         String status = new OrderStatusDAO().getStatusForOrder(order.getOrderCode());
         if ("done".equalsIgnoreCase(status)) {
             submitButton.setVisible(false);
@@ -205,50 +203,6 @@ public class QCUNewReportController {
             generalCommentsLabel.setText(latestComment);
         } catch (SQLException e) {
             generalCommentsLabel.setText("Failed to fetch comment: " + e.getMessage());
-        }
-    }
-
-    private void loadProductDetails(String orderNumber) {
-        try {
-            String orderCode = extractOrderNumber(orderNumber); //I called this to reach to the last 6 digit of order number
-            Map<String, String> details = reportModel.getProductDetailsByOrderCode(orderCode);
-            productDetailsBox.getChildren().clear();
-
-            if (details != null && !details.isEmpty()) {
-                details.forEach((key, value) -> {
-                    VBox detailBox = new VBox(5);
-                    detailBox.getStyleClass().add("product-detail-box");
-                    detailBox.setAlignment(javafx.geometry.Pos.CENTER);
-
-                    Label labelKey = new Label(key);
-                    labelKey.getStyleClass().add("product-detail-key");
-
-                    Label labelValue = new Label(value);
-                    labelValue.getStyleClass().add("product-detail-value");
-
-                    detailBox.getChildren().addAll(labelKey, labelValue);
-                    productDetailsBox.getChildren().add(detailBox);
-                });
-            } else {
-                Label noData = new Label("No product details found");
-                noData.setStyle("-fx-text-fill: #ff0000;");
-                productDetailsBox.getChildren().add(noData);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Label error = new Label("Failed to load product details.");
-            error.setStyle("-fx-text-fill: #ff0000;");
-            productDetailsBox.getChildren().add(error);
-        }
-
-    }
-
-    //This method takes the last 6 digit of orderNumber which is a ORDER CODE!!!!
-    private String extractOrderNumber(String orderNumber) {
-        if (orderNumber != null && orderNumber.length() >= 6) {
-            return orderNumber.substring(orderNumber.length() - 6);
-        } else {
-            return "";
         }
     }
 

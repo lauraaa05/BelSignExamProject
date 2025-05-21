@@ -6,6 +6,8 @@ import dal.OrderStatusDAO;
 import dal.PictureDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.mfxlocalization.Language;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,14 +16,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import utilities.AlertHelper;
 
 import java.io.ByteArrayInputStream;
@@ -30,8 +36,10 @@ import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static utilities.AlertHelper.showAlert;
+import static utilities.AlertHelper.showConfirmationAlert;
 
 public class OperatorPreviewController {
 
@@ -50,6 +58,12 @@ public class OperatorPreviewController {
     @FXML
     private Button doneButton;
 
+    //These are for swiping gesture
+    @FXML
+    private HBox swipeContainer;
+    @FXML
+    private Button swipeButton;
+
     private final List<ImageView> imageViews = new ArrayList<>();
     private static final int MIN_IMAGES = 5;
     private Order currentOrder;
@@ -62,6 +76,10 @@ public class OperatorPreviewController {
                 ex.printStackTrace();
             }
         });
+
+        swipeButton.setOnMousePressed(this::onMousePressed);
+        swipeButton.setOnMouseDragged(this::onMouseDragged);
+        swipeButton.setOnMouseReleased(this::onMouseReleased);
     }
 
     public void setOrder(Order order) {
@@ -248,4 +266,50 @@ public class OperatorPreviewController {
             showAlert(Alert.AlertType.ERROR, "Error", "Could not update order status", e.getMessage());
         }
     }
+
+    //These are for swipin gesture
+    private double startX;
+    private final double TRIGGER_DISTANCE = 150; // Distance to consider it a full swipe
+
+    private void onMousePressed(MouseEvent event) {
+        startX = event.getSceneX();
+    }
+
+    private void onMouseDragged(MouseEvent event) {
+        double offsetX = event.getSceneX() - startX;
+        if (offsetX >= 0 && offsetX <= (swipeContainer.getWidth() - swipeButton.getWidth() - 20)) {
+            swipeButton.setTranslateX(offsetX);
+        }
+    }
+
+    private void onMouseReleased(MouseEvent event) {
+        double offsetX = event.getSceneX() - startX;
+
+        if (offsetX > TRIGGER_DISTANCE) {
+            // Trigger confirmation or animation to end
+            animateToPosition(swipeButton, swipeContainer.getWidth() - swipeButton.getWidth() - 20, true);
+        } else {
+            // Snap back
+            animateToPosition(swipeButton, 0, false);
+        }
+    }
+
+    private void markAsDone() {
+        markAsDone(null); // Call the existing method with null
+    }
+
+    private void animateToPosition(Button button, double position, boolean isConfirmed) {
+        TranslateTransition transition = new TranslateTransition(Duration.millis(250), button);
+        transition.setToX(position);
+
+        transition.setOnFinished(event -> {
+            if (isConfirmed) {
+                System.out.println("Swipe Confirmed!");
+                // Optionally call a method: handleSwipeConfirm();
+                javafx.application.Platform.runLater(this::markAsDone);
+            }
+        });
+        transition.play();
+    }
+
 }

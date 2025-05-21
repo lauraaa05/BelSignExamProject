@@ -67,7 +67,7 @@
                      </children>
                   </VBox>
                </children></Pane>
-                <Button id="signOutButton" fx:id="signOutButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleSignOutButtonClick" prefHeight="45.0" prefWidth="56.0" text="🚪">
+                <Button fx:id="signOutButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleSignOutButtonClick" prefHeight="45.0" prefWidth="56.0" text="🚪">
                     <VBox.margin>
                         <Insets left="20.0" />
                     </VBox.margin>
@@ -99,13 +99,34 @@
                             </FlowPane>
                     </content>
                 </ScrollPane>
+                <AnchorPane prefHeight="200" prefWidth="220">
+                    <children>
+                        <HBox fx:id="swipeContainer" spacing="10" alignment="CENTER_LEFT"
+                              layoutY="0.0"
+                              prefWidth="240"
+                              style="-fx-background-color: #5f87ff; -fx-background-radius: 30;"
+                              AnchorPane.leftAnchor="220.0"
+                              AnchorPane.bottomAnchor="50.0">
+                            <children>
+                                <Button fx:id="swipeButton" text="▶"
+                                        style="-fx-font-size: 20; -fx-text-fill: white; -fx-background-radius: 30; -fx-background-color: white; -fx-padding: 10 15;" />
+                                <VBox>
+                                    <children>
+                                        <Label text="Swipe to Confirm"
+                                               style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-text-alignment: center;" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                    </children>
+                </AnchorPane>
             </children>
         </VBox>
     </center>
     <right>
       <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Button id="signOutButton" fx:id="doneButton" mnemonicParsing="false" onAction="#markAsDone" text="✔" textFill="#2a8820">
+            <Button fx:id="doneButton" mnemonicParsing="false" onAction="#markAsDone" text="✔" textFill="#2a8820">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
