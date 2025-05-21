@@ -2,7 +2,7 @@ package gui.controllers;
 
 
 import be.Operator;
-import bll.OrderManager;
+import be.Order;
 import bll.OrderStatusManager;
 import dal.OrderStatusDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 
 public class OperatorMainController implements Initializable {
@@ -30,7 +29,7 @@ public class OperatorMainController implements Initializable {
     private Button signOutButton;
 
     @FXML
-    private ListView<String> toDoListView;
+    private ListView<Order> toDoListView;
 
     @FXML
     private Label loggedUsernameLbl;
@@ -48,7 +47,7 @@ public class OperatorMainController implements Initializable {
 
     private void loadOrdersIntoToDoList() {
         OrderStatusManager osm = new OrderStatusManager();
-        List<String> toDoOrders = osm.getToDoOrders();
+        List<Order> toDoOrders = osm.getToDoOrders();
         toDoListView.getItems().setAll(toDoOrders);
         toDoListView.setFixedCellSize(48);
     }
@@ -56,15 +55,15 @@ public class OperatorMainController implements Initializable {
     // Handle order click
     private void handleOrderClick(MouseEvent event) {
         if (event.getClickCount() == 1) {  // Single click
-            String selectedOrderNumber = toDoListView.getSelectionModel().getSelectedItem();
-            if (selectedOrderNumber != null) {
-                openOrderPreviewScene(selectedOrderNumber);
+            Order selectedOrder = toDoListView.getSelectionModel().getSelectedItem();
+            if (selectedOrder != null) {
+                openOrderPreviewScene(selectedOrder);
             }
         }
     }
 
     // Open the OperatorPreviewController scene and pass the order number
-    private void openOrderPreviewScene(String orderNumber) {
+    private void openOrderPreviewScene(Order order) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/OperatorPreview.fxml"));
 
@@ -73,7 +72,7 @@ public class OperatorMainController implements Initializable {
 
             // Get the controller of the new scene and pass the order number
             OperatorPreviewController previewController = loader.getController();
-            previewController.setOrderNumber(orderNumber);
+            previewController.setOrder(order);
 
             // Set the new scene to the current stage
             Stage stage = (Stage) toDoListView.getScene().getWindow();
@@ -109,12 +108,8 @@ public class OperatorMainController implements Initializable {
 
     public void refreshLists() {
         OrderStatusDAO dao = new OrderStatusDAO();
-        List<String> todoOrders = dao.getFormattedOrdersByRoleAndStatus("operator", "todo");
+        List<Order> todoOrders = dao.getOrdersByRoleAndStatus("operator", "todo");
 
         toDoListView.getItems().setAll(todoOrders);
     }
 }
-
-
-
-
