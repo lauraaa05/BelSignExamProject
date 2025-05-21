@@ -40,7 +40,7 @@ public class PictureDAO {
                 byte[] imageBytes = rs.getBytes("Image");
                 String fileName = rs.getString("FileName");
                 Timestamp timestamp = rs.getTimestamp("Timestamp");
-                String dbOrderNumber = rs.getString("Order");
+                String dbOrderNumber = rs.getString("OrderNumber");
                 String dbSide = rs.getString("Side");
 
                 Picture picture = new Picture(imageBytes, fileName, timestamp.toLocalDateTime(), dbOrderNumber, dbSide);
