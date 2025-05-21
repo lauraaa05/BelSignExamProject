@@ -1,5 +1,6 @@
 package dk.easv.belsignexamproject;
 
+import be.Order;
 import dal.OrderDAO;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -26,16 +27,4 @@ public class TestQCULogIn extends Application {
     public static void main(String[] args) {
         launch();
     }
-    private void loadOrdersToApprove() {
-        System.out.println("[LOAD] Loading orders to approve from DB");
-
-        OrderDAO orderDAO;
-        List<String> formattedOrders = OrderDAO.getFormattedOrderNumbers();
-        ObservableList<String> orders = FXCollections.observableArrayList(formattedOrders);
-
-        ListView<String> toApproveListView = null;
-        toApproveListView.setItems(orders);
-        toApproveListView.setFixedCellSize(48);
-    }
-
 }

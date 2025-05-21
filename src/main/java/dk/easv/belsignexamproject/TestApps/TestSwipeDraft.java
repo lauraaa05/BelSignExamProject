@@ -8,28 +8,19 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
-public class TestQCUNewReport extends Application {
+public class TestSwipeDraft extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/QCUNewReport.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/TestSwipeDraft.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-
-        QCUNewReportController controller = fxmlLoader.getController();
-
-        stage.setTitle("QCU Report Test");
+        stage.setTitle("Operator Log In");
         stage.setScene(scene);
         stage.show();
-
-        javafx.application.Platform.runLater(() -> {
-            controller.setOrderNumber("45-2025-04-028746");
-        });
     }
 
     public static void main(String[] args) {
         launch();
     }
-
 }

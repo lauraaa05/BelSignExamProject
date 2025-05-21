@@ -92,7 +92,7 @@
                               <Insets />
                            </HBox.margin>
                         </Button>
-                        <Button id="centerButton" fx:id="deleteUserButton" mnemonicParsing="false" onAction="#handleDeleteUser" styleClass="conterButton" text="➖" />
+                        <Button id="centerButton" fx:id="deleteUserButton" mnemonicParsing="false" onAction="#handleDeleteUser" styleClass="conterButton" text="🗑️" />
                         <Button id="centerButton" fx:id="editButton" mnemonicParsing="false" onAction="#handleEditButtonClick" styleClass="editButton" text="🖍">
                            <font>
                               <Font name="System Bold" size="13.0" />
