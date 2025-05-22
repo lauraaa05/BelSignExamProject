@@ -2,6 +2,7 @@ package gui.controllers;
 
 import be.Order;
 import be.Picture;
+import bll.PictureManager;
 import dal.OrderStatusDAO;
 import dal.PictureDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
@@ -29,6 +30,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import utilities.AlertHelper;
+import utilities.SceneNavigator;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -58,6 +60,12 @@ public class OperatorPreviewController {
     @FXML
     private Button doneButton;
 
+    @FXML
+    private Button deleteButton;
+
+    @FXML
+    private Button fullscreenButton;
+
     //These are for swiping gesture
     @FXML
     private HBox swipeContainer;
@@ -67,6 +75,10 @@ public class OperatorPreviewController {
     private final List<ImageView> imageViews = new ArrayList<>();
     private static final int MIN_IMAGES = 5;
     private Order currentOrder;
+    private Picture selectedPicture;
+    private VBox selectedVBox;
+    private final SceneNavigator sceneNavigator = new SceneNavigator();
+    private PictureManager pictureManager;
 
     public void initialize() {
         btnExit.setOnAction(e -> {
@@ -80,6 +92,9 @@ public class OperatorPreviewController {
         swipeButton.setOnMousePressed(this::onMousePressed);
         swipeButton.setOnMouseDragged(this::onMouseDragged);
         swipeButton.setOnMouseReleased(this::onMouseReleased);
+
+        PictureDAO pictureDAO = new PictureDAO();
+        pictureManager = new PictureManager(pictureDAO);
     }
 
     public void setOrder(Order order) {
@@ -104,7 +119,7 @@ public class OperatorPreviewController {
     }
 
     public void addImage(Picture picture) {
-        Image image = new Image(new ByteArrayInputStream(picture.getImage()));
+        Image image = new Image(new ByteArrayInputStream(picture.getImageBytes()));
         ImageView imageView = new ImageView(image);
 
         imageView.setFitWidth(270);
@@ -123,20 +138,15 @@ public class OperatorPreviewController {
         label.getStyleClass().add("preview-box");
 
         vBox.setOnMouseClicked(event -> {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ImageViewer.fxml"));
-                Parent root = loader.load();
+            selectedPicture = picture;
+            selectedVBox = vBox;
 
-                ImageViewerController controller = loader.getController();
-                controller.setImage(image);
+            imageFlowPane.getChildren().forEach(node -> node.setStyle(""));
 
-                Stage stage = new Stage();
-                stage.setTitle("Image preview");
-                stage.setScene(new Scene(root));
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            vBox.setStyle("-fx-border-color: #4CAF50; -fx-border-width: 3;");
+
+            deleteButton.setDisable(false);
+            fullscreenButton.setDisable(false);
         });
         imageFlowPane.getChildren().add(vBox);
     }
@@ -312,4 +322,32 @@ public class OperatorPreviewController {
         transition.play();
     }
 
+    @FXML
+    private void handleFullscreenButtonClick() {
+        if (selectedPicture == null) return;
+
+        Image image = new Image(new ByteArrayInputStream(selectedPicture.getImageBytes()));
+
+        Stage imageStage = new Stage();
+        sceneNavigator.switchToWithData(imageStage, "ImageViewer.fxml", (ImageViewerController controller) -> {
+            controller.setImage(image);
+        });
+    }
+
+    @FXML
+    private void handleDeleteButtonClick() {
+        if (selectedPicture == null) return;
+
+        try {
+            pictureManager.deletePictureFromDB(selectedPicture.getImageId());
+            imageFlowPane.getChildren().remove(selectedVBox);
+            selectedPicture = null;
+            selectedVBox = null;
+            deleteButton.setDisable(true);
+            fullscreenButton.setDisable(true);
+            System.out.println("Deleting image with ID: " + selectedPicture.getImageId());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

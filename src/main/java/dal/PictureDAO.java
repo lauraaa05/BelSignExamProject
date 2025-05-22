@@ -16,7 +16,7 @@ public class PictureDAO {
         try (Connection conn = db.DBConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setBytes(1, picture.getImage());
+            pstmt.setBytes(1, picture.getImageBytes());
             pstmt.setTimestamp(2, Timestamp.valueOf(picture.getTimestamp()));
             pstmt.setString(3, picture.getFileName());
             pstmt.setString(4, picture.getOrderNumber());
@@ -40,7 +40,7 @@ public class PictureDAO {
                 byte[] imageBytes = rs.getBytes("Image");
                 String fileName = rs.getString("FileName");
                 Timestamp timestamp = rs.getTimestamp("Timestamp");
-                String dbOrderNumber = rs.getString("Order");
+                String dbOrderNumber = rs.getString("OrderNumber");
                 String dbSide = rs.getString("Side");
 
                 Picture picture = new Picture(imageBytes, fileName, timestamp.toLocalDateTime(), dbOrderNumber, dbSide);
@@ -103,5 +103,14 @@ public class PictureDAO {
             }
         }
         return pictures;
+    }
+
+    public void deletePictureById(int imageId) throws SQLException {
+        String sql = "DELETE FROM Pictures WHERE ImageId = ?";
+        try (Connection conn = db.DBConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, imageId);
+            pstmt.executeUpdate();
+        }
     }
 }

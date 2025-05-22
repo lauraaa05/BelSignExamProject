@@ -77,7 +77,7 @@ public class QCUNewReportController {
         imageView.setFitHeight(130);
         imageView.setFitWidth(180);
         imageView.setPreserveRatio(true);
-        imageView.setImage((new Image(new ByteArrayInputStream(picture.getImage()))));
+        imageView.setImage((new Image(new ByteArrayInputStream(picture.getImageBytes()))));
 
         String sideText = (picture.getSide() == null || picture.getSide().isEmpty()) ? "Unknown" : picture.getSide();
         Label sideLabel = new Label("Side: " + sideText); //File name just be back front up...

@@ -1,5 +1,7 @@
 package be;
 
+import javafx.scene.image.Image;
+
 import java.time.LocalDateTime;
 
 public class Picture {
@@ -51,12 +53,12 @@ public class Picture {
         this.orderNumber = "";
     }
 
-    public int getImageId() {
-        return imageId;
+    public byte[] getImageBytes() {
+        return image;
     }
 
-    public byte[] getImage() {
-        return image;
+    public int getImageId() {
+        return imageId;
     }
 
     public LocalDateTime getTimestamp() {
