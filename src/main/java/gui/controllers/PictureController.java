@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import be.Order;
 import be.Picture;
 import bll.CameraManager;
 import bll.PictureManager;
@@ -57,7 +58,7 @@ public class PictureController {
     private PictureDAO pictureDAO;
     private BufferedImage capturedImage;
     private boolean isPhotoTaken = false;
-    private String orderNumber;
+    private Order order;
     private OperatorPreviewController operatorPreviewController;
     private final List<String> sides = List.of("Front", "Back", "Right", "Left", "Top");
     private int currentSideIndex = 0;
@@ -80,7 +81,6 @@ public class PictureController {
                 ex.printStackTrace();
             }
         });
-
 
         pictureManager = new PictureManager(new PictureDAO());
     }
@@ -127,7 +127,7 @@ public class PictureController {
             LocalDateTime timestamp = LocalDateTime.now();
 
             try {
-                pictureManager.savePictureToDB(capturedImage, orderNumber, timestamp, currentSide);
+                pictureManager.savePictureToDB(capturedImage, order.getOrderCode(), timestamp, currentSide);
 
                 byte[] imageBytes = convertToByteArray(capturedImage);
                 Picture previewPicture = new Picture(imageBytes, timestamp, currentSide);
@@ -149,16 +149,16 @@ public class PictureController {
         }
     }
 
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
-        System.out.println("Order number received in PictureController: " + orderNumber);
+    public void setOrder(Order order) {
+        this.order = order;
+        System.out.println("Order number received in PictureController: " + order.getOrderCode());
 
         pictureDAO = new PictureDAO();
 
         List<String> allSides = new ArrayList<>(List.of("Front", "Back", "Right", "Left", "Top"));
 
         try {
-            List<String> takenSides = pictureDAO.getTakenSidesForOrderNumber(orderNumber);
+            List<String> takenSides = pictureDAO.getTakenSidesForOrderNumber(order.getOrderCode());
             allSides.removeAll(takenSides);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -187,7 +187,7 @@ public class PictureController {
             Parent root = fxmlLoader.load();
 
             OperatorPreviewController controller = fxmlLoader.getController();
-            controller.setOrderNumber(orderNumber);
+            controller.setOrder(order);
 
             Stage stage = (Stage) btnExit.getScene().getWindow();
             stage.setScene(new Scene(root));

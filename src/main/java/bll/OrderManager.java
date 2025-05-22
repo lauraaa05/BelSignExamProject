@@ -1,4 +1,5 @@
 package bll;
+import be.Order;
 import dal.DBAccess;
 import dal.OrderDAO;
 
@@ -14,7 +15,7 @@ public class OrderManager {
 
     private OrderDAO od = new OrderDAO();
 
-    public List<String> getOrderNumbersAsList() {
+    public List<Order> getOrderNumbersAsList() {
         return od.getFormattedOrderNumbers();
     }
 
@@ -22,11 +23,11 @@ public class OrderManager {
         return List.of();
     }
 
-    public List<String> getOrdersForDate(int year, int month) {
-        List<String> orders = new ArrayList<>();
+    public List<Order> getOrdersForDate(int year, int month) {
+        List<Order> orders = new ArrayList<>();
 
         String sql = """
-        SELECT o.CountryNumber, o.Year, o.Month, o.OrderCode
+        SELECT o.CountryNumber, o.Year, o.Month, o.OrderCode, o.OrderGroupId
         FROM Orders o
         INNER JOIN OrderStatus s ON o.OrderCode = s.OrderCode
         WHERE s.Role = 'qcu' AND s.Status = 'done'
@@ -45,13 +46,14 @@ public class OrderManager {
                 int y = rs.getInt("Year");
                 String m = rs.getString("Month").trim();
                 String code = rs.getString("OrderCode");
+                int orderGroupId = rs.getInt("OrderGroupId");
 
                 if (m.length() == 1) {
                     m = "0" + m;
                 }
 
-                String formatted = country + "-" + y + "-" + m + "-" + code;
-                orders.add(formatted);
+                Order order = new  Order(country, y, m, code, orderGroupId);
+                orders.add(order);
             }
 
         } catch (SQLException e) {

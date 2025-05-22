@@ -1,29 +1,21 @@
 package dal;
 
+import be.Order;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class OrderDAO {
 
     public OrderDAO() {
     }
 
-    private static String formatOrderData(int countryNumber, int year, String month, String orderCode) {
-        if (month.length() == 1) {
-            month = "0" + month;
-        }
-        return countryNumber + "-" + year + "-" + month + "-" + orderCode;
-    }
-
-    public static List<String> getFormattedOrderNumbers() {
-        List<String> orders = new ArrayList<>();
-        String query = "SELECT CountryNumber, Year, Month, OrderCode FROM Orders";
+    public static List<Order> getFormattedOrderNumbers() {
+        List<Order> orders = new ArrayList<>();
+        String query = "SELECT CountryNumber, Year, Month, OrderCode, OrderGroupId FROM Orders";
 
         try (Connection conn = new DBAccess().DBConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
@@ -32,20 +24,23 @@ public class OrderDAO {
             while (rs.next()) {
                 int countryNumber = rs.getInt("CountryNumber");
                 int year = rs.getInt("Year");
-                String month = rs.getString("Month").trim();
+                String month = rs.getString("Month");
                 String orderCode = rs.getString("OrderCode");
+                int orderGroupId = rs.getInt("OrderGroupId");
 
-                orders.add(formatOrderData(countryNumber, year, month, orderCode));
+                orders.add(new Order(countryNumber, year, month, orderCode, orderGroupId));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        orders.sort(Comparator.comparingInt(Order::getOrderGroupId));
+
         return orders;
     }
 
-    public List<String> searchFormattedOrders(String searchTerm) {
-        List<String> orders = new ArrayList<>();
-        String query = "SELECT CountryNumber, Year, Month, OrderCode FROM Orders " +
+    public List<Order> searchFormattedOrders(String searchTerm) {
+        List<Order> orders = new ArrayList<>();
+        String query = "SELECT CountryNumber, Year, Month, OrderCode, OrderGroupId FROM Orders " +
                 "WHERE CAST(CountryNumber AS TEXT) LIKE ? OR " +
                 "CAST(Year AS TEXT) LIKE ? OR " +
                 "Month LIKE ? OR " +
@@ -61,12 +56,14 @@ public class OrderDAO {
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                int countryNumber = rs.getInt("CountryNumber");
-                int year = rs.getInt("Year");
-                String month = rs.getString("Month").trim();
-                String orderCode = rs.getString("OrderCode");
+                orders.add(new Order(
+                        rs.getInt("CountryNumber"),
+                        rs.getInt("Year"),
+                        rs.getString("Month"),
+                        rs.getString("OrderCode"),
+                        rs.getInt("OrderGroupId")
+                ));
 
-                orders.add(formatOrderData(countryNumber, year, month, orderCode));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,8 +93,8 @@ public class OrderDAO {
 
         return results;
     }
-    public List<String> searchOrdersByYear(int year) {
-        List<String> orders = new ArrayList<>();
+    public List<Order> searchOrdersByYear(int year) {
+        List<Order> orders = new ArrayList<>();
         String query = "SELECT CountryNumber, Year, Month, OrderCode FROM Orders WHERE Year = ?";
 
         try (Connection conn = new DBAccess().DBConnection();
@@ -107,11 +104,13 @@ public class OrderDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    int countryNumber = rs.getInt("CountryNumber");
-                    String month = rs.getString("Month").trim();
-                    String orderCode = rs.getString("OrderCode");
-
-                    orders.add(formatOrderData(countryNumber, year, month, orderCode)); // Format the order data
+                    orders.add(new Order(
+                            rs.getInt("CountryNumber"),
+                            year,
+                            rs.getString("Month"),
+                            rs.getString("OrderCode"),
+                            rs.getInt("OrderGroupId")
+                    ));
                 }
             }
         } catch (Exception e) {
@@ -123,8 +122,8 @@ public class OrderDAO {
     private void add(OrderDAO folder) {
     }
 
-    public List<String> getOrdersForDate(int year, int month) {
-        List<String> filteredOrders = new ArrayList<>();
+    public List<Order> getOrdersForDate(int year, int month) {
+        List<Order> filteredOrders = new ArrayList<>();
         String query = "SELECT CountryNumber, Year, Month, OrderCode FROM Orders WHERE Year = ? AND Month = ?";
 
         try (Connection conn = DBAccess.DBConnection();
@@ -135,11 +134,13 @@ public class OrderDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    int countryNumber = rs.getInt("CountryNumber");
-                    String monthStr = rs.getString("Month");
-                    String orderCode = rs.getString("OrderCode");
-
-                    filteredOrders.add(formatOrderData(countryNumber, year, monthStr, orderCode));
+                    filteredOrders.add(new Order(
+                            rs.getInt("CountryNumber"),
+                            year,
+                            rs.getString("Month"),
+                            rs.getString("OrderCode"),
+                            rs.getInt("OrderGroupId")
+                    ));
                 }
             }
         } catch (Exception e) {

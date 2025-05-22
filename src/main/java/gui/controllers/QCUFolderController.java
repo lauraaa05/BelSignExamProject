@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import be.Order;
 import bll.OrderManager;
 import dk.easv.belsignexamproject.OperatorLogInApp;
 import javafx.event.ActionEvent;
@@ -49,7 +50,7 @@ public class QCUFolderController {
     private VBox orderListPane;
 
     @FXML
-    private ListView<String> orderListView;
+    private ListView<Order> orderListView;
 
     @FXML
     private Label currentFolderLabel;
@@ -99,6 +100,18 @@ public class QCUFolderController {
         });
 
         orderListView.setFixedCellSize(40);
+
+        orderListView.setCellFactory(listView -> new ListCell<>() {
+            @Override
+            protected void updateItem(Order order, boolean empty) {
+                super.updateItem(order, empty);
+                if (empty || order == null) {
+                    setText(null);
+                } else {
+                    setText("📄 " + order.toString());
+                }
+            }
+        });
     }
 
     @FXML
@@ -107,7 +120,7 @@ public class QCUFolderController {
 
         for (javafx.scene.Node node : folderFlowPane.getChildren()) {
             if (node instanceof VBox folderBox && !folderBox.getChildren().isEmpty()) {
-                Label label = (Label) folderBox.getChildren().get(1);
+                Label label = (Label) folderBox.getChildren().get(1); // Assuming second child is always the label
                 String folderDate = label.getText().toLowerCase();
 
                 boolean matches = searchText.isEmpty() || folderDate.contains(searchText);
@@ -197,8 +210,6 @@ public class QCUFolderController {
         int year = Integer.parseInt(parts[0]);
         int month = Integer.parseInt(parts[1]);
 
-        List<String> orders = orderManager.getOrdersForDate(year, month);
-
         currentFolderLabel.setText("📁 " + date);
 
         folderViewPane.setVisible(false);
@@ -207,11 +218,9 @@ public class QCUFolderController {
         orderListPane.setVisible(true);
         orderListPane.setManaged(true);
 
-        List<String> formattedOrders = orders.stream()
-                .map(order -> "\uD83D\uDCC4 " + order)
-                .toList();
+        List<Order> orders = orderManager.getOrdersForDate(year, month);
+        orderListView.getItems().setAll(orders);
 
-        orderListView.getItems().setAll(formattedOrders);
     }
 
     @FXML
@@ -226,13 +235,11 @@ public class QCUFolderController {
     @FXML
     private void handleOrderClick(MouseEvent event) {
         if (event.getClickCount() == 1) {
-            String selectedOrderNumber = orderListView.getSelectionModel().getSelectedItem();
-            if (selectedOrderNumber != null) {
-                String cleanOrder = selectedOrderNumber.replace("\uD83D\uDCC4 ", "");
-
+            Order selectedOrder = orderListView.getSelectionModel().getSelectedItem();
+            if (selectedOrder != null) {
                 Stage stage = (Stage) orderListView.getScene().getWindow();
                 sceneNavigator.<QCUNewReportController>switchToWithData(stage, "QCUNewReport.fxml", controller -> {
-                    controller.setOrderNumber(cleanOrder);
+                    controller.setOrder(selectedOrder);
                 });
             }
         }

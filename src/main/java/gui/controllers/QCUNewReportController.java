@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import be.Order;
 import be.Picture;
 import be.Report;
 import dal.OrderStatusDAO;
@@ -52,23 +53,6 @@ public class QCUNewReportController {
     @FXML
     private Label orderNumberLabel;
 
-    @FXML
-    private VBox productDetailsSection;
-    @FXML
-    private HBox productDetailsBox;
-//    @FXML
-//    private Label materialTypeLabel;
-//    @FXML
-//    private Label colorLabel;
-//    @FXML
-//    private Label weightLabel;
-//    @FXML
-//    private Label heightLabel;
-//    @FXML
-//    private Label lengthLabel;
-//    @FXML
-//    private Label widthLabel;
-
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     private PictureDAO pictureDAO = new PictureDAO();
@@ -104,15 +88,13 @@ public class QCUNewReportController {
         return vBox;
     }
 
-    public void setOrderNumber(String orderNumber) {
-        orderNumberLabel.setText("ORDER NUMBER: " + orderNumber);
+    public void setOrder(Order order) {
+        orderNumberLabel.setText("ORDER NUMBER: " + order);
 
-        loadPictures(orderNumber);
-        loadLatestComment(orderNumber);
+        loadPictures(order.toString());
+        loadLatestComment(order.getOrderCode());
 
-        loadProductDetails(orderNumber);
-
-        String status = new OrderStatusDAO().getStatusForOrder(orderNumber);
+        String status = new OrderStatusDAO().getStatusForOrder(order.getOrderCode());
         if ("done".equalsIgnoreCase(status)) {
             submitButton.setVisible(false);
             commentsTextArea.setEditable(false);
@@ -127,6 +109,7 @@ public class QCUNewReportController {
             for (Picture picture : pictures) {
                 VBox imageCard = createImageCard(picture);
                 photoTile.getChildren().add(imageCard);
+                System.out.println("Trying to load pictures for order: " + orderNumber);
             }
 
             if (pictures.isEmpty()) {
@@ -169,6 +152,8 @@ public class QCUNewReportController {
             submitButton.setVisible(false);
             commentsTextArea.setEditable(false);
 
+            hideSubmitButton(orderCode);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -207,53 +192,17 @@ public class QCUNewReportController {
         }
     }
 
-    private void loadProductDetails(String orderNumber) {
-        try {
-            String orderCode = extractOrderNumber(orderNumber); //I called this to reach to the last 6 digit of order number
-            Map<String, String> details = reportModel.getProductDetailsByOrderCode(orderCode);
-            productDetailsBox.getChildren().clear();
-
-            if (details != null && !details.isEmpty()) {
-                details.forEach((key, value) -> {
-                    VBox detailBox = new VBox(5);
-                    detailBox.getStyleClass().add("product-detail-box");
-                    detailBox.setAlignment(javafx.geometry.Pos.CENTER);
-
-                    Label labelKey = new Label(key);
-                    labelKey.getStyleClass().add("product-detail-key");
-
-                    Label labelValue = new Label(value);
-                    labelValue.getStyleClass().add("product-detail-value");
-
-                    detailBox.getChildren().addAll(labelKey, labelValue);
-                    productDetailsBox.getChildren().add(detailBox);
-                });
-            } else {
-                Label noData = new Label("No product details found");
-                noData.setStyle("-fx-text-fill: #ff0000;");
-                productDetailsBox.getChildren().add(noData);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Label error = new Label("Failed to load product details.");
-            error.setStyle("-fx-text-fill: #ff0000;");
-            productDetailsBox.getChildren().add(error);
-        }
-
-    }
-
-    //This method takes the last 6 digit of orderNumber which is a ORDER CODE!!!!
-    private String extractOrderNumber(String orderNumber) {
-        if (orderNumber != null && orderNumber.length() >= 6) {
-            return orderNumber.substring(orderNumber.length() - 6);
-        } else {
-            return "";
-        }
-    }
-
     @FXML
     private void goBackBtnAction(ActionEvent actionEvent) {
         sceneNavigator.switchTo(actionEvent, "QCUFolderScreen.fxml");
     }
 
+    private void hideSubmitButton(String orderCode) {
+        String status = new OrderStatusDAO().getStatusForOrder(orderCode);
+        if ("done".equalsIgnoreCase(status)) {
+            submitButton.setVisible(false);
+            submitButton.setManaged(false);
+            commentsTextArea.setEditable(false);
+        }
+    }
 }
