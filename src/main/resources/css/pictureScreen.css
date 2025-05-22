@@ -36,3 +36,21 @@
 	-fx-font-size: 24px;
 	-fx-padding: 18 0 0 10;
 }
+
+.currentSideLabel {
+	-fx-font-size: 40px;
+	-fx-font-weight: bold;
+	-fx-text-fill: #333;
+}
+
+.cameraButton {
+	-fx-font-size: 26px;
+	-fx-padding: 12px 24px;
+	-fx-background-radius: 8px;
+	-fx-cursor: hand;
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0, 0, 2);
+}
+
+.cameraButton:hover {
+	-fx-background-color: #dddddd;
+}

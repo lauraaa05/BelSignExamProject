@@ -51,6 +51,10 @@ public class Picture {
         this.orderNumber = "";
     }
 
+    public byte[] getImageBytes() {
+        return image;
+    }
+
     public int getImageId() {
         return imageId;
     }

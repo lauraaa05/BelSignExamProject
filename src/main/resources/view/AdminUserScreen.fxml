@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <BorderPane id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@../css/AdminUserScreen.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.AdminUserController">
    <top>
@@ -78,7 +79,7 @@
                <children>
                   <HBox alignment="TOP_CENTER" prefHeight="49.0" prefWidth="620.0" spacing="15.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <Label styleClass="centerLabel" text="Users" textFill="WHITE">
+                        <Label styleClass="centerLabel" text="Users" textFill="WHITE" HBox.hgrow="ALWAYS">
                            <font>
                               <Font name="Arial Bold" size="24.0" />
                            </font>
@@ -86,17 +87,36 @@
                               <Insets top="5.0" />
                            </HBox.margin>
                         </Label>
-                        <Region prefHeight="33.0" prefWidth="371.0" HBox.hgrow="ALWAYS" />
-                        <Button id="centerButton" fx:id="addButton" mnemonicParsing="false" onAction="#handleAddUserPopup" styleClass="centerButton" text="➕">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
+                        <Region prefHeight="33.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <Button id="centerButton"
+                                fx:id="addButton"
+                                mnemonicParsing="false"
+                                onAction="#handleAddUserPopup"
+                                styleClass="centerButton"
+                                text="">
+                           <graphic>
+                              <FontIcon iconLiteral="fas-user-plus" iconSize="16"/>
+                           </graphic>
                         </Button>
-                        <Button id="centerButton" fx:id="deleteUserButton" mnemonicParsing="false" onAction="#handleDeleteUser" styleClass="conterButton" text="🗑️" />
-                        <Button id="centerButton" fx:id="editButton" mnemonicParsing="false" onAction="#handleEditButtonClick" styleClass="editButton" text="🖍">
-                           <font>
-                              <Font name="System Bold" size="13.0" />
-                           </font></Button>
+                        <Button id="centerButton" fx:id="deleteUserButton"
+                                mnemonicParsing="false"
+                                onAction="#handleDeleteUser"
+                                styleClass="centerButton"
+                                text="">
+                           <graphic>
+                              <FontIcon iconLiteral="fas-user-minus" iconSize="16"/>
+                           </graphic>
+                        </Button>
+                        <Button id="centerButton"
+                                fx:id="editButton"
+                                mnemonicParsing="false"
+                                onAction="#handleEditButtonClick"
+                                styleClass="editButton"
+                                text="">
+                           <graphic>
+                              <FontIcon iconLiteral="fas-user-edit" iconSize="16"/>
+                           </graphic>
+                        </Button>
                      </children>
                   </HBox>
                   <TableView fx:id="tableViewUsers" prefHeight="419.0" prefWidth="605.0" styleClass="tableView" VBox.vgrow="ALWAYS">
