@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" prefHeight="780.0" prefWidth="850.0" stylesheets="@../css/QCUNewReport.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCUNewReportController">
     <content>
@@ -30,7 +31,6 @@
                             <Insets left="190.0" />
                         </HBox.margin>
                     </Label>
-               <Label fx:id="title1" layoutX="320.0" layoutY="51.0" prefHeight="36.0" prefWidth="45.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
                 </HBox>
                 <Label fx:id="orderNumberLabel" style="-fx-font-size: 16px;" text="ORDER NUMBER: ???????" />
             </VBox>
@@ -43,39 +43,44 @@
                     <!-- Images will be added dynamically -->
                 </TilePane>
 
-                <!--                <VBox fx:id="productDetailsSection" alignment="CENTER" spacing="10" style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-border-color: #d3d3d3; -fx-border-width: 1; -fx-background-radius: 8px;">-->
-                <!--                    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Product Details" />-->
-                <!--                    <HBox fx:id="productDetailsBox" alignment="CENTER" spacing="15">-->
-                <!--                        &lt;!&ndash; Labels will be added dynamically &ndash;&gt;-->
-                <!--                    </HBox>-->
-                <!--                </VBox>-->
+                <VBox fx:id="productDetailsSection" alignment="CENTER" spacing="10" style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-border-color: #d3d3d3; -fx-border-width: 1; -fx-background-radius: 8px;">
+                    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Product Details" />
+                    <HBox fx:id="productDetailsBox" alignment="CENTER" spacing="15">
+                        <!-- Labels will be added dynamically -->
+                    </HBox>
+                </VBox>
                 <!-- General Comment Section BELOW photos -->
-                <VBox fx:id="generalCommentSection" alignment="TOP_LEFT" prefHeight="200" spacing="10" style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-border-color: #d3d3d3; -fx-border-width: 1;">
+                <VBox fx:id="generalCommentSection" alignment="TOP_LEFT" spacing="10" style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-border-color: #d3d3d3; -fx-border-width: 1;">
                     <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="QCU Comments:" />
                     <Label fx:id="generalCommentsLabel" style="-fx-font-size: 14px;" wrapText="true" />
                 </VBox>
             </VBox>
 
             <!-- COMMENTS & BUTTONS -->
-            <VBox fx:id="commentSection" alignment="CENTER" prefHeight="250" prefWidth="800.0" spacing="10">
+            <VBox fx:id="commentSection" alignment="CENTER" prefWidth="800.0" spacing="10">
                 <Label style="-fx-font-size: 16px;" text="COMMENTS:" />
                 <TextArea fx:id="commentsTextArea" prefHeight="100" prefWidth="600" promptText="Enter your comments here..." wrapText="true" />
 
                 <HBox alignment="CENTER" spacing="20">
-                    <Button fx:id="goBackButton" onAction="#goBackBtnAction" prefWidth="120" text="← BACK">
-                        <HBox.margin>
-                            <Insets left="30.0" />
-                        </HBox.margin></Button>
+                    <Button fx:id="goBackButton" onAction="#goBackBtnAction" prefHeight="35.0" prefWidth="127.0" text="← BACK">
+                  <HBox.margin>
+                     <Insets left="30.0" />
+                  </HBox.margin>
+                  <opaqueInsets>
+                     <Insets />
+                  </opaqueInsets></Button>
                     <Button fx:id="submitButton" prefHeight="35.0" prefWidth="209.0" text="SUBMIT REPORT">
-                        <HBox.margin>
-                            <Insets />
-                        </HBox.margin></Button>
-                    <Button fx:id="rejectButton" layoutX="282.0" layoutY="10.0" prefHeight="35.0" prefWidth="209.0"
-                            text="REJECT" textFill="WHITE" onAction="#handleRejectButtonClick">
-                        <HBox.margin>
-                            <Insets />
-                        </HBox.margin>
-                    </Button>
+                  <HBox.margin>
+                     <Insets />
+                  </HBox.margin>
+                  <opaqueInsets>
+                     <Insets right="50.0" />
+                  </opaqueInsets></Button>
+               <Button fx:id="rejectButton" layoutX="282.0" layoutY="10.0" onAction="#onRejectAction" prefHeight="35.0" prefWidth="209.0" text="REJECT" textFill="#f2f2f2">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+               </Button>
                 </HBox>
             </VBox>
 
