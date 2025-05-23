@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/QCUMainCSS.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCUMainController">
+<BorderPane id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/QCUMainCSS.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCUMainController">
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" styleClass="topVBox" BorderPane.alignment="CENTER">
          <children>
@@ -67,37 +67,24 @@
    <center>
       <HBox prefHeight="100.0" prefWidth="760.0" spacing="20.0" styleClass="centerHBox" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="TOP_CENTER" prefHeight="360.0" prefWidth="255.0" spacing="10.0">
+            <VBox alignment="TOP_CENTER" prefHeight="470.0" prefWidth="375.0" spacing="10.0">
                <children>
                   <Label style="-fx-font-weight: bold;" text="TO APPROVE" textFill="WHITE">
                      <font>
                         <Font size="18.0" />
                      </font>
                      <VBox.margin>
-                        <Insets />
+                        <Insets left="40.0" />
                      </VBox.margin>
                   </Label>
-                  <ListView fx:id="toApproveListView" onMouseClicked="#handleOrderClick" prefHeight="420.0" prefWidth="201.0" styleClass="listView">
+                  <ListView fx:id="toApproveListView" onMouseClicked="#handleOrderClick" prefHeight="409.0" prefWidth="354.0" styleClass="listView">
                      <VBox.margin>
-                        <Insets />
+                        <Insets left="40.0" />
                      </VBox.margin></ListView>
                </children>
                <HBox.margin>
                   <Insets />
                </HBox.margin>
-            </VBox>
-            <VBox alignment="TOP_CENTER" prefHeight="360.0" prefWidth="255.0" spacing="10.0">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-               <children>
-                  <Label style="-fx-font-weight: bold;" text="DONE" textFill="WHITE">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <ListView fx:id="doneListView1" prefHeight="420.0" prefWidth="255.0" styleClass="listView" />
-               </children>
             </VBox>
          </children>
       </HBox>

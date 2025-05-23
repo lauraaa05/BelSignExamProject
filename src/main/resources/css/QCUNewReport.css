@@ -70,6 +70,16 @@
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
 }
+* Buttons *,
+#rejectButton {
+    -fx-background-color: linear-gradient(to right, #cc4b39, #e41b1b);
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 3, 0, 0, 1);
+}
 
 #goBackButton {
     -fx-background-color: #004b88;
@@ -80,6 +90,34 @@
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
 }
+#rejectedButton {
+    -fx-background-color: #e81414;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+#sendEmailButton {
+    -fx-background-color: #575757;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+#savePDFButton {
+    -fx-background-color: #004b88;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+
 
 /* Hover Effects */
 #submitButton:hover {
@@ -89,6 +127,10 @@
 
 #goBackButton:hover {
     -fx-background-color: #003060;
+    -fx-opacity: 0.9;
+}
+#reject:hover {
+    -fx-background-color: #cd1a1e;
     -fx-opacity: 0.9;
 }
 
