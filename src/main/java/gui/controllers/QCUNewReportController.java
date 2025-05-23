@@ -6,32 +6,23 @@ import be.Report;
 import dal.OrderStatusDAO;
 import dal.PictureDAO;
 import gui.model.ReportModel;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-
-import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
 import utilities.SceneNavigator;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 
 public class QCUNewReportController {
 
@@ -45,6 +36,9 @@ public class QCUNewReportController {
     private Button submitButton;
 
     @FXML
+    private Button rejectButton;
+
+    @FXML
     private Label generalCommentsLabel;
 
     @FXML
@@ -55,40 +49,22 @@ public class QCUNewReportController {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    private PictureDAO pictureDAO = new PictureDAO();
+    private final PictureDAO pictureDAO = new PictureDAO();
 
-    private ReportModel reportModel = new ReportModel();
+    private final ReportModel reportModel = new ReportModel();
 
     private final SceneNavigator sceneNavigator = new SceneNavigator();
+
+    private Order currentOrder;
 
     @FXML
     public void initialize() {
         submitButton.setOnAction(e -> submitComment());
-
-
-    }
-
-    private VBox createImageCard(Picture picture) {
-        VBox vBox = new VBox(10);
-        vBox.setStyle("-fx-background-color: #fff; -fx-padding: 10px; -fx-border-color: #d1d5db; -fx-border-radius: 5px; -fx-background-radius: 8px;");
-        vBox.setAlignment(javafx.geometry.Pos.CENTER);
-
-        ImageView imageView = new ImageView();
-        imageView.setFitHeight(130);
-        imageView.setFitWidth(180);
-        imageView.setPreserveRatio(true);
-        imageView.setImage((new Image(new ByteArrayInputStream(picture.getImage()))));
-
-        String sideText = (picture.getSide() == null || picture.getSide().isEmpty()) ? "Unknown" : picture.getSide();
-        Label sideLabel = new Label("Side: " + sideText); //File name just be back front up...
-        Label dateLabel = new Label("Date: " + picture.getTimestamp().format(formatter));
-
-        vBox.getChildren().addAll(imageView, sideLabel, dateLabel);
-
-        return vBox;
+        rejectButton.setOnAction(this::handleRejectButtonClick);
     }
 
     public void setOrder(Order order) {
+        this.currentOrder = order;
         orderNumberLabel.setText("ORDER NUMBER: " + order);
 
         loadPictures(order.toString());
@@ -101,6 +77,25 @@ public class QCUNewReportController {
         }
     }
 
+    private VBox createImageCard(Picture picture) {
+        VBox vBox = new VBox(10);
+        vBox.setStyle("-fx-background-color: #fff; -fx-padding: 10px; -fx-border-color: #d1d5db; -fx-border-radius: 5px; -fx-background-radius: 8px;");
+        vBox.setAlignment(javafx.geometry.Pos.CENTER);
+
+        ImageView imageView = new ImageView();
+        imageView.setFitHeight(130);
+        imageView.setFitWidth(180);
+        imageView.setPreserveRatio(true);
+        imageView.setImage(new Image(new ByteArrayInputStream(picture.getImage())));
+
+        String sideText = (picture.getSide() == null || picture.getSide().isEmpty()) ? "Unknown" : picture.getSide();
+        Label sideLabel = new Label("Side: " + sideText);
+        Label dateLabel = new Label("Date: " + picture.getTimestamp().format(formatter));
+
+        vBox.getChildren().addAll(imageView, sideLabel, dateLabel);
+        return vBox;
+    }
+
     private void loadPictures(String orderNumber) {
         try {
             List<Picture> pictures = pictureDAO.getPicturesByOrderNumberRaw(orderNumber);
@@ -109,7 +104,6 @@ public class QCUNewReportController {
             for (Picture picture : pictures) {
                 VBox imageCard = createImageCard(picture);
                 photoTile.getChildren().add(imageCard);
-                System.out.println("Trying to load pictures for order: " + orderNumber);
             }
 
             if (pictures.isEmpty()) {
@@ -117,11 +111,8 @@ public class QCUNewReportController {
             }
         } catch (SQLException e) {
             System.err.println("Database error while loading pictures: " + e.getMessage());
-            e.printStackTrace();
         }
     }
-
-
 
     private void submitComment() {
         String commentText = commentsTextArea.getText();
@@ -137,13 +128,10 @@ public class QCUNewReportController {
             Report report = new Report(4, commentText, fullOrderNumber, LocalDateTime.now(), orderCode);
             reportModel.insertReport(report);
 
-            OrderStatusDAO dao = new OrderStatusDAO();
-            boolean updated = dao.updateOrderStatus(orderCode, "qcu", "done");
+            boolean updated = new OrderStatusDAO().updateOrderStatus(orderCode, "qcu", "done");
 
             if (updated) {
                 System.out.println("Order marked as done.");
-            } else {
-                System.out.println("Order status update failed!");
             }
 
             commentsTextArea.clear();
@@ -154,18 +142,9 @@ public class QCUNewReportController {
 
             hideSubmitButton(orderCode);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/QCUMain.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
+            sceneNavigator.switchTo("/view/QCUMain.fxml");
 
-            Stage currentStage = (Stage) submitButton.getScene().getWindow();
-            currentStage.setScene(scene);
-            currentStage.setTitle("QCU Main");
-            currentStage.show();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -203,6 +182,40 @@ public class QCUNewReportController {
             submitButton.setVisible(false);
             submitButton.setManaged(false);
             commentsTextArea.setEditable(false);
+        }
+    }
+
+    @FXML
+    private void handleRejectButtonClick(ActionEvent event) {
+        try {
+            String commentText = commentsTextArea.getText();
+            String fullOrderNumber = extractOrderNumber();
+            String orderCode = fullOrderNumber.substring(fullOrderNumber.lastIndexOf("-") + 1);
+
+            if (commentText != null && !commentText.isEmpty()) {
+                Report report = new Report(4, "[REJECTED] " + commentText, fullOrderNumber, LocalDateTime.now(), orderCode);
+                reportModel.insertReport(report);
+            }
+
+            boolean updated = new OrderStatusDAO().updateOrderStatus(orderCode, "operator", "rejected");
+
+            if (updated) {
+                System.out.println("Order marked as rejected and returned to operator.");
+            } else {
+                System.out.println("Failed to update order status to rejected.");
+            }
+
+            rejectButton.setDisable(true);
+            rejectButton.setVisible(false);
+            commentsTextArea.setEditable(false);
+
+            // swicht to QCU main
+            sceneNavigator.switchTo("/view/QCUMain.fxml");
+
+            //TO DO CLOSE THE BACK REPORT AND ADD COMMENTS AND SAVE WHAT ABOUT PICTURES
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
