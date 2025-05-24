@@ -8,6 +8,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
+import bll.OrderStatusManager;
+import bll.ReportManager;
+import be.Order;
+
+import java.util.List;
+import java.util.ArrayList;
+
 
 import java.io.IOException;
 
@@ -19,14 +26,37 @@ public class AdminReportController {
     @FXML
     private ListView<String> listViewReports;
 
-//    @Override
+    private final OrderStatusManager orderStatusManager = new OrderStatusManager();
+    private final ReportManager reportManager = new ReportManager();
+
+
     public void initialize() {
-//        loadFinishedReports();
+        loadFinishedReports();
     }
 
-//    private void loadFinishedReports() {
-//        List<>
-//    }
+    private void loadFinishedReports() {
+        List<Order> doneOrders = orderStatusManager.getDoneOrders();
+        List<String> reportSummaries = new ArrayList<>();
+
+        for (Order order : doneOrders) {
+            try {
+                String orderCode = order.getOrderCode();
+                String fullOrderNumber = order.getCountryNumber() + "/" +
+                        order.getYear() + "/" +
+                        order.getMonth() + "/" +
+                        orderCode;
+
+//                String comment = reportManager.getLatestCommentByOrderNumber(orderCode);
+                reportSummaries.add("Order: " + fullOrderNumber); /* + " - Comment: " + comment);*/
+            } catch (Exception e) {
+                e.printStackTrace();
+//                reportSummaries.add("Order: " + order.getOrderCode() + " - Error loading comment.");
+            }
+        }
+
+        listViewReports.getItems().setAll(reportSummaries);
+    }
+
 
     private void switchToUserScreen(Stage currentStage) throws IOException {
 
