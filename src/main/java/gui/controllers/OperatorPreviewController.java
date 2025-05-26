@@ -151,7 +151,7 @@ public class OperatorPreviewController {
         imageFlowPane.getChildren().add(vBox);
     }
 
-    // Método reusable to change the scene
+    // Méthod change the scene
     private void switchToLoginScene(Stage currentStage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorLogIn.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
