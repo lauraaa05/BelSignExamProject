@@ -121,8 +121,7 @@ public class OperatorMainController implements Initializable {
 
     public void setLoggedInOperator(Operator operator) {
         loggedUsernameLbl.setText(operator.getFirstName());
-        System.out.println("Logged in operator: " + operator.getFirstName());
-
+        System.out.println("Operator received in controller: " + operator.getFirstName());
     }
 
     private final String currentUserRole = "Operator";
