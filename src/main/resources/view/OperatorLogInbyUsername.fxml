@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<BorderPane id="mainBorderPane" fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/OperatorLogInbyUsername.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.OperatorLogInbyUsernameController">
+<BorderPane id="mainBorderPane" fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/OperatorLogInbyUsername.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.OperatorLogInbyUsernameController">
     <top>
         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" styleClass="topVBox" BorderPane.alignment="CENTER">
             <children>
@@ -73,7 +66,7 @@
                                     <VBox.margin>
                                         <Insets left="320.0" />
                                     </VBox.margin></Label>
-                                <TextField fx:id="usernameField" prefHeight="34.0" prefWidth="276.0">
+                                <TextField fx:id="usernameField" prefHeight="50.0" prefWidth="276.0">
                                     <VBox.margin>
                                         <Insets left="320.0" right="302.0" top="8.0" />
                                     </VBox.margin>
@@ -93,11 +86,11 @@
                                 <HBox prefHeight="100.0" prefWidth="200.0">
                                     <children>
                                         <StackPane>
-                                            <PasswordField fx:id="passwordFieldMasked" prefHeight="34.0" prefWidth="240" promptText="Password">
+                                            <PasswordField fx:id="passwordFieldMasked" prefHeight="50.0" prefWidth="240" promptText="Password">
                                                 <StackPane.margin>
                                                     <Insets bottom="30.0" left="320.0" />
                                                 </StackPane.margin></PasswordField>
-                                            <TextField fx:id="passwordFieldVisible" prefHeight="34.0" prefWidth="240" promptText="Password">
+                                            <TextField fx:id="passwordFieldVisible" prefHeight="50.0" prefWidth="240" promptText="Password">
                                                 <StackPane.margin>
                                                     <Insets bottom="30.0" left="320.0" />
                                                 </StackPane.margin></TextField>
