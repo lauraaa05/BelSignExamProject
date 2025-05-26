@@ -55,7 +55,7 @@
 
                 <!-- Email Input Field -->
                 <HBox alignment="CENTER" spacing="10">
-                    <Label text="Send Email to:" />
+                    <Label fx:id="emailText" text="Send Email to:" />
                     <TextField fx:id="emailField" prefWidth="300" promptText="Enter email address" />
                 </HBox>
 

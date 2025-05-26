@@ -54,10 +54,13 @@ public class QCUDoneReportController {
     private TextArea commentsTextArea;
 
     @FXML
+    private Label emailText;
+
+    @FXML
     private Button sendEmailButton;
 
     @FXML
-    private Button savePdfButton;
+    private Button viewPdfButton;
 
     @FXML
     private Label generalCommentsLabel;
@@ -84,8 +87,12 @@ public class QCUDoneReportController {
         if (loggedIn != null && "admin".equalsIgnoreCase(loggedIn.getRole())) {
             sendEmailButton.setVisible(false);
             sendEmailButton.setManaged(false);
-            savePdfButton.setVisible(false);
-            savePdfButton.setManaged(false);
+            viewPdfButton.setVisible(false);
+            viewPdfButton.setManaged(false);
+            emailField.setVisible(false);
+            emailField.setManaged(false);
+            emailText.setVisible(false);
+            emailText.setManaged(false);
         }
     }
 
