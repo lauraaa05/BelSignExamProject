@@ -1,4 +1,6 @@
 package gui.controllers;
+import be.Admin;
+import be.QualityControl;
 import bll.LoginManager;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
@@ -14,9 +16,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import javafx.event.ActionEvent;
-
-
-
 
 
 public class QCULogInController {
@@ -100,12 +99,14 @@ public class QCULogInController {
 
         if (isValid) {
             errorLabel.setVisible(false);
+            QualityControl qcu = loginManager.getQCUByUsername(username);
             Stage currentStage = (Stage) logInButton.getScene().getWindow();
-            switchToMainSceneSameWindow(currentStage);
+            switchToMainSceneSameWindow(currentStage, qcu);
         } else if (isValidAdmin) {
             errorLabel.setVisible(false);
+            Admin admin = loginManager.getAdminByUsername(username);
             Stage currentStage = (Stage) logInButton.getScene().getWindow();
-            switchToAdminMainScreen(currentStage);
+            switchToAdminMainScreen(currentStage, admin);
         } else {
             errorLabel.setText("Incorrect username or password for Quality Control");
             errorLabel.setStyle("-fx-text-fill: red;");
@@ -141,18 +142,24 @@ public class QCULogInController {
         }
     }
 
-    private void switchToMainSceneSameWindow(Stage currentStage) throws IOException {
+    private void switchToMainSceneSameWindow(Stage currentStage, QualityControl qcu) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/QCUMain.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
+
+        QCUMainController qcumainController = fxmlLoader.getController();
+        qcumainController.setLoggedInQCU(qcu);
 
         currentStage.setTitle("QCU Main");
         currentStage.setScene(scene);
         currentStage.show();
     }
 
-    private void switchToAdminMainScreen(Stage currentStage) throws IOException {
+    private void switchToAdminMainScreen(Stage currentStage, Admin admin) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/AdminUserScreen.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
+
+        AdminUserController adminUserController = fxmlLoader.getController();
+        adminUserController.setLoggedInAdmin(admin);
 
         currentStage.setTitle("Admin User Management");
         currentStage.setScene(scene);

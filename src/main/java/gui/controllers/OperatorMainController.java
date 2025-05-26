@@ -122,7 +122,7 @@ public class OperatorMainController implements Initializable {
     }
 
     public void setLoggedInOperator(Operator operator) {
-        loggedUsernameLbl.setText(operator.getName());
+        loggedUsernameLbl.setText(operator.getFirstName());
     }
 
     public void refreshLists() {

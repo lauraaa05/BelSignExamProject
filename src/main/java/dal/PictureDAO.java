@@ -28,7 +28,7 @@ public class PictureDAO {
 
     public List<Picture> getPicturesByOrderNumber(String orderNumber) throws SQLException {
         List<Picture> pictures = new ArrayList<>();
-        String sql = "SELECT Image, FileName, Timestamp, OrderNumber, Side FROM Pictures WHERE OrderNumber = ?";
+        String sql = "SELECT ImageId, Image, FileName, Timestamp, OrderNumber, Side FROM Pictures WHERE OrderNumber = ?";
 
         try (Connection conn = db.DBConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -37,13 +37,14 @@ public class PictureDAO {
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
+                int imageId = rs.getInt("ImageId");
                 byte[] imageBytes = rs.getBytes("Image");
                 String fileName = rs.getString("FileName");
                 Timestamp timestamp = rs.getTimestamp("Timestamp");
                 String dbOrderNumber = rs.getString("OrderNumber");
                 String dbSide = rs.getString("Side");
 
-                Picture picture = new Picture(imageBytes, fileName, timestamp.toLocalDateTime(), dbOrderNumber, dbSide);
+                Picture picture = new Picture(imageId, imageBytes, fileName, timestamp.toLocalDateTime(), dbOrderNumber, dbSide);
                 pictures.add(picture);
             }
         }
@@ -83,7 +84,7 @@ public class PictureDAO {
     //This is for retrieving images to QCU report
     public List<Picture> getPicturesByOrderNumberRaw(String orderNumber) throws SQLException {
         List<Picture> pictures = new ArrayList<>();
-        String sql = "SELECT Image, Side, Timestamp, OrderNumber FROM Pictures WHERE OrderNumber = ?";
+        String sql = "SELECT ImageId, Image, Side, Timestamp, OrderNumber FROM Pictures WHERE OrderNumber = ?";
 
         try (Connection conn = db.DBConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -93,12 +94,13 @@ public class PictureDAO {
             System.out.println("DAO received orderNumber: " + orderNumber);
 
             while (rs.next()) {
+                int  imageId = rs.getInt("ImageId");
                 byte[] imageBytes = rs.getBytes("Image");
                 String side = rs.getString("Side");
                 Timestamp timestamp = rs.getTimestamp("Timestamp");
                 String dbOrderNumber = rs.getString("OrderNumber");
 
-                Picture picture = new Picture(imageBytes, timestamp.toLocalDateTime(), side, dbOrderNumber);
+                Picture picture = new Picture(imageId, imageBytes, timestamp.toLocalDateTime(), side, dbOrderNumber);
                 pictures.add(picture);
             }
         }

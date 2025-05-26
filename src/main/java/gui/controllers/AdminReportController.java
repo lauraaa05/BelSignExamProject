@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import be.Order;
 import dk.easv.belsignexamproject.OperatorLogInApp;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,7 +8,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import utilities.SceneNavigator;
 
 import java.io.IOException;
 
@@ -17,7 +20,9 @@ public class AdminReportController {
     private Button signOutButton, userButton;
 
     @FXML
-    private ListView<String> listViewReports;
+    private ListView<Order> listViewReports;
+
+    private final SceneNavigator sceneNavigator = new SceneNavigator();
 
 //    @Override
     public void initialize() {
@@ -60,5 +65,18 @@ public class AdminReportController {
     public void handleSignOutButtonClick(ActionEvent actionEvent) throws IOException {
         Stage currentStage = (Stage) signOutButton.getScene().getWindow();
         switchToLogInScreen(currentStage);
+    }
+
+    @FXML
+    private void handleOrderClick(MouseEvent event) {
+        if (event.getClickCount() == 1) {
+            Order selectedOrder = listViewReports.getSelectionModel().getSelectedItem();
+            if (selectedOrder != null) {
+                Stage stage = (Stage) listViewReports.getScene().getWindow();
+                sceneNavigator.<QCUNewReportController>switchToWithData(stage, "QCUNewReport.fxml", controller -> {
+                    controller.setOrder(selectedOrder);
+                });
+            }
+        }
     }
 }

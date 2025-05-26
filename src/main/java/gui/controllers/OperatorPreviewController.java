@@ -339,13 +339,13 @@ public class OperatorPreviewController {
         if (selectedPicture == null) return;
 
         try {
+            System.out.println("Deleting image with ID: " + selectedPicture.getImageId());
             pictureManager.deletePictureFromDB(selectedPicture.getImageId());
             imageFlowPane.getChildren().remove(selectedVBox);
             selectedPicture = null;
             selectedVBox = null;
             deleteButton.setDisable(true);
             fullscreenButton.setDisable(true);
-            System.out.println("Deleting image with ID: " + selectedPicture.getImageId());
         } catch (SQLException e) {
             e.printStackTrace();
         }

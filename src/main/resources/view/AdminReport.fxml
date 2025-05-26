@@ -75,7 +75,7 @@
                         <Font name="Arial Bold" size="24.0" />
                      </font>
                   </Label>
-                  <ListView id="listView" fx:id="listViewReports" prefHeight="444.0" prefWidth="620.0" styleClass="listView" />
+                  <ListView id="listView" fx:id="listViewReports" onMouseClicked="#handleOrderClick" prefHeight="444.0" prefWidth="620.0" styleClass="listView" />
                </children>
             </VBox>
          </children>

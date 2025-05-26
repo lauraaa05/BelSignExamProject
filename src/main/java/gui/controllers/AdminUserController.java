@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import be.Admin;
 import be.Operator;
 import be.QualityControl;
 import be.User;
@@ -36,6 +37,8 @@ public class AdminUserController implements Initializable {
     private TableColumn<User, String> usernameColumn;
     @FXML
     private TableColumn<User, String> roleColumn;
+    @FXML
+    private Label welcomeLabel;
 
     @FXML
     private Button signOutButton, addButton, editButton, deleteUserButton, reportButton;
@@ -165,5 +168,9 @@ public class AdminUserController implements Initializable {
     public void handleReportButtonClick(ActionEvent actionEvent) throws IOException {
         Stage currentStage = (Stage) reportButton.getScene().getWindow();
         switchToReportScreen(currentStage);
+    }
+
+    public void setLoggedInAdmin(Admin admin) {
+        welcomeLabel.setText("Welcome " + admin.getFirstName());
     }
 }
