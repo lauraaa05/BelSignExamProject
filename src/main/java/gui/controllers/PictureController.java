@@ -137,7 +137,6 @@ public class PictureController {
                 currentSideIndex++;
                 updateCurrentSideLabel();
 
-                showAlert(Alert.AlertType.INFORMATION, "Picture saved", null, "Picture saved for side " + currentSide);
                 isPhotoTaken = false;
                 startWebcamStream();
             } catch (SQLException | IOException e) {
