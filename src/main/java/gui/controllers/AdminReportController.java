@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import bll.OrderStatusManager;
 import bll.ReportManager;
@@ -17,11 +18,17 @@ import java.util.ArrayList;
 
 
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 public class AdminReportController {
 
     @FXML
     private Button signOutButton, userButton;
+
+    @FXML
+    private TextField searchField;
+
+    private final List<String> allReportSummaries = new ArrayList<>();
 
     @FXML
     private ListView<String> listViewReports;
@@ -32,8 +39,13 @@ public class AdminReportController {
 
     public void initialize() {
         loadFinishedReports();
-    }
 
+        // Adds a listener to the search field to filter the report list when the user is typing
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filterReportList(newValue);
+        });
+    }
+    // Method to load finished orders into the ListView
     private void loadFinishedReports() {
         List<Order> doneOrders = orderStatusManager.getDoneOrders();
         List<String> reportSummaries = new ArrayList<>();
@@ -41,11 +53,12 @@ public class AdminReportController {
         for (Order order : doneOrders) {
             try {
                 String orderCode = order.getOrderCode();
-                String fullOrderNumber = order.getCountryNumber() + "/" +
-                        order.getYear() + "/" +
-                        order.getMonth() + "/" +
+                String fullOrderNumber = order.getCountryNumber() + "-" +
+                        order.getYear() + "-" +
+                        order.getMonth() + "-" +
                         orderCode;
 
+                //Optional: Adds the latest comment of the Order to the report ListView after the OrderNumber
 //                String comment = reportManager.getLatestCommentByOrderNumber(orderCode);
                 reportSummaries.add("Order: " + fullOrderNumber); /* + " - Comment: " + comment);*/
             } catch (Exception e) {
@@ -53,8 +66,21 @@ public class AdminReportController {
 //                reportSummaries.add("Order: " + order.getOrderCode() + " - Error loading comment.");
             }
         }
+        allReportSummaries.clear();
+        allReportSummaries.addAll(reportSummaries);
 
-        listViewReports.getItems().setAll(reportSummaries);
+        listViewReports.getItems().setAll(allReportSummaries);
+    }
+
+    // Method to filter the List based on the searchField text
+    private void filterReportList(String searchText) {
+        String lowerSearch = searchText.toLowerCase().trim(); // Converts to lowercase for case-insensitive searching
+
+        // Keeps only the items that contain the search text
+        List<String> filtered = allReportSummaries.stream().filter(summary -> summary.toLowerCase().contains(lowerSearch)).collect(Collectors.toList());
+
+        // Shows the filtered text in the ListView
+        listViewReports.getItems().setAll(filtered);
     }
 
 
