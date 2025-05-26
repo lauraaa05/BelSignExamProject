@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import javafx.event.ActionEvent;
+import utilities.LoggedInUser;
 
 
 public class QCULogInController {
@@ -100,11 +101,13 @@ public class QCULogInController {
         if (isValid) {
             errorLabel.setVisible(false);
             QualityControl qcu = loginManager.getQCUByUsername(username);
+            LoggedInUser.setUser(qcu);
             Stage currentStage = (Stage) logInButton.getScene().getWindow();
             switchToMainSceneSameWindow(currentStage, qcu);
         } else if (isValidAdmin) {
             errorLabel.setVisible(false);
             Admin admin = loginManager.getAdminByUsername(username);
+            LoggedInUser.setUser(admin);
             Stage currentStage = (Stage) logInButton.getScene().getWindow();
             switchToAdminMainScreen(currentStage, admin);
         } else {

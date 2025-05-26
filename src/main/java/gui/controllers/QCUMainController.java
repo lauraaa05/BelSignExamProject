@@ -95,7 +95,7 @@ public class QCUMainController {
             if (selectedOrder != null) {
                 Stage stage = (Stage) toApproveListView.getScene().getWindow();
                 sceneNavigator.<QCUNewReportController>switchToWithData(stage, "QCUNewReport.fxml", controller -> {
-                    controller.setOrder(selectedOrder); // Or use getOrderCode() if you only need the code
+                    controller.setOrder(selectedOrder);
                 });
             }
         }

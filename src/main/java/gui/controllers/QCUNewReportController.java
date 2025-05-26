@@ -173,7 +173,7 @@ public class QCUNewReportController {
 
     @FXML
     private void goBackBtnAction(ActionEvent actionEvent) {
-        sceneNavigator.switchTo(actionEvent, "QCUFolderScreen.fxml");
+        sceneNavigator.switchTo(actionEvent, "QCUMain.fxml");
     }
 
     private void hideSubmitButton(String orderCode) {

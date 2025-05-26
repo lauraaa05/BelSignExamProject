@@ -101,7 +101,7 @@ public class AdminReportController {
             Order selectedOrder = listViewReports.getSelectionModel().getSelectedItem();
             if (selectedOrder != null) {
                 Stage stage = (Stage) listViewReports.getScene().getWindow();
-                sceneNavigator.<QCUNewReportController>switchToWithData(stage, "QCUNewReport.fxml", controller -> {
+                sceneNavigator.<QCUDoneReportController>switchToWithData(stage, "QCUDoneReport.fxml", controller -> {
                     controller.setOrder(selectedOrder);
                 });
             }

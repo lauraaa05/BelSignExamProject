@@ -202,7 +202,7 @@ public class QCUFolderController {
 
     @FXML
     private void btnOpenReportAction(ActionEvent actionEvent) {
-        sceneNavigator.switchTo(actionEvent, "QCUNewReport.fxml");
+        sceneNavigator.switchTo(actionEvent, "QCUDoneReport.fxml");
     }
 
     private void openFolderAndShowOrders(String date) {
@@ -238,7 +238,7 @@ public class QCUFolderController {
             Order selectedOrder = orderListView.getSelectionModel().getSelectedItem();
             if (selectedOrder != null) {
                 Stage stage = (Stage) orderListView.getScene().getWindow();
-                sceneNavigator.<QCUNewReportController>switchToWithData(stage, "QCUNewReport.fxml", controller -> {
+                sceneNavigator.<QCUDoneReportController>switchToWithData(stage, "QCUDoneReport.fxml", controller -> {
                     controller.setOrder(selectedOrder);
                 });
             }
