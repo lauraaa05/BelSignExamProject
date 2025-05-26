@@ -1,6 +1,8 @@
 package gui.controllers;
 
+import be.Operator;
 import be.Order;
+import be.QualityControl;
 import dal.OrderStatusDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -8,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -21,11 +24,15 @@ import javafx.collections.ObservableList;
 
 public class QCUMainController {
 
+
     @FXML
     private Button btnOpenReport, folderButton, homeButton;
 
     @FXML
     private ListView<Order> toApproveListView;
+
+    @FXML
+    private Label welcomeLabel;
 
     private final SceneNavigator sceneNavigator = new SceneNavigator();
 
@@ -72,7 +79,7 @@ public class QCUMainController {
     public void initialize() {
         try {
             OrderStatusDAO dao = new OrderStatusDAO();
-            List<Order> orders = dao.getOrdersByRoleAndStatus("qcu", "to_approve");
+            List<Order> orders = dao.getOrdersByRoleAndStatuses("qcu", List.of("to_approve", "rejected"));
 
             ObservableList<Order> observableOrders = FXCollections.observableArrayList(orders);
             toApproveListView.setItems(observableOrders);
@@ -92,5 +99,9 @@ public class QCUMainController {
                 });
             }
         }
+    }
+
+    public void setLoggedInQCU(QualityControl qcu) {
+        welcomeLabel.setText("Welcome " + qcu.getFirstName());
     }
 }

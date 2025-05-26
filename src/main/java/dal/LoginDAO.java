@@ -1,8 +1,10 @@
 package dal;
 
+import be.Admin;
 import be.Operator;
 import be.QualityControl;
 import be.User;
+import utilities.DBHelper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -190,4 +192,53 @@ public class LoginDAO {
         }
     }
 
+    public Operator getOperatorByUsername(String username) {
+        return DBHelper.getUserByUsername(username, rs -> {
+            try {
+                return new Operator(
+                        rs.getInt("UserId"),
+                        rs.getString("Username"),
+                        rs.getString("Password"),
+                        rs.getString("Role"),
+                        rs.getString("FirstName"),
+                        null
+                );
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public QualityControl getQCUByUsername(String username) {
+        return DBHelper.getUserByUsername(username, rs -> {
+            try {
+                return new QualityControl(
+                        rs.getInt("UserId"),
+                        rs.getString("Username"),
+                        rs.getString("Password"),
+                        rs.getString("Role"),
+                        rs.getString("FirstName"),
+                        rs.getString("LastName")
+                );
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public Admin getAdminByUsername(String username) {
+        return DBHelper.getUserByUsername(username, rs -> {
+            try {
+                return new Admin(
+                        rs.getInt("UserId"),
+                        rs.getString("Username"),
+                        rs.getString("Password"),
+                        rs.getString("Role"),
+                        rs.getString("FirstName")
+                );
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
 }

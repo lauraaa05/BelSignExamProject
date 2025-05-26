@@ -1,24 +1,35 @@
 package gui.controllers;
 
+import be.Operator;
 import bll.LoginManager;
+import dal.LoginDAO;
+import dal.OperatorDAO;
 import gui.model.LoginModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import javafx.event.ActionEvent;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import utilities.SceneNavigator;
+
+
+
+
 
 import java.io.IOException;
 import java.net.URL;
 
 public class OperatorLogInbyUsernameController {
+
 
     @FXML
     private TextField usernameField;
@@ -38,10 +49,12 @@ public class OperatorLogInbyUsernameController {
     @FXML
     private MFXButton logInButton;
 
+
     private boolean passwordVisible = false;
 
     private final LoginManager loginManager = new LoginManager();
     private final LoginModel loginModel = new LoginModel();
+    private final LoginDAO loginDAO = new LoginDAO();
 
     @FXML
     private void initialize() {
@@ -96,8 +109,22 @@ public class OperatorLogInbyUsernameController {
 
         if (isValid) {
             errorLabel.setVisible(false);
-            Stage currentStage = (Stage) logInButton.getScene().getWindow();
-            switchToMainSceneSameWindow(currentStage);
+            Operator operator = loginDAO.getOperatorByUsername(username);
+
+            if (operator != null) {
+                Stage currentStage = (Stage) logInButton.getScene().getWindow();
+                currentStage.setTitle("Operator");
+
+                new SceneNavigator().<OperatorMainController>switchToWithData(
+                        currentStage,
+                        "OperatorMain.fxml",
+                        controller -> controller.setLoggedInOperator(operator)
+                );
+            } else {
+                errorLabel.setText("Unexpected error loading operator data.");
+                errorLabel.setStyle("-fx-text-fill: red;");
+                errorLabel.setVisible(true);
+            }
         } else {
             errorLabel.setText("Incorrect username or password for Quality Control");
             errorLabel.setStyle("-fx-text-fill: red;");
@@ -132,14 +159,4 @@ public class OperatorLogInbyUsernameController {
             System.out.println("Image not found: " + imageName);
         }
     }
-
-    private void switchToMainSceneSameWindow(Stage currentStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/OperatorMain.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-
-        currentStage.setTitle("QCU Main");
-        currentStage.setScene(scene);
-        currentStage.show();
-    }
-
 }

@@ -18,7 +18,14 @@ public class QualityControl implements User {
         this.lastName = lastName;
     }
 
-    public QualityControl() { this(0, "", "", "", ""); }
+    public QualityControl(int id, String name, String password, String role, String firstName, String lastName) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.role = role;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
     public QualityControl(String firstName, String lastName, String username, String password, String email) {
         this(0, username, "Quality Control", firstName, lastName);
@@ -34,7 +41,7 @@ public class QualityControl implements User {
     public String getLastName() {
         return lastName;
     }
-    public void setLastName(String lastName) {}
+    public void setLastName(String lastName) {this.lastName = lastName;}
 
     public int getId() {
         return this.id;

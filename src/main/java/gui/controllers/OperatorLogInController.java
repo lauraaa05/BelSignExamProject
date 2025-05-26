@@ -93,7 +93,7 @@ public class OperatorLogInController {
                 Scene scene = new Scene(fxmlLoader.load());
 
                 OperatorMainController operatorMainController = fxmlLoader.getController();
-                operatorMainController.setLoggedInOperator(operator);
+                Platform.runLater(() -> operatorMainController.setLoggedInOperator(operator));
 
                 Stage currentStage = (Stage) welcomeText.getScene().getWindow();
                 currentStage.setTitle("Operator Main");

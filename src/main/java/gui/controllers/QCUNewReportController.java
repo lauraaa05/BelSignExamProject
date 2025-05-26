@@ -60,7 +60,8 @@ public class QCUNewReportController {
     @FXML
     public void initialize() {
         submitButton.setOnAction(e -> submitComment());
-        rejectButton.setOnAction(this::handleRejectButtonClick);
+
+        rejectButton.setOnAction(event -> handleReject());
     }
 
     public void setOrder(Order order) {
@@ -185,18 +186,53 @@ public class QCUNewReportController {
         }
     }
 
-    @FXML
-    private void handleRejectButtonClick(ActionEvent event) {
+//    @FXML
+//    private void handleRejectButtonClick(ActionEvent event) {
+//        try {
+//            String commentText = commentsTextArea.getText();
+//            String fullOrderNumber = extractOrderNumber();
+//            String orderCode = fullOrderNumber.substring(fullOrderNumber.lastIndexOf("-") + 1);
+//
+//            if (commentText != null && !commentText.isEmpty()) {
+//                Report report = new Report(4, "[REJECTED] " + commentText, fullOrderNumber, LocalDateTime.now(), orderCode);
+//                reportModel.insertReport(report);
+//            }
+//
+//            boolean updated = new OrderStatusDAO().updateOrderStatus(orderCode, "operator", "rejected");
+//
+//            if (updated) {
+//                System.out.println("Order marked as rejected and returned to operator.");
+//            } else {
+//                System.out.println("Failed to update order status to rejected.");
+//            }
+//
+//            rejectButton.setDisable(true);
+//            rejectButton.setVisible(false);
+//            commentsTextArea.setEditable(false);
+//
+//            // swicht to QCU main
+//            sceneNavigator.switchTo("/view/QCUMain.fxml");
+//
+//            //TO DO CLOSE THE BACK REPORT AND ADD COMMENTS AND SAVE WHAT ABOUT PICTURES
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    private void handleReject() {
         try {
             String commentText = commentsTextArea.getText();
             String fullOrderNumber = extractOrderNumber();
             String orderCode = fullOrderNumber.substring(fullOrderNumber.lastIndexOf("-") + 1);
 
+            // Save rejected comment
             if (commentText != null && !commentText.isEmpty()) {
                 Report report = new Report(4, "[REJECTED] " + commentText, fullOrderNumber, LocalDateTime.now(), orderCode);
                 reportModel.insertReport(report);
             }
 
+            // Update order status to 'rejected'
             boolean updated = new OrderStatusDAO().updateOrderStatus(orderCode, "operator", "rejected");
 
             if (updated) {
@@ -205,14 +241,13 @@ public class QCUNewReportController {
                 System.out.println("Failed to update order status to rejected.");
             }
 
+            // UI updates
             rejectButton.setDisable(true);
             rejectButton.setVisible(false);
             commentsTextArea.setEditable(false);
 
-            // swicht to QCU main
+            // Navigate away
             sceneNavigator.switchTo("/view/QCUMain.fxml");
-
-            //TO DO CLOSE THE BACK REPORT AND ADD COMMENTS AND SAVE WHAT ABOUT PICTURES
 
         } catch (Exception e) {
             e.printStackTrace();

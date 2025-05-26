@@ -38,4 +38,8 @@ public class PictureManager {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
         return  LocalDateTime.now().format(dtf) + ".png";
     }
+
+    public void deletePictureFromDB(int imageId) throws SQLException {
+        pictureDAO.deletePictureById(imageId);
+    }
 }

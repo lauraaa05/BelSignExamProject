@@ -1,5 +1,7 @@
 package bll;
 
+import be.Admin;
+import be.QualityControl;
 import dal.LoginDAO;
 
 public class LoginManager {
@@ -18,5 +20,12 @@ public class LoginManager {
         return lgn.validateAdminUser(username, password);
     }
 
+    public QualityControl getQCUByUsername(String username) {
+        return lgn.getQCUByUsername(username);
+    }
+
+    public Admin getAdminByUsername(String username) {
+        return lgn.getAdminByUsername(username);
+    }
 }
 
