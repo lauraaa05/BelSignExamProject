@@ -76,7 +76,7 @@
                   <opaqueInsets>
                      <Insets right="50.0" />
                   </opaqueInsets></Button>
-               <Button fx:id="rejectButton" layoutX="282.0" layoutY="10.0" onAction="#onRejectAction" prefHeight="35.0" prefWidth="209.0" text="REJECT" textFill="#f2f2f2">
+               <Button fx:id="rejectButton" layoutX="282.0" layoutY="10.0" prefHeight="35.0" prefWidth="209.0" text="REJECT" textFill="#f2f2f2">
                   <font>
                      <Font size="14.0" />
                   </font>

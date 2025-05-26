@@ -3,22 +3,29 @@ package gui.controllers;
 import bll.LoginManager;
 import gui.model.LoginModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import javafx.event.ActionEvent;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+
+
+
 
 import java.io.IOException;
 import java.net.URL;
 
 public class OperatorLogInbyUsernameController {
+
 
     @FXML
     private TextField usernameField;
@@ -37,6 +44,7 @@ public class OperatorLogInbyUsernameController {
 
     @FXML
     private MFXButton logInButton;
+
 
     private boolean passwordVisible = false;
 
