@@ -13,6 +13,6 @@ public class OrderStatusManager {
     }
 
     public List<Order> getDoneOrders() {
-        return dao.getOrdersByRoleAndStatuses("operator", List.of("done"));
+        return dao.getOrdersByRoleAndStatuses("qcu", List.of("done"));
     }
 }
