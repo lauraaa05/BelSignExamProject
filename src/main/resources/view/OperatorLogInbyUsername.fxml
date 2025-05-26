@@ -29,9 +29,9 @@
                 <Label styleClass="topLabel" text="BelSign" />
                 <Pane prefHeight="100.0" prefWidth="167.0" HBox.hgrow="ALWAYS">
                <children>
-                  <ImageView fx:id="helmetImageView" fitHeight="84.0" fitWidth="84.0" layoutX="261.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="helmetImageView" fitHeight="63.0" fitWidth="62.0" layoutX="261.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
                    <image>
-                       <Image url="@../images/belmanHelmet.png" />
+                       <Image url="@../images/NewOperatorIcon.png" />
                    </image>
                </ImageView>
                </children></Pane>

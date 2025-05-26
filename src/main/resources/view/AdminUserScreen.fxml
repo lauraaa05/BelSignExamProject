@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.*?>
 
-<BorderPane id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@../css/AdminUserScreen.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.AdminUserController">
+<BorderPane id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@../css/AdminUserScreen.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.AdminUserController">
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" styleClass="topVBox" BorderPane.alignment="CENTER">
          <children>
@@ -31,7 +23,7 @@
             <Label styleClass="topLabel" text="BelSign" />
             <Pane prefHeight="100.0" prefWidth="167.0" HBox.hgrow="ALWAYS">
                <children>
-                  <ImageView fx:id="adminIconImageView" fitHeight="100.0" fitWidth="170.0" layoutX="152.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="adminIconImageView" fitHeight="73.0" fitWidth="71.0" layoutX="181.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/AdminIcon.png" />
                      </image>
@@ -57,7 +49,7 @@
                         <Insets bottom="20.0" />
                      </VBox.margin>
                   </Button>
-                  <Button onAction="#handleReportButtonClick" fx:id="reportButton" id="buttonClass" mnemonicParsing="false" styleClass="buttonClass" text="📝" />
+                  <Button id="buttonClass" fx:id="reportButton" mnemonicParsing="false" onAction="#handleReportButtonClick" styleClass="buttonClass" text="📝" />
                </children>
             </VBox>
             <HBox alignment="CENTER">
@@ -87,33 +79,19 @@
                            </HBox.margin>
                         </Label>
                         <Region prefHeight="33.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                        <Button id="centerButton"
-                                fx:id="addButton"
-                                mnemonicParsing="false"
-                                onAction="#handleAddUserPopup"
-                                styleClass="centerButton"
-                                text="">
+                        <Button id="centerButton" fx:id="addButton" mnemonicParsing="false" onAction="#handleAddUserPopup" styleClass="centerButton" text="">
                            <graphic>
-                              <FontIcon iconLiteral="fas-user-plus" iconSize="16"/>
+                              <FontIcon iconLiteral="fas-user-plus" iconSize="16" />
                            </graphic>
                         </Button>
-                        <Button id="centerButton" fx:id="deleteUserButton"
-                                mnemonicParsing="false"
-                                onAction="#handleDeleteUser"
-                                styleClass="centerButton"
-                                text="">
+                        <Button id="centerButton" fx:id="deleteUserButton" mnemonicParsing="false" onAction="#handleDeleteUser" styleClass="centerButton" text="">
                            <graphic>
-                              <FontIcon iconLiteral="fas-user-minus" iconSize="16"/>
+                              <FontIcon iconLiteral="fas-user-minus" iconSize="16" />
                            </graphic>
                         </Button>
-                        <Button id="centerButton"
-                                fx:id="editButton"
-                                mnemonicParsing="false"
-                                onAction="#handleEditButtonClick"
-                                styleClass="editButton"
-                                text="">
+                        <Button id="centerButton" fx:id="editButton" mnemonicParsing="false" onAction="#handleEditButtonClick" styleClass="editButton" text="">
                            <graphic>
-                              <FontIcon iconLiteral="fas-user-edit" iconSize="16"/>
+                              <FontIcon iconLiteral="fas-user-edit" iconSize="16" />
                            </graphic>
                         </Button>
                      </children>
