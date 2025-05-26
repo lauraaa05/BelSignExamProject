@@ -64,7 +64,7 @@
                     </columnConstraints>
                     <children>
                         <Button fx:id="goBackButton" onAction="#goBackBtnAction" prefHeight="35" prefWidth="127" text="← BACK" GridPane.columnIndex="0" GridPane.halignment="LEFT" />
-                        <Button fx:id="rejectButton" onAction="#handleRejectButtonClick" prefHeight="35" prefWidth="150" text="REJECT" textFill="white" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                        <Button fx:id="rejectButton" onAction="#handleReject" prefHeight="35" prefWidth="150" text="REJECT" textFill="white" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                         <Button fx:id="submitButton" prefHeight="35" prefWidth="158.0" text="SUBMIT REPORT" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
                     </children>
                <rowConstraints>
