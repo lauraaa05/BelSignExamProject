@@ -39,10 +39,30 @@ public class OperatorMainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        loadOrdersIntoToDoList();
-
+        refreshLists();
         // Adding click event listener on the ListView
         toDoListView.setOnMouseClicked(this::handleOrderClick);
+
+        //To make rejected orders in red color
+        toDoListView.setCellFactory(lv -> new javafx.scene.control.ListCell<>() {
+            @Override
+            protected void updateItem(Order order, boolean empty) {
+                super.updateItem(order, empty);
+                if (empty || order == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(order.toString());
+                    String status = orderStatusDAO.getStatusForOrder(order.getOrderCode());
+                    if ("rejected".equalsIgnoreCase(status)) {
+                        setStyle("-fx-text-fill: red; -fx-font-weight: bold; -fx-background-color: #ffeeee;");
+
+                    } else {
+                        setStyle("-fx-text-fill: black;");
+                    }
+                }
+            }
+        });
     }
 
     private void loadOrdersIntoToDoList() {
@@ -108,8 +128,24 @@ public class OperatorMainController implements Initializable {
 
     public void refreshLists() {
         OrderStatusDAO dao = new OrderStatusDAO();
-        List<Order> todoOrders = dao.getOrdersByRoleAndStatus("operator", "todo");
+        List<Order> todoOrders = dao.getOrdersByRoleAndStatuses("operator", List.of("todo","rejected"));
 
+        //To sort rejected orders first
+        todoOrders.sort((o1, o2) -> {
+            String status1 = orderStatusDAO.getStatusForOrder(o1.getOrderCode());
+            String status2 = orderStatusDAO.getStatusForOrder(o2.getOrderCode());
+
+            if ("rejected".equalsIgnoreCase(status1) && !"rejected".equalsIgnoreCase(status2)) {
+                return -1;
+            } else if (!"rejected".equalsIgnoreCase(status1) && "rejected".equalsIgnoreCase(status2)) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
         toDoListView.getItems().setAll(todoOrders);
+
     }
+
+
 }

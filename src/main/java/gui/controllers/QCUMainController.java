@@ -79,7 +79,7 @@ public class QCUMainController {
     public void initialize() {
         try {
             OrderStatusDAO dao = new OrderStatusDAO();
-            List<Order> orders = dao.getOrdersByRoleAndStatus("qcu", "to_approve");
+            List<Order> orders = dao.getOrdersByRoleAndStatuses("qcu", List.of("to_approve", "rejected"));
 
             ObservableList<Order> observableOrders = FXCollections.observableArrayList(orders);
             toApproveListView.setItems(observableOrders);

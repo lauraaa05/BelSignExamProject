@@ -1,5 +1,6 @@
 package be;
 
+
 public class Operator implements User {
 
     private int id;
