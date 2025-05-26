@@ -23,6 +23,16 @@
             <Label styleClass="topLabel" text="BelSign" />
             <Pane prefHeight="100.0" prefWidth="167.0" HBox.hgrow="ALWAYS" />
          </children>
+         <children>
+            <ImageView fitHeight="73.0" fitWidth="71.0" layoutX="231.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/QCUIcon.png" />
+               </image>
+               <HBox.margin>
+                  <Insets left="18.0" />
+               </HBox.margin>
+            </ImageView>
+         </children>
          <padding>
             <Insets left="5.0" />
          </padding>
