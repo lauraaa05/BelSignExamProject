@@ -1,10 +1,15 @@
 package utilities;
 
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -43,5 +48,18 @@ public class PDFReportGenerator {
 
         System.out.println("PDF saved at: " + file.getAbsolutePath());
         return file;
+    }
+
+    public static byte[] generateReportAsBytes(String content, String fileName) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        PdfWriter writer = new PdfWriter(outputStream);
+        PdfDocument pdf = new PdfDocument(writer);
+        Document document = new Document(pdf);
+
+        document.add(new Paragraph(content));
+        document.close();
+
+        return outputStream.toByteArray();
     }
 }
