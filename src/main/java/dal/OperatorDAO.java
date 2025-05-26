@@ -21,6 +21,7 @@ public class OperatorDAO {
                 op.setId(rs.getInt("UserId"));
                 op.setName(rs.getString("Username"));
                 op.setRole(rs.getString("Role"));
+                op.setFirstName(rs.getString("FirstName"));
                 return op;
             }
         } catch (SQLException e) {

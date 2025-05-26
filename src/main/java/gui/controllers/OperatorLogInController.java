@@ -36,6 +36,9 @@ public class OperatorLogInController {
     @FXML
     private TextField barcodeTextField;
 
+    @FXML
+    private Label loggedUsernameLbl;
+
     private CameraManager camera = new CameraManager();
     private boolean isPhotoTaken = false;
 
@@ -87,8 +90,6 @@ public class OperatorLogInController {
             Operator operator = operatorDAO.getOperatorById(operatorId);
 
             if (operator != null && operator.getRole().equalsIgnoreCase("Operator")) {
-                welcomeText.setText("Welcome " + operator.getName() + "! Role: " + operator.getRole());
-
                 FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorMain.fxml"));
                 Scene scene = new Scene(fxmlLoader.load());
 
@@ -131,5 +132,3 @@ public class OperatorLogInController {
         sceneNavigator.switchTo(actionEvent, "OperatorLogInbyUsername.fxml");
     }
 }
-
-
