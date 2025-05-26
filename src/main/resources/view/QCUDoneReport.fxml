@@ -58,15 +58,24 @@
                 </HBox>
 
                 <!-- Action Buttons -->
-                <HBox alignment="CENTER" spacing="20">
-                    <Button fx:id="goBackButton" prefWidth="120" text="← BACK" onAction="#handleGoBack">
-                        <HBox.margin>
-                            <Insets left="40.0"/>
-                        </HBox.margin>
-                    </Button>
-                    <Button fx:id="sendEmailButton" prefHeight="35.0" prefWidth="209.0" text="SEND EMAIL" onAction="#handleSendEmail"/>
-                    <Button fx:id="savePdfButton" prefHeight="35.0" prefWidth="209.0" text="SAVE PDF" textFill="WHITE" onAction="#handleSavePdf"/>
-                </HBox>
+                <GridPane alignment="CENTER" hgap="20">
+                    <padding>
+                        <Insets bottom="10" left="10" right="10" top="10" />
+                    </padding>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" />
+                        <ColumnConstraints hgrow="ALWAYS" />
+                        <ColumnConstraints hgrow="ALWAYS" />
+                    </columnConstraints>
+                    <children>
+                        <Button fx:id="goBackButton" onAction="#handleGoBack" prefHeight="35" prefWidth="127" text="← BACK" GridPane.columnIndex="0" GridPane.halignment="LEFT" />
+                        <Button id="sendEmailButton" fx:id="sendEmailButton" onAction="#handleSendEmail" prefHeight="35" prefWidth="150" text="SEND EMAIL" textFill="white" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                        <Button id="savePDFButton" fx:id="savePdfButton" onAction="#handleSavePdf" prefHeight="35" prefWidth="158.0" text="SUBMIT REPORT" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
+                    </children>
+                    <rowConstraints>
+                        <RowConstraints />
+                    </rowConstraints>
+                </GridPane>
             </VBox>
         </VBox>
     </content>
