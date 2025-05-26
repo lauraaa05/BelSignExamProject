@@ -54,4 +54,33 @@ public class ReportDAO {
         }
         return null;
     }
+
+    public void savePdfToDatabase(String orderNumber, byte[] pdfBytes) throws SQLException {
+        String sql = "UPDATE DoneReports SET PdfData = ? WHERE OrderCode = ?";
+
+        try (Connection conn = DBAccess.DBConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setBytes(1, pdfBytes);
+            stmt.setString(2, orderNumber);
+            stmt.executeUpdate();
+        }
+    }
+
+    public byte[] getPdfFromDatabase(String orderCode) throws SQLException {
+        String sql = "SELECT PdfData FROM DoneReports WHERE OrderCode = ?";
+
+        try (Connection conn = DBAccess.DBConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, orderCode);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getBytes("PdfData");
+            }
+        }
+
+        return null;
+    }
 }
