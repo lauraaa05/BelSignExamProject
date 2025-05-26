@@ -65,23 +65,25 @@
                         <Insets bottom="10" left="10" right="10" top="10" />
                     </padding>
                     <columnConstraints>
-                        <ColumnConstraints hgrow="ALWAYS" />
-                        <ColumnConstraints hgrow="ALWAYS" maxWidth="253.9999877929687" minWidth="166.79997558593746" prefWidth="197.599951171875" />
-                        <ColumnConstraints hgrow="ALWAYS" maxWidth="226.80002441406248" minWidth="139.60001220703123" prefWidth="168.79995117187497" />
-                  <ColumnConstraints hgrow="ALWAYS" maxWidth="209.60001220703123" minWidth="10.0" prefWidth="195.20004882812498" />
+                        <ColumnConstraints hgrow="ALWAYS" maxWidth="217.60003967285155" minWidth="131.99998779296874" prefWidth="217.60003967285155" />
+                        <ColumnConstraints hgrow="ALWAYS" maxWidth="317.6" minWidth="166.79997558593746" prefWidth="254.79999999999995" />
+                        <ColumnConstraints hgrow="ALWAYS" maxWidth="226.80002441406248" minWidth="0.0" prefWidth="0.0" />
+                  <ColumnConstraints hgrow="ALWAYS" maxWidth="243.20000000000005" minWidth="10.0" prefWidth="213.60002441406255" />
                     </columnConstraints>
                     <children>
                         <Button fx:id="goBackButton" onAction="#handleGoBack" prefHeight="35" prefWidth="127" text="← BACK" GridPane.columnIndex="0" GridPane.halignment="LEFT" />
                         <Button id="sendEmailButton" fx:id="sendEmailButton" onAction="#handleSendEmail" prefHeight="35" prefWidth="150" text="SEND EMAIL" textFill="white" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-                        <Button id="savePDFButton" fx:id="savePdfButton" onAction="#handleSavePdf" prefHeight="35" prefWidth="167.0" text="SUBMIT REPORT" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
                         <Button fx:id="viewPdfButton" onAction="#handleViewPdf" prefHeight="35.0" prefWidth="136.0" text="Create PDF" GridPane.columnIndex="3">
                      <GridPane.margin>
-                        <Insets left="20.0" />
+                        <Insets left="40.0" />
                      </GridPane.margin></Button>
                     </children>
                     <rowConstraints>
                         <RowConstraints />
                     </rowConstraints>
+               <VBox.margin>
+                  <Insets top="40.0" />
+               </VBox.margin>
                 </GridPane>
             </VBox>
         </VBox>
