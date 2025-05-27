@@ -102,12 +102,12 @@ public class OperatorMainController implements Initializable {
             e.printStackTrace();
         }
     }
-    private void switchToMainSceneSameWindow(Stage currentStage) throws IOException {
+    private void switchToMainLoginWindow(Stage currentStage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorLogin.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/MainLogin.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
-        currentStage.setTitle("OperatorLogin");
+        currentStage.setTitle("MainLogin");
         currentStage.setScene(scene);
         currentStage.show();
 
@@ -116,7 +116,7 @@ public class OperatorMainController implements Initializable {
     @FXML
     public void handleSignOutButtonClick(ActionEvent actionEvent) throws IOException {
         Stage currentStage = (Stage) signOutButton.getScene().getWindow();
-        switchToMainSceneSameWindow(currentStage);
+        switchToMainLoginWindow(currentStage);
     }
 
     public void setLoggedInOperator(Operator operator) {

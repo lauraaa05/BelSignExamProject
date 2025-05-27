@@ -129,6 +129,6 @@ public class OperatorLogInController {
 
     @FXML
     private void openUsernamePasswordLoginAct(ActionEvent actionEvent) {
-        sceneNavigator.switchTo(actionEvent, "OperatorLogInbyUsername.fxml");
+        sceneNavigator.switchTo(actionEvent, "MainLogin.fxml");
     }
 }
