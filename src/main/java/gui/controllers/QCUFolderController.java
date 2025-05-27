@@ -188,7 +188,7 @@ public class QCUFolderController {
     }
 
     private void switchToLoginScene(Stage currentStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/QCULogin.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/MainLogin.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         currentStage.setTitle("QCU Login");
         currentStage.setScene(scene);

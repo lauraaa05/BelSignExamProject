@@ -152,10 +152,10 @@ public class OperatorPreviewController {
     }
 
     // Méthod change the scene
-    private void switchToLoginScene(Stage currentStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorLogIn.fxml"));
+    private void switchToMainLoginScene(Stage currentStage) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/MainLogin.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        currentStage.setTitle("Operator Login");
+        currentStage.setTitle("Main Login");
         currentStage.setScene(scene);
         currentStage.show();
     }
@@ -165,7 +165,7 @@ public class OperatorPreviewController {
     private void handleSignOutButtonClick(ActionEvent event) {
         Stage currentStage = (Stage) signOutButton.getScene().getWindow();
         try {
-            switchToLoginScene(currentStage);
+            switchToMainLoginScene(currentStage);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -268,7 +268,7 @@ public class OperatorPreviewController {
             OperatorMainController operatorMainController = fxmlLoader.getController();
             operatorMainController.refreshLists();
 
-            Stage currentStage = (Stage) doneButton.getScene().getWindow();
+            Stage currentStage = (Stage) fullscreenButton.getScene().getWindow();
             currentStage.setScene(new Scene(root));
         } catch (Exception e) {
             e.printStackTrace();

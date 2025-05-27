@@ -1,6 +1,5 @@
 package gui.controllers;
 
-import be.Operator;
 import be.Order;
 import be.QualityControl;
 import dal.OrderStatusDAO;
@@ -59,7 +58,7 @@ public class QCUMainController {
     private void handleSignOutButtonClick(ActionEvent event) {
         try {
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/QCULogin.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainLogin.fxml"));
             Scene scene = new Scene(loader.load());
             currentStage.setTitle("QCU Login");
             currentStage.setScene(scene);
