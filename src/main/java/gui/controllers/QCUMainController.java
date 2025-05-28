@@ -37,24 +37,7 @@ public class QCUMainController {
 
     private final SceneNavigator sceneNavigator = new SceneNavigator();
 
-    // Method to load orders into the ListView
-    @FXML
-    public void initialize() {
-        User user = LoggedInUser.getUser();
-        if (user != null) {
-            welcomeLabel.setText("Welcome " + user.getFirstName());
-
-            try {
-                OrderStatusDAO dao = new OrderStatusDAO();
-                List<Order> orders = dao.getOrdersByRoleAndStatuses("qcu", List.of("to_approve", "rejected"));
-
-                ObservableList<Order> observableOrders = FXCollections.observableArrayList(orders);
-                toApproveListView.setItems(observableOrders);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+    private QualityControl loggedInQCU;
 
     @FXML
     private void switchToFolderScene(Stage currentStage) throws IOException {
@@ -94,6 +77,25 @@ public class QCUMainController {
         sceneNavigator.switchTo(actionEvent, "QCUReport.fxml");
     }
 
+    // Method to load orders into the ListView
+    @FXML
+    public void initialize() {
+        User user = LoggedInUser.getUser();
+        if (user != null) {
+            welcomeLabel.setText("Welcome " + user.getFirstName());
+
+            try {
+                OrderStatusDAO dao = new OrderStatusDAO();
+                List<Order> orders = dao.getOrdersByRoleAndStatuses("qcu", List.of("to_approve", "rejected"));
+
+                ObservableList<Order> observableOrders = FXCollections.observableArrayList(orders);
+                toApproveListView.setItems(observableOrders);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @FXML
     private void handleOrderClick(MouseEvent event) {
         if (event.getClickCount() == 1) {
@@ -102,12 +104,14 @@ public class QCUMainController {
                 Stage stage = (Stage) toApproveListView.getScene().getWindow();
                 sceneNavigator.<QCUNewReportController>switchToWithData(stage, "QCUNewReport.fxml", controller -> {
                     controller.setOrder(selectedOrder);
+                    controller.setCurrentUser(loggedInQCU);
                 });
             }
         }
     }
 
     public void setLoggedInQCU(QualityControl qcu) {
+        this.loggedInQCU = qcu;
         welcomeLabel.setText("Welcome " + qcu.getFirstName());
     }
 }

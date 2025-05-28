@@ -214,9 +214,9 @@ public class QCUDoneReportController {
         vBox.setAlignment(javafx.geometry.Pos.CENTER);
 
         ImageView imageView = new ImageView();
-        imageView.setFitHeight(130);
-        imageView.setFitWidth(180);
-        imageView.setPreserveRatio(true);
+        imageView.setFitHeight(520);
+        imageView.setFitWidth(420);
+        imageView.setPreserveRatio(false);
         imageView.setImage(new Image(new ByteArrayInputStream(picture.getImage())));
 
         String sideText = (picture.getSide() == null || picture.getSide().isEmpty()) ? "Unknown" : picture.getSide();

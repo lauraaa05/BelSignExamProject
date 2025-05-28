@@ -21,11 +21,11 @@ public class ReportDAO {
         }
     }
 
-    public String getLatestCommentByOrderNumber(String orderNumber) throws SQLException {
-        String sql = "SELECT TOP 1 Comment FROM Reports WHERE OrderNumber = ? ORDER BY Date DESC";
+    public String getLatestCommentByOrderNumber(String orderCode) throws SQLException {
+        String sql = "SELECT TOP 1 Comment FROM Reports WHERE OrderCode = ? ORDER BY Date DESC";
         try (Connection conn = DBAccess.DBConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, orderNumber);
+            stmt.setString(1, orderCode);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return rs.getString("Comment");
@@ -56,7 +56,7 @@ public class ReportDAO {
     }
 
     public void savePdfToDatabase(String orderNumber, byte[] pdfBytes) throws SQLException {
-        String sql = "UPDATE DoneReports SET PdfData = ? WHERE OrderCode = ?";
+        String sql = "UPDATE DoneReport SET PdfData = ? WHERE OrderCode = ?";
 
         try (Connection conn = DBAccess.DBConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -68,7 +68,7 @@ public class ReportDAO {
     }
 
     public byte[] getPdfFromDatabase(String orderCode) throws SQLException {
-        String sql = "SELECT PdfData FROM DoneReports WHERE OrderCode = ?";
+        String sql = "SELECT PdfData FROM DoneReport WHERE OrderCode = ?";
 
         try (Connection conn = DBAccess.DBConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -82,5 +82,16 @@ public class ReportDAO {
         }
 
         return null;
+    }
+
+    public void saveDoneReport(String orderCode, int signedBy) throws SQLException {
+        String sql = "INSERT INTO DoneReport (OrderCode, Date, SignedBy) VALUES (?, GETDATE(), ?)";
+
+        try (Connection conn = DBAccess.DBConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, orderCode);
+            stmt.setInt(2, signedBy);
+            stmt.executeUpdate();
+        }
     }
 }
