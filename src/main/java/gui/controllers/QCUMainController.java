@@ -80,7 +80,7 @@ public class QCUMainController {
     // Method to load orders into the ListView
     @FXML
     public void initialize() {
-        User user = LoggedInUser.getUser();
+        QualityControl user = (QualityControl) LoggedInUser.getUser();
         if (user != null) {
             welcomeLabel.setText("Welcome " + user.getFirstName());
 
@@ -98,15 +98,26 @@ public class QCUMainController {
 
     @FXML
     private void handleOrderClick(MouseEvent event) {
-        if (event.getClickCount() == 1) {
-            Order selectedOrder = toApproveListView.getSelectionModel().getSelectedItem();
-            if (selectedOrder != null) {
-                Stage stage = (Stage) toApproveListView.getScene().getWindow();
-                sceneNavigator.<QCUNewReportController>switchToWithData(stage, "QCUNewReport.fxml", controller -> {
-                    controller.setOrder(selectedOrder);
-                    controller.setCurrentUser(loggedInQCU);
-                });
-            }
+        Order selectedOrder = toApproveListView.getSelectionModel().getSelectedItem();
+        if (selectedOrder == null) return;
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/QCUNewReport.fxml"));
+            Scene scene = new Scene(loader.load());
+
+            QCUNewReportController controller = loader.getController();
+            controller.setOrder(selectedOrder);
+
+            // Set current user
+            QualityControl qcuUser = (QualityControl) LoggedInUser.getUser();
+            controller.setCurrentUser(qcuUser);  // <---- THIS IS MISSING ON 2ND OPEN
+
+            Stage stage = new Stage();
+            stage.setTitle("Review Order");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
