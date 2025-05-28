@@ -44,7 +44,13 @@ public class PictureDAO {
                 String dbOrderNumber = rs.getString("OrderNumber");
                 String dbSide = rs.getString("Side");
 
-                Picture picture = new Picture(imageId, imageBytes, fileName, timestamp.toLocalDateTime(), dbOrderNumber, dbSide);
+                Picture picture = new Picture();
+                picture.setImageId(imageId);
+                picture.setImage(imageBytes);
+                picture.setFileName(fileName);
+                picture.setTimestamp(timestamp.toLocalDateTime());
+                picture.setSide(dbSide);
+                picture.setOrderNumber(dbOrderNumber);
                 pictures.add(picture);
             }
         }

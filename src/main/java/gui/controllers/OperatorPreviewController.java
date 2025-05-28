@@ -9,6 +9,7 @@ import dk.easv.belsignexamproject.OperatorLogInApp;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.mfxlocalization.Language;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -100,7 +101,7 @@ public class OperatorPreviewController {
     public void setOrder(Order order) {
         this.currentOrder = order;
         orderNumberLabel.setText("Order: " + order);
-        loadOrderImages(order.getOrderCode());
+        loadOrderImages(order.getFormattedOrderText());
     }
 
     private void loadOrderImages(String orderNumber) {

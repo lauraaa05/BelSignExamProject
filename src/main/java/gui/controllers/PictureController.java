@@ -127,7 +127,7 @@ public class PictureController {
             LocalDateTime timestamp = LocalDateTime.now();
 
             try {
-                pictureManager.savePictureToDB(capturedImage, order.getOrderCode(), timestamp, currentSide);
+                pictureManager.savePictureToDB(capturedImage, order.getFormattedOrderText(), timestamp, currentSide);
 
                 byte[] imageBytes = convertToByteArray(capturedImage);
                 Picture previewPicture = new Picture(imageBytes, timestamp, currentSide);

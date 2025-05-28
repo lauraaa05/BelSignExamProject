@@ -19,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import utilities.LoggedInUser;
 import utilities.SceneNavigator;
 
 
@@ -112,13 +113,15 @@ public class OperatorLogInbyUsernameController {
             Operator operator = loginDAO.getOperatorByUsername(username);
 
             if (operator != null) {
+                LoggedInUser.setUser(operator);
+
                 Stage currentStage = (Stage) logInButton.getScene().getWindow();
                 currentStage.setTitle("Operator");
 
                 new SceneNavigator().<OperatorMainController>switchToWithData(
                         currentStage,
                         "OperatorMain.fxml",
-                        controller -> controller.setLoggedInOperator(operator)
+                        controller -> {}
                 );
             } else {
                 errorLabel.setText("Unexpected error loading operator data.");

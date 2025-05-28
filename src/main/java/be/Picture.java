@@ -11,15 +11,6 @@ public class Picture {
     private String fileName;
     private String orderNumber;
 
-    public Picture(int imageId, byte[] image, LocalDateTime timestamp, String side, String fileName, String orderNumber) {
-        this.imageId = imageId;
-        this.image = image;
-        this.timestamp = timestamp;
-        this.side = side;
-        this.fileName = fileName;
-        this.orderNumber = orderNumber;
-    }
-
     public Picture(int imageId, byte[] image, LocalDateTime timestamp, String side, String orderNumber) {
         this.imageId =  imageId;
         this.image = image;
@@ -28,13 +19,8 @@ public class Picture {
         this.orderNumber = orderNumber;
     }
 
-    public Picture(int imageId, byte[] image, String fileName, LocalDateTime timestamp, String side, String orderNumber) {
-        this.imageId =  imageId;
-        this.image = image;
-        this.fileName = fileName;
-        this.timestamp = timestamp;
-        this.side = side;
-        this.orderNumber = orderNumber;
+    public Picture() {
+
     }
 
     public Picture(byte[] imageBytes, String fileName, LocalDateTime timestamp, String orderNumber, String side) {
