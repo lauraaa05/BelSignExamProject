@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane id="mainBorderPane" fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/QCULogInCSS.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCULogInController">
+<BorderPane id="mainBorderPane" fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="900.0" stylesheets="@../css/MainLogin.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.MainLoginController">
     <top>
         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" styleClass="topVBox" BorderPane.alignment="CENTER">
             <children>
@@ -65,7 +65,7 @@
                            <VBox.margin>
                               <Insets left="320.0" />
                            </VBox.margin></Label>
-                         <TextField fx:id="usernameField" prefHeight="20.0" prefWidth="240.0">
+                         <TextField fx:id="usernameField" prefHeight="35.0" prefWidth="240.0">
                              <VBox.margin>
                                  <Insets left="320.0" right="345.0" top="8.0" />
                              </VBox.margin>
@@ -85,11 +85,11 @@
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
                                <StackPane>
-                                   <PasswordField fx:id="passwordFieldMasked" prefWidth="240" promptText="Password">
+                                   <PasswordField fx:id="passwordFieldMasked" prefHeight="35.0" prefWidth="240" promptText="Password">
                                     <StackPane.margin>
                                        <Insets bottom="40.0" left="320.0" />
                                     </StackPane.margin></PasswordField>
-                                   <TextField fx:id="passwordFieldVisible" prefWidth="240" promptText="Password">
+                                   <TextField fx:id="passwordFieldVisible" prefHeight="35.0" prefWidth="240" promptText="Password">
                                     <StackPane.margin>
                                        <Insets bottom="40.0" left="320.0" />
                                     </StackPane.margin></TextField>
@@ -114,6 +114,11 @@
                   <MFXButton fx:id="logInButton" prefHeight="50.0" prefWidth="110.0" text="Log in">
                      <HBox.margin>
                         <Insets left="380.0" />
+                     </HBox.margin>
+                  </MFXButton>
+                  <MFXButton fx:id="qrLoginBtn" onAction="#actQRLogin" prefHeight="50.0" prefWidth="198.0" text="📷 Log in with QR Code">
+                     <HBox.margin>
+                        <Insets left="140.0" />
                      </HBox.margin>
                   </MFXButton>
                </children>

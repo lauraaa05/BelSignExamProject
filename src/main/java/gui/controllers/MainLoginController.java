@@ -1,5 +1,6 @@
 package gui.controllers;
 import be.Admin;
+import be.Operator;
 import be.QualityControl;
 import bll.LoginManager;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -17,9 +18,10 @@ import java.io.IOException;
 import java.net.URL;
 import javafx.event.ActionEvent;
 import utilities.LoggedInUser;
+import utilities.SceneNavigator;
 
 
-public class QCULogInController {
+public class MainLoginController {
 
     @FXML
     private TextField usernameField;
@@ -42,6 +44,7 @@ public class QCULogInController {
     private boolean passwordVisible = false;
 
     private final LoginManager loginManager = new LoginManager();
+    private final SceneNavigator sceneNavigator = new SceneNavigator();
 
     @FXML
     private void initialize() {
@@ -94,6 +97,7 @@ public class QCULogInController {
 
         boolean isValid = loginManager.checkQCULogin(username, password);
         boolean isValidAdmin = loginManager.checkAdminLogin(username, password);
+        boolean isValidOperator = loginManager.checkOperatorLogin(username, password);
 
 //        QCUMainController qcuMainController = fxmlLoader.getController();
 //        qcuMainController.setLoggedInQCU(qcu);
@@ -110,8 +114,15 @@ public class QCULogInController {
             LoggedInUser.setUser(admin);
             Stage currentStage = (Stage) logInButton.getScene().getWindow();
             switchToAdminMainScreen(currentStage, admin);
-        } else {
-            errorLabel.setText("Incorrect username or password for Quality Control");
+        } else if(isValidOperator) {
+            errorLabel.setVisible(false);
+            Operator operator = loginManager.getOperatorByUsername(username);
+            LoggedInUser.setUser(operator);
+            Stage currentStage = (Stage) logInButton.getScene().getWindow();
+            switchToOperatorMainScreen(currentStage, operator);
+        }
+        else {
+            errorLabel.setText("Incorrect username or password!");
             errorLabel.setStyle("-fx-text-fill: red;");
             errorLabel.setVisible(true);
         }
@@ -169,6 +180,22 @@ public class QCULogInController {
         currentStage.show();
     }
 
+    private void switchToOperatorMainScreen(Stage currentStage, Operator operator) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/OperatorMain.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+
+        OperatorMainController operatorMainController = fxmlLoader.getController();
+        operatorMainController.setLoggedInOperator(operator);
+
+        currentStage.setTitle("Operator Main");
+        currentStage.setScene(scene);
+        currentStage.show();
+    }
+
+//    private void switchToOperatorMainScreen(ActionEvent event, Operator operator) throws IOException {
+//        sceneNavigator.switchTo(event, "OperatorMain.fxml");
+//    }
+
     // handle sign out
     @FXML
     private void handleSignOutButtonClick(ActionEvent event) {
@@ -177,7 +204,7 @@ public class QCULogInController {
             Stage currentStage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
 
             // Load login screen again
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/QCULogIn.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/MainLogin.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
 
             currentStage.setTitle("QCU Login");
@@ -186,5 +213,10 @@ public class QCULogInController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void actQRLogin(ActionEvent actionEvent) {
+        sceneNavigator.switchTo(actionEvent, "OperatorLogIn.fxml");
     }
 }

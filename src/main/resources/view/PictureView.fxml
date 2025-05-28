@@ -38,9 +38,9 @@
                </HBox.margin>
             </Label>
             <Region HBox.hgrow="ALWAYS"/>
-            <ImageView fx:id="helmetImageView" fitHeight="86.0" fitWidth="200.0" preserveRatio="true">
+            <ImageView fx:id="helmetImageView" fitHeight="63.0" fitWidth="62.0" preserveRatio="true">
                <image>
-                  <Image url="@../images/belmanHelmet.png"/>
+                  <Image url="@../images/NewOperatorIcon.png"/>
                </image>
                <HBox.margin>
                   <Insets right="10.0" top="8.0"/>

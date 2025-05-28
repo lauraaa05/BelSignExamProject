@@ -3,7 +3,6 @@ package gui.controllers;
 
 import be.Operator;
 import be.Order;
-import be.User;
 import bll.OrderStatusManager;
 import dal.OrderStatusDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
@@ -15,9 +14,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import utilities.LoggedInUser;
 
 import java.io.IOException;
 import java.net.URL;
@@ -44,12 +43,6 @@ public class OperatorMainController implements Initializable {
         refreshLists();
         // Adding click event listener on the ListView
         toDoListView.setOnMouseClicked(this::handleOrderClick);
-
-        User user = LoggedInUser.getUser();
-
-        if (user != null) {
-            loggedUsernameLbl.setText(user.getName());
-        }
 
         //To make rejected orders in red color
         toDoListView.setCellFactory(lv -> new javafx.scene.control.ListCell<>() {
@@ -109,12 +102,12 @@ public class OperatorMainController implements Initializable {
             e.printStackTrace();
         }
     }
-    private void switchToMainSceneSameWindow(Stage currentStage) throws IOException {
+    private void switchToMainLoginWindow(Stage currentStage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorLogin.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/MainLogin.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
-        currentStage.setTitle("OperatorLogin");
+        currentStage.setTitle("MainLogin");
         currentStage.setScene(scene);
         currentStage.show();
 
@@ -123,7 +116,12 @@ public class OperatorMainController implements Initializable {
     @FXML
     public void handleSignOutButtonClick(ActionEvent actionEvent) throws IOException {
         Stage currentStage = (Stage) signOutButton.getScene().getWindow();
-        switchToMainSceneSameWindow(currentStage);
+        switchToMainLoginWindow(currentStage);
+    }
+
+    public void setLoggedInOperator(Operator operator) {
+        loggedUsernameLbl.setText(operator.getFirstName());
+        System.out.println("Operator received in controller: " + operator.getFirstName());
     }
 
     private final String currentUserRole = "Operator";

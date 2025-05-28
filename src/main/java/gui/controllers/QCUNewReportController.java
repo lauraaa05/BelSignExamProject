@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import utilities.SceneNavigator;
 
 import java.io.ByteArrayInputStream;
@@ -143,6 +144,8 @@ public class QCUNewReportController {
 
             hideSubmitButton(orderCode);
 
+            Stage currentStage = (Stage) submitButton.getScene().getWindow();
+            currentStage.close();
             sceneNavigator.switchTo("/view/QCUMain.fxml");
 
         } catch (Exception e) {
@@ -186,40 +189,7 @@ public class QCUNewReportController {
         }
     }
 
-//    @FXML
-//    private void handleRejectButtonClick(ActionEvent event) {
-//        try {
-//            String commentText = commentsTextArea.getText();
-//            String fullOrderNumber = extractOrderNumber();
-//            String orderCode = fullOrderNumber.substring(fullOrderNumber.lastIndexOf("-") + 1);
-//
-//            if (commentText != null && !commentText.isEmpty()) {
-//                Report report = new Report(4, "[REJECTED] " + commentText, fullOrderNumber, LocalDateTime.now(), orderCode);
-//                reportModel.insertReport(report);
-//            }
-//
-//            boolean updated = new OrderStatusDAO().updateOrderStatus(orderCode, "operator", "rejected");
-//
-//            if (updated) {
-//                System.out.println("Order marked as rejected and returned to operator.");
-//            } else {
-//                System.out.println("Failed to update order status to rejected.");
-//            }
-//
-//            rejectButton.setDisable(true);
-//            rejectButton.setVisible(false);
-//            commentsTextArea.setEditable(false);
-//
-//            // swicht to QCU main
-//            sceneNavigator.switchTo("/view/QCUMain.fxml");
-//
-//            //TO DO CLOSE THE BACK REPORT AND ADD COMMENTS AND SAVE WHAT ABOUT PICTURES
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
+    @FXML
     private void handleReject() {
         try {
             String commentText = commentsTextArea.getText();

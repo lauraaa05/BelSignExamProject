@@ -1,6 +1,7 @@
 package bll;
 
 import be.Admin;
+import be.Operator;
 import be.QualityControl;
 import dal.LoginDAO;
 
@@ -26,6 +27,10 @@ public class LoginManager {
 
     public Admin getAdminByUsername(String username) {
         return lgn.getAdminByUsername(username);
+    }
+
+    public Operator getOperatorByUsername(String username) {
+        return lgn.getOperatorByUsername(username);
     }
 }
 

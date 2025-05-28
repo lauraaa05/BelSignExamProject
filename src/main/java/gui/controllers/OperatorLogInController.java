@@ -19,7 +19,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import utilities.LoggedInUser;
 import utilities.SceneNavigator;
 
 import java.awt.image.BufferedImage;
@@ -36,6 +35,9 @@ public class OperatorLogInController {
 
     @FXML
     private TextField barcodeTextField;
+
+    @FXML
+    private Label loggedUsernameLbl;
 
     private CameraManager camera = new CameraManager();
     private boolean isPhotoTaken = false;
@@ -88,22 +90,16 @@ public class OperatorLogInController {
             Operator operator = operatorDAO.getOperatorById(operatorId);
 
             if (operator != null && operator.getRole().equalsIgnoreCase("Operator")) {
-                LoggedInUser.setUser(operator);
                 FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorMain.fxml"));
                 Scene scene = new Scene(fxmlLoader.load());
 
-                Platform.runLater(() -> {
-                    Stage currentStage = (Stage) welcomeText.getScene().getWindow();
-                    if (currentStage != null) {
-                        currentStage.setTitle("Operator Main");
-                        currentStage.setScene(scene);
-                        currentStage.show();
-                        camera.closeCamera();
-                    } else {
-                        System.out.println("Stage is null — scene might not be fully loaded yet.");
-                    }
-                });
+                OperatorMainController operatorMainController = fxmlLoader.getController();
+                Platform.runLater(() -> operatorMainController.setLoggedInOperator(operator));
 
+                Stage currentStage = (Stage) welcomeText.getScene().getWindow();
+                currentStage.setTitle("Operator Main");
+                currentStage.setScene(scene);
+                currentStage.show();
                 camera.closeCamera();
 
             } else {
@@ -133,8 +129,6 @@ public class OperatorLogInController {
 
     @FXML
     private void openUsernamePasswordLoginAct(ActionEvent actionEvent) {
-        sceneNavigator.switchTo(actionEvent, "OperatorLogInbyUsername.fxml");
+        sceneNavigator.switchTo(actionEvent, "MainLogin.fxml");
     }
 }
-
-

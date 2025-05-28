@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
 
-<ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" prefHeight="780.0" prefWidth="850.0"
-            stylesheets="@../css/QCUNewReport.css"
-            xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="gui.controllers.QCUDoneReportController">
+<ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" prefHeight="780.0" prefWidth="850.0" stylesheets="@../css/QCUNewReport.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.QCUDoneReportController">
 
     <content>
         <VBox spacing="20">
             <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>
 
             <!-- HEADER -->
@@ -22,29 +27,26 @@
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <ImageView fx:id="logo" fitHeight="117.0" fitWidth="110.0" preserveRatio="true">
                         <image>
-                            <Image url="@../images/belmanlogo.png"/>
+                            <Image url="@../images/belmanlogo.png" />
                         </image>
                     </ImageView>
                     <Label fx:id="title" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="QCU Report">
                         <HBox.margin>
-                            <Insets left="190.0"/>
+                            <Insets left="190.0" />
                         </HBox.margin>
                     </Label>
-                    <Label fx:id="title1" layoutX="320.0" layoutY="51.0" prefHeight="36.0" prefWidth="45.0"
-                           style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+                    <Label fx:id="title1" layoutX="320.0" layoutY="51.0" prefHeight="36.0" prefWidth="45.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
                 </HBox>
-                <Label fx:id="orderNumberLabel" style="-fx-font-size: 16px;" text="ORDER NUMBER: ???????"/>
+                <Label fx:id="orderNumberLabel" style="-fx-font-size: 16px;" text="ORDER NUMBER: ???????" />
             </VBox>
 
             <!-- PAGE 1 (Photos Section) -->
             <VBox alignment="TOP_CENTER" spacing="20">
-                <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Photo Section"/>
-                <TilePane fx:id="photoTile" alignment="CENTER" hgap="20" maxWidth="800" prefTileHeight="220"
-                          prefTileWidth="200" prefWidth="800" vgap="20"/>
-                <VBox fx:id="generalCommentSection" alignment="TOP_LEFT" prefHeight="200" spacing="10"
-                      style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-border-color: #d3d3d3; -fx-border-width: 1;">
-                    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="QCU Comments:"/>
-                    <Label fx:id="generalCommentsLabel" style="-fx-font-size: 14px;" wrapText="true"/>
+                <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Photo Section" />
+                <TilePane fx:id="photoTile" alignment="CENTER" hgap="20" maxWidth="800" prefTileHeight="220" prefTileWidth="200" prefWidth="800" vgap="20" />
+                <VBox fx:id="generalCommentSection" alignment="TOP_LEFT" prefHeight="200" spacing="10" style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-border-color: #d3d3d3; -fx-border-width: 1;">
+                    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="QCU Comments:" />
+                    <Label fx:id="generalCommentsLabel" style="-fx-font-size: 14px;" wrapText="true" />
                 </VBox>
             </VBox>
 
@@ -53,8 +55,8 @@
 
                 <!-- Email Input Field -->
                 <HBox alignment="CENTER" spacing="10">
-                    <Label text="Send Email to:"/>
-                    <TextField fx:id="emailField" promptText="Enter email address" prefWidth="300"/>
+                    <Label fx:id="emailText" text="Send Email to:" />
+                    <TextField fx:id="emailField" prefWidth="300" promptText="Enter email address" />
                 </HBox>
 
                 <!-- Action Buttons -->
@@ -63,18 +65,25 @@
                         <Insets bottom="10" left="10" right="10" top="10" />
                     </padding>
                     <columnConstraints>
-                        <ColumnConstraints hgrow="ALWAYS" />
-                        <ColumnConstraints hgrow="ALWAYS" />
-                        <ColumnConstraints hgrow="ALWAYS" />
+                        <ColumnConstraints hgrow="ALWAYS" maxWidth="217.60003967285155" minWidth="131.99998779296874" prefWidth="217.60003967285155" />
+                        <ColumnConstraints hgrow="ALWAYS" maxWidth="317.6" minWidth="166.79997558593746" prefWidth="254.79999999999995" />
+                        <ColumnConstraints hgrow="ALWAYS" maxWidth="226.80002441406248" minWidth="0.0" prefWidth="0.0" />
+                  <ColumnConstraints hgrow="ALWAYS" maxWidth="243.20000000000005" minWidth="10.0" prefWidth="213.60002441406255" />
                     </columnConstraints>
                     <children>
                         <Button fx:id="goBackButton" onAction="#handleGoBack" prefHeight="35" prefWidth="127" text="← BACK" GridPane.columnIndex="0" GridPane.halignment="LEFT" />
                         <Button id="sendEmailButton" fx:id="sendEmailButton" onAction="#handleSendEmail" prefHeight="35" prefWidth="150" text="SEND EMAIL" textFill="white" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-                        <Button id="savePDFButton" fx:id="savePdfButton" onAction="#handleSavePdf" prefHeight="35" prefWidth="158.0" text="SUBMIT REPORT" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
+                        <Button fx:id="viewPdfButton" onAction="#handleViewPdf" prefHeight="35.0" prefWidth="136.0" text="Create PDF" GridPane.columnIndex="3">
+                     <GridPane.margin>
+                        <Insets left="40.0" />
+                     </GridPane.margin></Button>
                     </children>
                     <rowConstraints>
                         <RowConstraints />
                     </rowConstraints>
+               <VBox.margin>
+                  <Insets top="40.0" />
+               </VBox.margin>
                 </GridPane>
             </VBox>
         </VBox>

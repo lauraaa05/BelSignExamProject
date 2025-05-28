@@ -1,8 +1,6 @@
 package gui.controllers;
 
 import be.Admin;
-import be.Operator;
-import be.QualityControl;
 import be.User;
 import dal.LoginDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
@@ -15,15 +13,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.shape.Arc;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import utilities.SceneNavigator;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -67,7 +61,7 @@ public class AdminUserController implements Initializable {
 
     private void switchToLogInScreen(Stage currentStage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/QCULogin.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/MainLogin.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
         currentStage.setTitle("Login");

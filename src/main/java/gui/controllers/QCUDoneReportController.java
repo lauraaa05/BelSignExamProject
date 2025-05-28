@@ -5,11 +5,14 @@ import be.Picture;
 import be.User;
 import dal.PictureDAO;
 import gui.model.ReportModel;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
@@ -18,13 +21,28 @@ import utilities.LoggedInUser;
 import utilities.PDFReportGenerator;
 import utilities.SceneNavigator;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import java.awt.Desktop;
+import java.io.FileOutputStream;
+
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+
+import javax.imageio.ImageIO;
+
 public class QCUDoneReportController {
+
+    @FXML
+    private ScrollPane scrollPane;
 
     @FXML
     private TextField emailField;
@@ -36,10 +54,13 @@ public class QCUDoneReportController {
     private TextArea commentsTextArea;
 
     @FXML
+    private Label emailText;
+
+    @FXML
     private Button sendEmailButton;
 
     @FXML
-    private Button savePdfButton;
+    private Button viewPdfButton;
 
     @FXML
     private Label generalCommentsLabel;
@@ -52,12 +73,11 @@ public class QCUDoneReportController {
 
     private final PictureDAO pictureDAO = new PictureDAO();
 
-    private final ReportModel reportModel =  new ReportModel();
+    private final ReportModel reportModel = new ReportModel();
 
     private Order currentOrder;
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
 
 
     @FXML
@@ -67,8 +87,12 @@ public class QCUDoneReportController {
         if (loggedIn != null && "admin".equalsIgnoreCase(loggedIn.getRole())) {
             sendEmailButton.setVisible(false);
             sendEmailButton.setManaged(false);
-            savePdfButton.setVisible(false);
-            savePdfButton.setManaged(false);
+            viewPdfButton.setVisible(false);
+            viewPdfButton.setManaged(false);
+            emailField.setVisible(false);
+            emailField.setManaged(false);
+            emailText.setVisible(false);
+            emailText.setManaged(false);
         }
     }
 
@@ -127,11 +151,17 @@ public class QCUDoneReportController {
         String fileName = "QCU_Report";
 
         try {
-            File file = PDFReportGenerator.generateReport(content, fileName);
-            showAlert("Success", "PDF saved at: " + file.getAbsolutePath());
+            // Generate PDF as bytes
+            byte[] pdfBytes = PDFReportGenerator.generateReportAsBytes(content, fileName);
+
+            // Save to DB
+            reportModel.savePdfToDatabase(currentOrder.getOrderCode(), pdfBytes);
+
+            showAlert("Success", "PDF saved to database for order: " + currentOrder.getOrderCode());
+
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Error", "Could not save PDF: " + e.getMessage());
+            showAlert("Error", "Could not save PDF to database: " + e.getMessage());
         }
     }
 
@@ -195,5 +225,50 @@ public class QCUDoneReportController {
 
         vBox.getChildren().addAll(imageView, sideLabel, dateLabel);
         return vBox;
+    }
+
+    @FXML
+    private void handleViewPdf(ActionEvent actionEvent) {
+        try {
+            // Capture the node you want as image (e.g., ScrollPane)
+            WritableImage snapshot = scrollPane.snapshot(new SnapshotParameters(), null);
+
+            // Convert WritableImage to BufferedImage
+            BufferedImage bufferedImage = SwingFXUtils.fromFXImage(snapshot, null);
+
+            // Save the image to a temporary file (optional)
+            File imageFile = File.createTempFile("report_image_", ".png");
+            ImageIO.write(bufferedImage, "png", imageFile);
+
+            // Create a PDF file
+            File pdfFile = File.createTempFile("report_", ".pdf");
+            pdfFile.deleteOnExit();
+
+            // Use iText to write image to PDF
+            try (FileOutputStream fos = new FileOutputStream(pdfFile)) {
+                PdfWriter writer = new PdfWriter(fos);
+                PdfDocument pdfDoc = new PdfDocument(writer);
+                Document document = new Document(pdfDoc);
+
+                // Load image
+                com.itextpdf.layout.element.Image pdfImage =
+                        new com.itextpdf.layout.element.Image(com.itextpdf.io.image.ImageDataFactory.create(imageFile.getAbsolutePath()));
+
+                pdfImage.scaleToFit(500, 700);  // Resize as needed
+                document.add(pdfImage);
+                document.close();
+            }
+
+            // Open the PDF
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().open(pdfFile);
+            } else {
+                showAlert("Unsupported", "Desktop API is not supported on this system.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to generate PDF: " + e.getMessage());
+        }
     }
 }

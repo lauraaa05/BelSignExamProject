@@ -114,7 +114,7 @@ public class AdminReportController {
 
     private void switchToLogInScreen(Stage currentStage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/QCULogin.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/MainLogin.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
         currentStage.setTitle("Login");
