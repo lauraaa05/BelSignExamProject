@@ -1,19 +1,18 @@
 package gui.controllers;
 
+import be.User;
 import dk.easv.belsignexamproject.OperatorLogInApp;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import bll.OrderStatusManager;
 import bll.ReportManager;
 import be.Order;
+import utilities.LoggedInUser;
 import utilities.SceneNavigator;
 
 import java.util.List;
@@ -30,6 +29,9 @@ public class AdminReportController {
 
     @FXML
     private TextField searchField;
+
+    @FXML
+    private Label loggedUsernameLbl;
 
     private final List<String> allReportSummaries = new ArrayList<>();
 
@@ -50,6 +52,11 @@ public class AdminReportController {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filterReportList(newValue);
         });
+
+        User user = LoggedInUser.getUser();
+        if (user != null) {
+            loggedUsernameLbl.setText(user.getFirstName());
+        }
     }
     // Method to load finished orders into the ListView
     private void loadFinishedReports() {

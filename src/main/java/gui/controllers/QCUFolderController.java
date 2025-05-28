@@ -1,6 +1,7 @@
 package gui.controllers;
 
 import be.Order;
+import be.User;
 import bll.OrderManager;
 import dk.easv.belsignexamproject.OperatorLogInApp;
 import javafx.event.ActionEvent;
@@ -16,6 +17,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
+import utilities.LoggedInUser;
 import utilities.SceneNavigator;
 
 import java.io.IOException;
@@ -51,6 +53,9 @@ public class QCUFolderController {
 
     @FXML
     private ListView<Order> orderListView;
+
+    @FXML
+    private Label welcomeLabel;
 
     @FXML
     private Label currentFolderLabel;
@@ -112,6 +117,11 @@ public class QCUFolderController {
                 }
             }
         });
+
+        User user = LoggedInUser.getUser();
+        if (user != null) {
+            welcomeLabel.setText("Welcome " + user.getFirstName());
+        }
     }
 
     @FXML

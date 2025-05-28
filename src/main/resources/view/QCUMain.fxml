@@ -38,22 +38,18 @@
       </HBox>
    </top>
    <left>
-      <VBox prefHeight="400.0" prefWidth="140.0" spacing="20.0" styleClass="leftVBox" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" prefWidth="140.0" spacing="20.0" styleClass="leftVBox" BorderPane.alignment="CENTER">
          <padding>
             <Insets bottom="15.0" left="20.0" right="20.0" top="10.0" />
          </padding>
          <children>
-            <Label fx:id="welcomeLabel" alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="63.0" prefWidth="100.0" styleClass="leftUserLabel" text="" wrapText="true" VBox.vgrow="NEVER" />
-            <Region prefHeight="20.0" />
+            <Label fx:id="welcomeLabel" alignment="CENTER" maxHeight="47.0" prefHeight="47.0" prefWidth="100.0" styleClass="leftUserLabel" text="Welcome Emre" wrapText="true" />
             <VBox alignment="CENTER" spacing="20.0">
-               <Button id="buttonClass" fx:id="homeButton" alignment="CENTER" mnemonicParsing="false" prefHeight="45.0" prefWidth="56.0" styleClass="homeButton" text="🏠">
-               </Button>
-               <Button id="buttonClass" fx:id="folderButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleFolderButtonClick" prefHeight="45.0" prefWidth="56.0" styleClass="folderButton" text="📁">
-               </Button>
-               <Region prefHeight="194.0" prefWidth="120.0" />
-               <Button id="buttonClass" fx:id="signOutButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleSignOutButtonClick" prefHeight="45.0" prefWidth="56.0" styleClass="signOutButton" text="🚪">
-               </Button>
+               <Button fx:id="homeButton" prefHeight="45.0" prefWidth="56.0" styleClass="buttonClass" text="🏠" />
+               <Button fx:id="folderButton" onAction="#handleFolderButtonClick" prefHeight="45.0" prefWidth="56.0" styleClass="buttonClass" text="📁" />
             </VBox>
+            <Region VBox.vgrow="ALWAYS" />
+            <Button fx:id="signOutButton" onAction="#handleSignOutButtonClick" prefHeight="45.0" prefWidth="56.0" styleClass="buttonClass" text="🚪" />
          </children>
       </VBox>
    </left>

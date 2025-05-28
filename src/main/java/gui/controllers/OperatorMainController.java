@@ -44,6 +44,11 @@ public class OperatorMainController implements Initializable {
         // Adding click event listener on the ListView
         toDoListView.setOnMouseClicked(this::handleOrderClick);
 
+        be.User user = utilities.LoggedInUser.getUser();
+        if (user != null) {
+            loggedUsernameLbl.setText(user.getFirstName());
+        }
+
         //To make rejected orders in red color
         toDoListView.setCellFactory(lv -> new javafx.scene.control.ListCell<>() {
             @Override
@@ -148,6 +153,4 @@ public class OperatorMainController implements Initializable {
         toDoListView.getItems().setAll(todoOrders);
 
     }
-
-
 }

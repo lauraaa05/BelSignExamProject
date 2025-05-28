@@ -19,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import utilities.LoggedInUser;
 import utilities.SceneNavigator;
 
 import java.awt.image.BufferedImage;
@@ -90,17 +91,20 @@ public class OperatorLogInController {
             Operator operator = operatorDAO.getOperatorById(operatorId);
 
             if (operator != null && operator.getRole().equalsIgnoreCase("Operator")) {
+                LoggedInUser.setUser(operator);
+
                 FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorMain.fxml"));
                 Scene scene = new Scene(fxmlLoader.load());
 
-                OperatorMainController operatorMainController = fxmlLoader.getController();
-                Platform.runLater(() -> operatorMainController.setLoggedInOperator(operator));
-
-                Stage currentStage = (Stage) welcomeText.getScene().getWindow();
-                currentStage.setTitle("Operator Main");
-                currentStage.setScene(scene);
-                currentStage.show();
-                camera.closeCamera();
+                Platform.runLater(() -> {
+                    Stage currentStage = (Stage) welcomeText.getScene().getWindow();
+                    if (currentStage != null) {
+                        currentStage.setTitle("Operator Main");
+                        currentStage.setScene(scene);
+                        currentStage.show();
+                        camera.closeCamera();
+                    }
+                });
 
             } else {
                 welcomeText.setText("Operator not found.");

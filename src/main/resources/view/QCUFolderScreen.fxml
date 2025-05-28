@@ -39,35 +39,17 @@
       </HBox>
    </top>
    <left>
-      <VBox prefHeight="400.0" prefWidth="140.0" styleClass="leftVBox" BorderPane.alignment="CENTER">
-         <children>
-            <Pane prefHeight="251.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
-               <children>
-                  <VBox prefHeight="334.0" prefWidth="121.0">
-                     <children>
-                        <MFXButton id="buttonClass" fx:id="homeButton" onAction="#handleMainButtonClick" prefHeight="45.0" prefWidth="56.0" styleClass="buttonClass" text="🏠">
-                           <VBox.margin>
-                              <Insets left="20.0" top="30.0" />
-                           </VBox.margin>
-                        </MFXButton>
-                        <MFXButton id="buttonClass" fx:id="folderButton" prefHeight="45.0" prefWidth="56.0" styleClass="buttonClass" text="📁">
-                           <VBox.margin>
-                              <Insets left="20.0" top="20.0" />
-                           </VBox.margin>
-                        </MFXButton>
-                     </children>
-                  </VBox>
-               </children>
-            </Pane>
-            <Button id="buttonClass" fx:id="signOutButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleSignOutButtonClick" prefHeight="45.0" prefWidth="56.0" styleClass="buttonClass" text="🚪">
-               <VBox.margin>
-                  <Insets left="20.0" />
-               </VBox.margin>
-            </Button>
-         </children>
+      <VBox alignment="TOP_CENTER" prefWidth="140.0" spacing="20.0" styleClass="leftVBox" BorderPane.alignment="CENTER">
          <padding>
-            <Insets bottom="15.0" left="20.0" />
+            <Insets bottom="15.0" left="20.0" right="20.0" top="10.0" />
          </padding>
+         <Label fx:id="welcomeLabel" alignment="CENTER" maxHeight="47.0" prefHeight="47.0" prefWidth="100.0" styleClass="leftUserLabel" text="Welcome Emre" wrapText="true" />
+         <VBox alignment="CENTER" spacing="20.0">
+            <MFXButton fx:id="homeButton" onAction="#handleMainButtonClick" prefHeight="45.0" prefWidth="56.0" styleClass="buttonClass" text="🏠" />
+            <MFXButton fx:id="folderButton" prefHeight="45.0" prefWidth="56.0" styleClass="buttonClass" text="📁" />
+         </VBox>
+         <Region VBox.vgrow="ALWAYS" />
+         <Button fx:id="signOutButton" alignment="CENTER" onAction="#handleSignOutButtonClick" prefHeight="45.0" prefWidth="56.0" styleClass="buttonClass" text="🚪" />
       </VBox>
    </left>
    <center>

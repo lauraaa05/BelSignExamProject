@@ -2,6 +2,7 @@ package gui.controllers;
 
 import be.Order;
 import be.QualityControl;
+import be.User;
 import dal.OrderStatusDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import utilities.LoggedInUser;
 import utilities.SceneNavigator;
 import java.io.IOException;
 import java.util.List;
@@ -34,6 +36,25 @@ public class QCUMainController {
     private Label welcomeLabel;
 
     private final SceneNavigator sceneNavigator = new SceneNavigator();
+
+    // Method to load orders into the ListView
+    @FXML
+    public void initialize() {
+        User user = LoggedInUser.getUser();
+        if (user != null) {
+            welcomeLabel.setText("Welcome " + user.getFirstName());
+
+            try {
+                OrderStatusDAO dao = new OrderStatusDAO();
+                List<Order> orders = dao.getOrdersByRoleAndStatuses("qcu", List.of("to_approve", "rejected"));
+
+                ObservableList<Order> observableOrders = FXCollections.observableArrayList(orders);
+                toApproveListView.setItems(observableOrders);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @FXML
     private void switchToFolderScene(Stage currentStage) throws IOException {
@@ -71,20 +92,6 @@ public class QCUMainController {
     @FXML
     private void btnOpenReportAction(ActionEvent actionEvent) {
         sceneNavigator.switchTo(actionEvent, "QCUReport.fxml");
-    }
-
-    // Method to load orders into the ListView
-    @FXML
-    public void initialize() {
-        try {
-            OrderStatusDAO dao = new OrderStatusDAO();
-            List<Order> orders = dao.getOrdersByRoleAndStatuses("qcu", List.of("to_approve", "rejected"));
-
-            ObservableList<Order> observableOrders = FXCollections.observableArrayList(orders);
-            toApproveListView.setItems(observableOrders);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML

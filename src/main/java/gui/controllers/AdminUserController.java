@@ -14,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import utilities.LoggedInUser;
 import utilities.SceneNavigator;
 
 import java.io.IOException;
@@ -57,6 +58,11 @@ public class AdminUserController implements Initializable {
         tableViewUsers.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             deleteUserButton.setDisable(newSelection == null);
         });
+
+        User user = LoggedInUser.getUser();
+        if (user != null) {
+            welcomeLabel.setText("Welcome " + user.getFirstName());
+        }
     }
 
     private void switchToLogInScreen(Stage currentStage) throws IOException {
