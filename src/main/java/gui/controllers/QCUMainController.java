@@ -35,6 +35,8 @@ public class QCUMainController {
 
     private final SceneNavigator sceneNavigator = new SceneNavigator();
 
+    private QualityControl loggedInQCU;
+
     @FXML
     private void switchToFolderScene(Stage currentStage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/QCUFolderScreen.fxml"));
@@ -95,12 +97,14 @@ public class QCUMainController {
                 Stage stage = (Stage) toApproveListView.getScene().getWindow();
                 sceneNavigator.<QCUNewReportController>switchToWithData(stage, "QCUNewReport.fxml", controller -> {
                     controller.setOrder(selectedOrder);
+                    controller.setCurrentUser(loggedInQCU);
                 });
             }
         }
     }
 
     public void setLoggedInQCU(QualityControl qcu) {
+        this.loggedInQCU = qcu;
         welcomeLabel.setText("Welcome " + qcu.getFirstName());
     }
 }

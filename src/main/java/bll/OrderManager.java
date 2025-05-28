@@ -2,6 +2,7 @@ package bll;
 import be.Order;
 import dal.DBAccess;
 import dal.OrderDAO;
+import dal.interfaceDAO.IOrderDAO;
 
 import java.io.File;
 import java.sql.Connection;
@@ -14,6 +15,7 @@ import java.util.List;
 public class OrderManager {
 
     private OrderDAO od = new OrderDAO();
+//    private IOrderDAO od = new OrderDAO();    you should use it like this
 
     public List<Order> getOrderNumbersAsList() {
         return od.getFormattedOrderNumbers();
