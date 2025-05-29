@@ -33,10 +33,19 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.layout.Document;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
+
+
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -44,6 +53,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 public class QCUReportPDFController {
+
+    @FXML
+    private VBox ignoreThisInPDF;
 
     @FXML
     private Label signatureLabel;
@@ -188,19 +200,7 @@ public class QCUReportPDFController {
         return orderNumberLabel.getText().replace("ORDER NUMBER: ", "").trim();
     }
 
-    private void refreshLatestComment() {
-        try {
-            String latestComment = reportModel.getLatestCommentByOrderNumber(extractOrderNumber());
-            generalCommentsLabel.setText(latestComment);
-        } catch (SQLException e) {
-            generalCommentsLabel.setText("Failed to fetch comment: " + e.getMessage());
-        }
-    }
 
-    @FXML
-    private void goBackBtnAction(ActionEvent actionEvent) {
-        sceneNavigator.switchTo(actionEvent, "QCUMain.fxml");
-    }
 
     private void hideSubmitButton(String orderCode) {
         String status = new OrderStatusDAO().getStatusForOrder(orderCode);
@@ -211,50 +211,19 @@ public class QCUReportPDFController {
         }
     }
 
-    @FXML
-    private void handleReject() {
-        try {
-            String commentText = commentsTextArea.getText();
-            String fullOrderNumber = extractOrderNumber();
-            String orderCode = fullOrderNumber.substring(fullOrderNumber.lastIndexOf("-") + 1);
-
-            // Save rejected comment
-            if (commentText != null && !commentText.isEmpty()) {
-                Report report = new Report(4, "[REJECTED] " + commentText, fullOrderNumber, LocalDateTime.now(), orderCode);
-                reportModel.insertReport(report);
-            }
-
-            // Update order status to 'rejected'
-            boolean updated = new OrderStatusDAO().updateOrderStatus(orderCode, "operator", "rejected");
-
-            if (updated) {
-                System.out.println("Order marked as rejected and returned to operator.");
-            } else {
-                System.out.println("Failed to update order status to rejected.");
-            }
-
-            // UI updates
-            rejectButton.setDisable(true);
-            rejectButton.setVisible(false);
-            commentsTextArea.setEditable(false);
-
-            // Navigate away
-            sceneNavigator.switchTo("/view/QCUMain.fxml");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public void setCurrentUser(QualityControl user) {
         this.currentUser = user;
         signatureLabel.setText(user.getFirstName() + " " + user.getLastName());
     }
 
-    public void handleGoBack(ActionEvent actionEvent) {
+    @FXML
+    private void handleGoBack(ActionEvent actionEvent) {
+        sceneNavigator.switchTo(actionEvent, "QCUFolderScreen.fxml");
     }
 
-    public void downloadPdfAct(ActionEvent actionEvent) {
+    @FXML
+    private void downloadPdfAct(ActionEvent actionEvent) {
+        handleDownloadPDF();
     }
 
     private void loadSignatureName(String orderCode) {
@@ -267,42 +236,64 @@ public class QCUReportPDFController {
         }
     }
 
-//    @FXML
-//    private void handleDownloadPDF(ActionEvent actionEvent) {
-//        try {
-//            VBox content = (VBox) scrollPane.getContent();
-//
-//            content.applyCss();
-//            content.layout();
-//
-//            int width = (int) content.getBoundsInParent().getWidth();
-//            int height = (int) content.getBoundsInParent().getHeight();
-//
-//            WritableImage fxImage = new WritableImage(width, height);
-//            content.snapshot(new SnapshotParameters(), fxImage);
-//
-//            BufferedImage bufferedImage = SwingFXUtils.fromFXImage(fxImage, null);
-//            File tempImageFile = new File("qcu_temp_snapshot.png");
-//            ImageIO.write(bufferedImage, "png", tempImageFile);
-//
-//            String pdfPath = "QCU_Report_iText.pdf";
-//            PdfWriter writer = new PdfWriter(new FileOutputStream(pdfPath));
-//            PdfDocument pdfDoc = new PdfDocument(writer);
-//            Document doc = new Document(pdfDoc);
-//
-//            ImageData imageData = ImageDataFactory.create(tempImageFile.getAbsolutePath());
-//            com.itextpdf.layout.element.Image pdfImage = new com.itextpdf.layout.element.Image(imageData);
-//
-//            pdfImage.scaleToFit(pdfDoc.getDefaultPageSize().getWidth(), pdfDoc.getDefaultPageSize().getHeight());
-//
-//            doc.add(pdfImage);
-//            doc.close();
-//
-//            System.out.println("PDF created at: " + pdfPath);
-//            tempImageFile.delete(); // Clean up temp image
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+
+    private void handleDownloadPDF() {
+        try {
+            VBox content = (VBox) scrollPane.getContent();
+
+            // Hide content you don’t want in the PDF
+            boolean wasVisible = ignoreThisInPDF.isVisible();
+            ignoreThisInPDF.setVisible(false);
+            ignoreThisInPDF.setManaged(false);
+
+            content.applyCss();
+            content.layout();
+
+            // Snapshot the VBox
+            int width = (int) content.getBoundsInParent().getWidth();
+            int height = (int) content.getBoundsInParent().getHeight();
+            WritableImage fxImage = new WritableImage(width, height);
+            content.snapshot(new SnapshotParameters(), fxImage);
+
+            // Restore visibility
+            ignoreThisInPDF.setVisible(wasVisible);
+            ignoreThisInPDF.setManaged(wasVisible);
+
+            // Convert WritableImage to BufferedImage
+            BufferedImage bufferedImage = SwingFXUtils.fromFXImage(fxImage, null);
+
+            // Create a new PDF document
+            try (PDDocument document = new PDDocument()) {
+                // Calculate scale to fit into A4
+                float pageWidth = PDRectangle.A4.getWidth();
+                float pageHeight = PDRectangle.A4.getHeight();
+
+                // Scale image to fit page size
+                float scale = Math.min(pageWidth / bufferedImage.getWidth(), pageHeight / bufferedImage.getHeight());
+
+                int scaledWidth = (int) (bufferedImage.getWidth() * scale);
+                int scaledHeight = (int) (bufferedImage.getHeight() * scale);
+
+                PDPage page = new PDPage(PDRectangle.A4);
+                document.addPage(page);
+
+                PDImageXObject pdImage = LosslessFactory.createFromImage(document, bufferedImage);
+                PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+                // Draw the image centered
+                float x = (pageWidth - scaledWidth) / 2;
+                float y = (pageHeight - scaledHeight) / 2;
+                contentStream.drawImage(pdImage, x, y, scaledWidth, scaledHeight);
+
+                contentStream.close();
+
+                String outputPath = "QCU_Report_PDFBox.pdf";
+                document.save(outputPath);
+                System.out.println("PDF created at: " + outputPath);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
