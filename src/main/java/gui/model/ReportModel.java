@@ -32,4 +32,12 @@ public class ReportModel {
         return  reportDAO.getPdfFromDatabase(orderCode);
     }
 
+    public void saveDoneReport(String orderCode, int signedBy) throws SQLException {
+        reportManager.saveDoneReport(orderCode, signedBy);
+    }
+
+    public String getSignatureNameByOrderCode(String orderCode) throws SQLException {
+        return reportManager.getSignatureNameByOrderCode(orderCode);
+    }
+
 }

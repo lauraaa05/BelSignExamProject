@@ -1,6 +1,7 @@
 package dal;
 
 import be.Order;
+import dal.interfaceDAO.IOrderDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class OrderDAO {
+public class OrderDAO implements IOrderDAO {
 
     public OrderDAO() {
     }
@@ -150,4 +151,33 @@ public class OrderDAO {
     }
 
 
+    @Override
+    public Order findOrderByOrderNumber(String orderNumber) {
+        return null;
+    }
+
+    @Override
+    public void save(Order obj) {
+
+    }
+
+    @Override
+    public void update(Order obj) {
+
+    }
+
+    @Override
+    public void delete(Order obj) {
+
+    }
+
+    @Override
+    public Order findById(int id) {
+        return null;
+    }
+
+    @Override
+    public List<Order> findAll() {
+        return List.of();
+    }
 }
