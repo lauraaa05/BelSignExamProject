@@ -38,7 +38,7 @@ public class LoginDAO {
 
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT ul.UserId, ul.Username, ul.Password, ur.Role AS RoleName, ul.FirstName, ul.LastName, ul.Email FROM UserLogin ul JOIN UserRoles ur ON ul.Role = ur.Id";
+        String sql = "SELECT ul.UserId, ul.Username, ul.Password, ur.RoleName, ul.FirstName, ul.LastName, ul.Email FROM UserLogin ul JOIN UserRoles ur ON ul.Role = ur.Id";
 
         try (Connection conn = DBAccess.DBConnection();
         PreparedStatement stmt = conn.prepareStatement(sql);

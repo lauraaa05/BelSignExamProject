@@ -15,7 +15,6 @@ import java.util.List;
 public class OrderManager {
 
     private OrderDAO od = new OrderDAO();
-//    private IOrderDAO od = new OrderDAO();    you should use it like this
 
     public List<Order> getOrderNumbersAsList() {
         return od.getFormattedOrderNumbers();
