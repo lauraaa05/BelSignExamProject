@@ -3,22 +3,30 @@ package bll;
 import be.Admin;
 import be.Operator;
 import be.QualityControl;
+import be.User;
 import dal.LoginDAO;
+import dal.UserRole;
+
+import java.sql.SQLException;
 
 public class LoginManager {
 
     private final LoginDAO lgn = new LoginDAO();
 
-    public boolean checkQCULogin(String username, String password) {
-        return lgn.validateQualityControlUser(username, password);
-    }
+    public User login(String username, String password) {
+        try {
+            UserRole role = lgn.getUserRole(username, password);
+            if (role == null) return null;
 
-    public boolean checkOperatorLogin(String username, String password) {
-        return lgn.validateOperatorUser(username, password);
-    }
-
-    public boolean checkAdminLogin(String username, String password) {
-        return lgn.validateAdminUser(username, password);
+            return switch (role) {
+                case OPERATOR -> lgn.getOperatorByUsername(username);
+                case QUALITY_CONTROL -> lgn.getQCUByUsername(username);
+                case ADMIN -> lgn.getAdminByUsername(username);
+            };
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public QualityControl getQCUByUsername(String username) {
@@ -33,4 +41,3 @@ public class LoginManager {
         return lgn.getOperatorByUsername(username);
     }
 }
-

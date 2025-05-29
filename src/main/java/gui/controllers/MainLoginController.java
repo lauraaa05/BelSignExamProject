@@ -2,7 +2,9 @@ package gui.controllers;
 import be.Admin;
 import be.Operator;
 import be.QualityControl;
+import be.User;
 import bll.LoginManager;
+import dal.UserRole;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +21,6 @@ import java.net.URL;
 import javafx.event.ActionEvent;
 import utilities.LoggedInUser;
 import utilities.SceneNavigator;
-
 
 public class MainLoginController {
 
@@ -95,33 +96,21 @@ public class MainLoginController {
             return;
         }
 
-        boolean isValid = loginManager.checkQCULogin(username, password);
-        boolean isValidAdmin = loginManager.checkAdminLogin(username, password);
-        boolean isValidOperator = loginManager.checkOperatorLogin(username, password);
+        User user = loginManager.login(username, password);
 
-//        QCUMainController qcuMainController = fxmlLoader.getController();
-//        qcuMainController.setLoggedInQCU(qcu);
+        if (user != null) {
+            errorLabel.setVisible(false);
+            LoggedInUser.setUser(user);
+            Stage currentStage = (Stage) logInButton.getScene().getWindow();
 
-        if (isValid) {
-            errorLabel.setVisible(false);
-            QualityControl qcu = loginManager.getQCUByUsername(username);
-            LoggedInUser.setUser(qcu);
-            Stage currentStage = (Stage) logInButton.getScene().getWindow();
-            switchToMainSceneSameWindow(currentStage, qcu);
-        } else if (isValidAdmin) {
-            errorLabel.setVisible(false);
-            Admin admin = loginManager.getAdminByUsername(username);
-            LoggedInUser.setUser(admin);
-            Stage currentStage = (Stage) logInButton.getScene().getWindow();
-            switchToAdminMainScreen(currentStage, admin);
-        } else if(isValidOperator) {
-            errorLabel.setVisible(false);
-            Operator operator = loginManager.getOperatorByUsername(username);
-            LoggedInUser.setUser(operator);
-            Stage currentStage = (Stage) logInButton.getScene().getWindow();
-            switchToOperatorMainScreen(currentStage, operator);
-        }
-        else {
+            UserRole role = UserRole.fromString(user.getRole());
+
+            switch (role) {
+                case OPERATOR -> switchToOperatorMainScreen(currentStage, (Operator) user);
+                case ADMIN -> switchToAdminMainScreen(currentStage, (Admin) user);
+                case QUALITY_CONTROL -> switchToMainSceneSameWindow(currentStage, (QualityControl) user);
+            }
+        } else {
             errorLabel.setText("Incorrect username or password!");
             errorLabel.setStyle("-fx-text-fill: red;");
             errorLabel.setVisible(true);

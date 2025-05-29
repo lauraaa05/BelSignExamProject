@@ -1,11 +1,13 @@
 package gui.controllers;
 
 import be.Operator;
+import be.QRCodeInfo;
 import bll.CameraManager;
 import bll.OperatorManager;
 import bll.QRCodeService;
 import com.google.zxing.qrcode.QRCodeReader;
 import dal.OperatorDAO;
+import dal.QRCodeDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
 import io.github.palexdev.materialfx.utils.SwingFXUtils;
 import javafx.application.Platform;
@@ -24,6 +26,7 @@ import utilities.SceneNavigator;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.sql.SQLException;
 
 
 public class OperatorLogInController {
@@ -45,6 +48,7 @@ public class OperatorLogInController {
 
     private final OperatorDAO operatorDAO = new OperatorDAO();
     private final SceneNavigator sceneNavigator = new SceneNavigator();
+    private final QRCodeDAO  qrCodeDAO = new QRCodeDAO();
 
     @FXML
     public void initialize() {
@@ -87,39 +91,42 @@ public class OperatorLogInController {
 
     private void loginOperator(String scannedCode) {
         try {
-            int operatorId = Integer.parseInt(scannedCode);
-            Operator operator = operatorDAO.getOperatorById(operatorId);
+            QRCodeInfo qrInfo = qrCodeDAO.getQRCodeByString(scannedCode);
 
-            if (operator != null && operator.getRole().equalsIgnoreCase("Operator")) {
-                LoggedInUser.setUser(operator);
+            if (qrInfo != null) {
+                int userId = qrInfo.getUserId(); // Get actual user ID
+                Operator operator = operatorDAO.getOperatorById(userId);
 
-                FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorMain.fxml"));
-                Scene scene = new Scene(fxmlLoader.load());
+                if (operator != null && operator.getRole().equalsIgnoreCase("Operator")) {
+                    LoggedInUser.setUser(operator);
 
-                Platform.runLater(() -> {
-                    Stage currentStage = (Stage) welcomeText.getScene().getWindow();
-                    if (currentStage != null) {
-                        currentStage.setTitle("Operator Main");
-                        currentStage.setScene(scene);
-                        currentStage.show();
-                        camera.closeCamera();
-                    }
-                });
+                    FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorMain.fxml"));
+                    Scene scene = new Scene(fxmlLoader.load());
 
+                    Platform.runLater(() -> {
+                        Stage currentStage = (Stage) welcomeText.getScene().getWindow();
+                        if (currentStage != null) {
+                            currentStage.setTitle("Operator Main");
+                            currentStage.setScene(scene);
+                            currentStage.show();
+                            camera.closeCamera();
+                        }
+                    });
+                } else {
+                    welcomeText.setText("Operator not found.");
+                    isPhotoTaken = false;
+                }
             } else {
-                welcomeText.setText("Operator not found.");
+                welcomeText.setText("QR code not found.");
                 isPhotoTaken = false;
             }
-
-        } catch (NumberFormatException | IOException e) {
+        } catch (NumberFormatException | IOException | SQLException e) {
             welcomeText.setText("Invalid barcode or loading error.");
             isPhotoTaken = false;
             e.printStackTrace();
         }
-
         System.out.println("Scanned QR content: " + scannedCode);
     }
-
 
     // Optional: For returning to login screen later from another controller
     public static void switchToLoginScene(Stage currentStage) throws IOException {

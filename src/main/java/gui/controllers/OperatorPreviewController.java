@@ -39,6 +39,7 @@ import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static utilities.AlertHelper.showAlert;
@@ -210,14 +211,24 @@ public class OperatorPreviewController {
         try {
             PictureDAO pictureDAO = new PictureDAO();
 
-            List<String> takenSides = pictureDAO.getTakenSidesForOrderNumber(currentOrder.getOrderCode());
+            List<String> takenSides = pictureDAO.getTakenSidesForOrderNumber(currentOrder.getFormattedOrderText());
+            System.out.println("Raw takenSides: " + takenSides);
 
-            if (takenSides.containsAll(List.of("Front", "Back", "Left", "Right", "Top"))) {
-                System.out.println("All sides have been photographed");
+            List<String> requiredSides = List.of("front", "back", "left", "right", "top");
+
+            List<String> normalizedTakenSides = takenSides.stream()
+                    .filter(Objects::nonNull)
+                    .map(s -> s.trim().toLowerCase())
+                    .toList();
+
+            if (normalizedTakenSides.containsAll(requiredSides)) {
+                System.out.println("All sides photographed: " + normalizedTakenSides);
             } else {
-                List<String> missingSides = List.of("Front", "Back", "Left", "Right", "Top")
-                        .stream().filter(side -> !takenSides.contains(side))
+                List<String> missingSides = requiredSides.stream()
+                        .filter(side -> !normalizedTakenSides.contains(side))
                         .toList();
+
+                System.out.println("Missing: " + missingSides);
 
                 AlertHelper.showAlert(
                         Alert.AlertType.WARNING,
@@ -228,7 +239,7 @@ public class OperatorPreviewController {
                 return;
             }
 
-            int imageCount = pictureDAO.countImagesForOrderNumber(currentOrder.getOrderCode());
+            int imageCount = pictureDAO.countImagesForOrderNumber(currentOrder.getFormattedOrderText());
 
             if (imageCount < MIN_IMAGES) {
                 AlertHelper.showAlert(
@@ -271,6 +282,7 @@ public class OperatorPreviewController {
 
             Stage currentStage = (Stage) fullscreenButton.getScene().getWindow();
             currentStage.setScene(new Scene(root));
+
         } catch (Exception e) {
             e.printStackTrace();
 

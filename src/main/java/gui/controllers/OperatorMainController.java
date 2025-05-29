@@ -137,7 +137,6 @@ public class OperatorMainController implements Initializable {
         OrderStatusDAO dao = new OrderStatusDAO();
         List<Order> todoOrders = dao.getOrdersByRoleAndStatuses("operator", List.of("todo","rejected"));
 
-        //To sort rejected orders first
         todoOrders.sort((o1, o2) -> {
             String status1 = orderStatusDAO.getStatusForOrder(o1.getOrderCode());
             String status2 = orderStatusDAO.getStatusForOrder(o2.getOrderCode());
@@ -151,6 +150,5 @@ public class OperatorMainController implements Initializable {
             }
         });
         toDoListView.getItems().setAll(todoOrders);
-
     }
 }

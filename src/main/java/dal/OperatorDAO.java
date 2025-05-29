@@ -11,7 +11,7 @@ public class OperatorDAO {
 
     public Operator getOperatorById(int userId) {
         try (Connection conn = dbAccess.DBConnection()) {
-            String sql = "SELECT * FROM LoginInfo WHERE UserId = ? AND Role = 'Operator'";
+            String sql = "SELECT * FROM UserLogin WHERE UserId = ? AND Role = 1";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, userId);
 

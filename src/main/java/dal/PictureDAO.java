@@ -20,7 +20,7 @@ public class PictureDAO {
             pstmt.setTimestamp(2, Timestamp.valueOf(picture.getTimestamp()));
             pstmt.setString(3, picture.getFileName());
             pstmt.setString(4, picture.getOrderNumber());
-            pstmt.setString(5, picture.getSide());
+            pstmt.setString(5, picture.getSide().trim().toLowerCase());
 
             pstmt.executeUpdate();
         }
@@ -81,7 +81,9 @@ public class PictureDAO {
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                sides.add(rs.getString("Side"));
+                String side = rs.getString("Side");
+                System.out.println("DAO fetched side: " + side);
+                sides.add(side);
             }
         }
         return sides;
@@ -97,7 +99,6 @@ public class PictureDAO {
 
             stmt.setString(1,orderNumber);
             ResultSet rs = stmt.executeQuery();
-            System.out.println("DAO received orderNumber: " + orderNumber);
 
             while (rs.next()) {
                 int  imageId = rs.getInt("ImageId");
