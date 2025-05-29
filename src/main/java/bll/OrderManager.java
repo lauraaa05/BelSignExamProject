@@ -29,12 +29,13 @@ public class OrderManager {
         List<Order> orders = new ArrayList<>();
 
         String sql = """
-        SELECT o.CountryNumber, o.Year, o.Month, o.OrderCode, o.OrderGroupId
-        FROM Orders o
-        INNER JOIN OrderStatus s ON o.OrderCode = s.OrderCode
-        WHERE s.Role = 'qcu' AND s.Status = 'done'
-        AND o.Year = ? AND o.Month = ?
-    """;
+    SELECT o.CountryNumber, o.Year, o.Month, o.OrderCode, o.OrderGroupId
+    FROM Orders o
+    INNER JOIN OrderStatusOrder sso ON o.OrderCode = sso.OrderCode
+    INNER JOIN OrderStatus st ON sso.OrderStatus = st.StatusId
+    WHERE sso.UserRole = '2' AND st.Status = 'done'
+    AND o.Year = ? AND o.Month = ?
+""";
 
         try (Connection conn = new DBAccess().DBConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
