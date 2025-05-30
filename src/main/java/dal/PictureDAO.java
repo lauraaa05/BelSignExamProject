@@ -20,7 +20,7 @@ public class PictureDAO {
             pstmt.setTimestamp(2, Timestamp.valueOf(picture.getTimestamp()));
             pstmt.setString(3, picture.getFileName());
             pstmt.setString(4, picture.getOrderNumber());
-            pstmt.setString(5, picture.getSide().trim().toLowerCase());
+            pstmt.setString(5, formatSide(picture.getSide()));
 
             pstmt.executeUpdate();
         }
@@ -121,5 +121,10 @@ public class PictureDAO {
             pstmt.setInt(1, imageId);
             pstmt.executeUpdate();
         }
+    }
+
+    private String formatSide(String input) {
+        if (input == null || input.isEmpty()) return input;
+        return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
     }
 }

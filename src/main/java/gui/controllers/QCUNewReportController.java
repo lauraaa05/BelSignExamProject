@@ -140,43 +140,6 @@ public class QCUNewReportController {
         }
     }
 
-//    private void submitComment() {
-//        String commentText = commentsTextArea.getText();
-//        if (commentText == null || commentText.isEmpty()) {
-//            System.out.println("Comment is empty");
-//            return;
-//        }
-//
-//        try {
-//            String fullOrderNumber = extractOrderNumber();
-//            String orderCode = fullOrderNumber.substring(fullOrderNumber.lastIndexOf("-") + 1);
-//
-//            Report report = new Report(4, commentText, fullOrderNumber, LocalDateTime.now(), orderCode);
-//            reportModel.insertReport(report);
-//
-//            boolean updated = new OrderStatusDAO().updateOrderStatus(orderCode, "qcu", "done");
-//
-//            if (updated) {
-//                System.out.println("Order marked as done.");
-//            }
-//
-//            commentsTextArea.clear();
-//            loadLatestComment(fullOrderNumber);
-//
-//            submitButton.setVisible(false);
-//            commentsTextArea.setEditable(false);
-//
-//            hideSubmitButton(orderCode);
-//
-//            Stage currentStage = (Stage) submitButton.getScene().getWindow();
-//            currentStage.close();
-//            sceneNavigator.switchTo("/view/QCUMain.fxml");
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     private void loadLatestComment(String orderNumber) {
         try {
             String latestComment = reportModel.getLatestCommentByOrderNumber(orderNumber);
@@ -227,7 +190,7 @@ public class QCUNewReportController {
             }
 
             // Update order status to 'rejected'
-            boolean updated = new OrderStatusDAO().updateOrderStatus(orderCode, "operator", "rejected");
+            boolean updated = new OrderStatusDAO().updateOrderStatusAndRole(orderCode, 2, 1, 1029);
 
             if (updated) {
                 System.out.println("Order marked as rejected and returned to operator.");
@@ -242,6 +205,8 @@ public class QCUNewReportController {
 
             // Navigate away
             sceneNavigator.switchTo("/view/QCUMain.fxml");
+            Stage stage = (Stage) rejectButton.getScene().getWindow();
+            stage.close();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -316,7 +281,7 @@ public class QCUNewReportController {
             reportModel.saveDoneReport(orderCode, currentUser.getId());
 
             // to update status
-            boolean updated = new OrderStatusDAO().updateOrderStatus(orderCode, "qcu", "done");
+            boolean updated = new OrderStatusDAO().updateOrderStatus(orderCode, 2, 1028);
             if (updated) {
                 System.out.println("Order marked as done");
             }
@@ -336,6 +301,8 @@ public class QCUNewReportController {
             alert.setHeaderText(null);
             alert.setContentText("Report has been submitted successfully.");
             alert.showAndWait();
+            Stage stage = (Stage) submitButton.getScene().getWindow();
+            stage.close();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -344,7 +311,6 @@ public class QCUNewReportController {
             alert.setHeaderText(null);
             alert.setContentText("Failed to submit report.");
             alert.showAndWait();
-
         }
     }
 }

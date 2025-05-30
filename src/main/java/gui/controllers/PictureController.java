@@ -32,6 +32,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static utilities.AlertHelper.showAlert;
 
@@ -61,6 +62,7 @@ public class PictureController {
     private Order order;
     private OperatorPreviewController operatorPreviewController;
     private final List<String> sides = List.of("Front", "Back", "Right", "Left", "Top");
+    private List<String> sidesToTake;
     private int currentSideIndex = 0;
     private int thumbnailCount = 0;
 
@@ -119,11 +121,11 @@ public class PictureController {
 
     private void saveImage() {
         if (capturedImage != null && isPhotoTaken) {
-            if (currentSideIndex >= sides.size()) {
+            if (currentSideIndex >= sidesToTake.size()) {
                 showAlert(Alert.AlertType.INFORMATION, "All sides captured", null, "You have captured all required sides.");
                 return;
             }
-            String currentSide = sides.get(currentSideIndex);
+            String currentSide = sidesToTake.get(currentSideIndex);
             LocalDateTime timestamp = LocalDateTime.now();
 
             try {
@@ -150,23 +152,33 @@ public class PictureController {
 
     public void setOrder(Order order) {
         this.order = order;
-        System.out.println("Order number received in PictureController: " + order.getOrderCode());
+        System.out.println("Order number received in PictureController: " + order.getFormattedOrderText());
 
         pictureDAO = new PictureDAO();
 
         List<String> allSides = new ArrayList<>(List.of("Front", "Back", "Right", "Left", "Top"));
 
         try {
-            List<String> takenSides = pictureDAO.getTakenSidesForOrderNumber(order.getOrderCode());
-            allSides.removeAll(takenSides);
+            List<String> takenSides = pictureDAO.getTakenSidesForOrderNumber(order.getFormattedOrderText());
+            List<String> formattedTaken = takenSides.stream()
+                    .map(this::formatSide)
+                    .toList();
+
+            allSides.removeIf(side -> formattedTaken.contains(formatSide(side)));
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        allSides.add("Extra");
+        if (allSides.isEmpty()) {
+            allSides.add("Extra");
+        }
+
+        sidesToTake = allSides;
         currentSideIndex = 0;
+
         updateCurrentSideLabel();
     }
+
 
     private void switchToPreviewScene(Stage currentStage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/OperatorPreview.fxml"));
@@ -235,10 +247,15 @@ public class PictureController {
     }
 
     private void updateCurrentSideLabel() {
-        if(currentSideIndex < sides.size()) {
-            lblCurrentSide.setText(sides.get(currentSideIndex));
+        if(currentSideIndex < sidesToTake.size()) {
+            lblCurrentSide.setText(sidesToTake.get(currentSideIndex));
         } else {
             lblCurrentSide.setText("Extra");
         }
+    }
+
+    private String formatSide(String input) {
+        if (input == null || input.isEmpty()) return input;
+        return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
     }
 }
