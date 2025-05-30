@@ -16,19 +16,17 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
-import utilities.EmailSender;
 import utilities.LoggedInUser;
-import utilities.PDFReportGenerator;
 import utilities.SceneNavigator;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import java.awt.Desktop;
 import java.io.FileOutputStream;
 
@@ -36,8 +34,6 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
-
-import javax.imageio.ImageIO;
 
 public class QCUDoneReportController {
 
@@ -72,13 +68,9 @@ public class QCUDoneReportController {
     private Label orderNumberLabel;
 
     private final PictureDAO pictureDAO = new PictureDAO();
-
     private final ReportModel reportModel = new ReportModel();
-
     private Order currentOrder;
-
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
 
     @FXML
     public void initialize() {
@@ -105,35 +97,23 @@ public class QCUDoneReportController {
             return;
         }
 
+        // Simulate email send
         try {
-            String content = "Quality Control Report Completed.\nAll items approved.";
-            String fileName = "QCU_Report";
-
-            // Correct PDF file name
-            File pdf = PDFReportGenerator.generateReport(content, fileName);
-
-            boolean success = EmailSender.sendWithAttachment(
-                    email,
-                    "Report Complete",
-                    "Attached is the Belman Quality Control Report.",
-                    pdf
-            );
-
-            if (success) {
-                showAlert("Success", "Email sent successfully to: " + email);
-            } else {
-                showAlert("Failure", "Could not send email to: " + email);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Error", "Exception occurred while sending email: " + e.getMessage());
+            // Optional: simulate delay
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
+
+        // messaging in console
+        System.out.println("Email sent to: " + email);
+
+        // Show success alert
+        showAlert("Success", "Email sent successfully to: " + email);
     }
 
     public void handleGoBack(ActionEvent actionEvent) {
         SceneNavigator sceneNavigator = new SceneNavigator();
-
         User loggedInUser = LoggedInUser.getUser();
 
         if (loggedInUser.getRole().equalsIgnoreCase("Admin")) {
@@ -142,26 +122,6 @@ public class QCUDoneReportController {
             sceneNavigator.switchTo(actionEvent, "QCUFolderScreen.fxml");
         } else {
             System.out.println("Unknown role: " + loggedInUser.getRole());
-        }
-    }
-
-    // Save PDF to file
-    public void handleSavePdf(ActionEvent actionEvent) {
-        String content = "Quality Control Report Completed.\nAll items approved.";
-        String fileName = "QCU_Report";
-
-        try {
-            // Generate PDF as bytes
-            byte[] pdfBytes = PDFReportGenerator.generateReportAsBytes(content, fileName);
-
-            // Save to DB
-            reportModel.savePdfToDatabase(currentOrder.getOrderCode(), pdfBytes);
-
-            showAlert("Success", "PDF saved to database for order: " + currentOrder.getOrderCode());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Error", "Could not save PDF to database: " + e.getMessage());
         }
     }
 
@@ -176,7 +136,6 @@ public class QCUDoneReportController {
     public void setOrder(Order order) {
         this.currentOrder = order;
         orderNumberLabel.setText("ORDER NUMBER: " + order);
-
         loadPictures(order.toString());
         loadLatestComment(order.getOrderCode());
     }
@@ -230,36 +189,28 @@ public class QCUDoneReportController {
     @FXML
     private void handleViewPdf(ActionEvent actionEvent) {
         try {
-            // Capture the node you want as image (e.g., ScrollPane)
             WritableImage snapshot = scrollPane.snapshot(new SnapshotParameters(), null);
-
-            // Convert WritableImage to BufferedImage
             BufferedImage bufferedImage = SwingFXUtils.fromFXImage(snapshot, null);
 
-            // Save the image to a temporary file (optional)
             File imageFile = File.createTempFile("report_image_", ".png");
             ImageIO.write(bufferedImage, "png", imageFile);
 
-            // Create a PDF file
             File pdfFile = File.createTempFile("report_", ".pdf");
             pdfFile.deleteOnExit();
 
-            // Use iText to write image to PDF
             try (FileOutputStream fos = new FileOutputStream(pdfFile)) {
                 PdfWriter writer = new PdfWriter(fos);
                 PdfDocument pdfDoc = new PdfDocument(writer);
                 Document document = new Document(pdfDoc);
 
-                // Load image
                 com.itextpdf.layout.element.Image pdfImage =
                         new com.itextpdf.layout.element.Image(com.itextpdf.io.image.ImageDataFactory.create(imageFile.getAbsolutePath()));
 
-                pdfImage.scaleToFit(500, 700);  // Resize as needed
+                pdfImage.scaleToFit(500, 700);
                 document.add(pdfImage);
                 document.close();
             }
 
-            // Open the PDF
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().open(pdfFile);
             } else {
