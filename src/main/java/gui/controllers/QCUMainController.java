@@ -116,6 +116,9 @@ public class QCUMainController {
             stage.setTitle("Review Order");
             stage.setScene(scene);
             stage.show();
+
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

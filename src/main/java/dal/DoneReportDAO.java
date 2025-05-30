@@ -8,9 +8,9 @@
     public class DoneReportDAO {
 
         public String getSignatureNameByOrderCode(String orderCode) throws SQLException {
-            String sql = "SELECT LI.FirstName, LI.LastName " +
+            String sql = "SELECT UL.FirstName, UL.LastName " +
                     "FROM DoneReport DR " +
-                    "INNER JOIN LoginInfo LI ON DR.SignedBy = LI.UserId " +
+                    "INNER JOIN UserLogin UL ON DR.SignedBy = UL.UserId " +
                     "WHERE DR.OrderCode = ?";
             try (Connection conn = DBAccess.DBConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
