@@ -5,10 +5,11 @@ import be.Picture;
 import bll.CameraManager;
 import bll.PictureManager;
 import dal.PictureDAO;
+import exceptions.BLLException;
+import exceptions.DALException;
+import exceptions.ImageProcessingException;
 import io.github.palexdev.materialfx.utils.SwingFXUtils;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -24,11 +25,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.rmi.server.RemoteObject;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,12 +38,8 @@ public class PictureController {
     private ImageView imgVPicture;
     @FXML
     private Button btnCapture, btnRetake, btnSave, btnExit;
-//    @FXML
-//    private ComboBox<String> cBoxSide;
     @FXML
     private StackPane stackPane;
-//    @FXML
-//    private Label comboPlaceholder;
     @FXML
     private GridPane gridCapturedImages;
     @FXML
@@ -139,9 +133,9 @@ public class PictureController {
 
                 isPhotoTaken = false;
                 startWebcamStream();
-            } catch (SQLException | IOException e) {
+            } catch (BLLException | ImageProcessingException e) {
                 e.printStackTrace();
-                showAlert(Alert.AlertType.ERROR, "Picture save failed", null, "Picture save failed");
+                showAlert(Alert.AlertType.ERROR, "Picture save failed", null, e.getMessage());
             }
         } else {
             showAlert(Alert.AlertType.ERROR, "Save failed", null, "No picture to save");
@@ -159,8 +153,9 @@ public class PictureController {
         try {
             List<String> takenSides = pictureDAO.getTakenSidesForOrderNumber(order.getOrderCode());
             allSides.removeAll(takenSides);
-        } catch (SQLException e) {
+        } catch (DALException e) {
             e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Database Error", null, "Failed to load sides from database.");
         }
 
         allSides.add("Extra");
@@ -196,17 +191,21 @@ public class PictureController {
         }
     }
 
-    private byte[] convertToByteArray(BufferedImage image) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, "png", baos);
-        return baos.toByteArray();
+    private byte[] convertToByteArray(BufferedImage image) throws ImageProcessingException {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", baos);
+            return baos.toByteArray();
+        } catch (IOException e) {
+            throw new ImageProcessingException("Failed to convert image to byte array", e);
+        }
     }
 
     public void setOperatorPreviewController(OperatorPreviewController operatorPreviewController) {
         this.operatorPreviewController = operatorPreviewController;
     }
 
-    private void addThumbnail(Picture picture) {
+    private void addThumbnail(Picture picture) throws ImageProcessingException {
         try {
             BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(picture.getImageBytes()));
             if (bufferedImage == null) {
@@ -229,8 +228,7 @@ public class PictureController {
             thumbnailCount++;
 
         } catch (IOException e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Thumbnail Error", null, "Failed to load thumbnail image.");
+            throw new ImageProcessingException("Failed to load thumbnail image", e);
         }
     }
 

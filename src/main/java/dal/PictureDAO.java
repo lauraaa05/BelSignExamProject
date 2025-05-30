@@ -1,6 +1,7 @@
 package dal;
 
 import be.Picture;
+import exceptions.DALException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ public class PictureDAO {
 
     DBAccess db = new DBAccess();
 
-    public void savePicture(Picture picture) throws SQLException {
+    public void savePicture(Picture picture) throws DALException {
         String sql = "INSERT INTO Pictures (Image, Timestamp, FileName, OrderNumber, Side) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = db.DBConnection();
@@ -23,10 +24,12 @@ public class PictureDAO {
             pstmt.setString(5, picture.getSide().trim().toLowerCase());
 
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DALException("Failed to save picture to database", e);
         }
     }
 
-    public List<Picture> getPicturesByOrderNumber(String orderNumber) throws SQLException {
+    public List<Picture> getPicturesByOrderNumber(String orderNumber) throws DALException {
         List<Picture> pictures = new ArrayList<>();
         String sql = "SELECT ImageId, Image, FileName, Timestamp, OrderNumber, Side FROM Pictures WHERE OrderNumber = ?";
 
@@ -53,11 +56,13 @@ public class PictureDAO {
                 picture.setOrderNumber(dbOrderNumber);
                 pictures.add(picture);
             }
+        } catch (SQLException e) {
+            throw new DALException("Failed to retrieve pictures from database", e);
         }
         return pictures;
     }
 
-    public int countImagesForOrderNumber(String orderNumber) throws SQLException {
+    public int countImagesForOrderNumber(String orderNumber) throws DALException {
         String sql = "SELECT COUNT(*) FROM Pictures WHERE OrderNumber = ?";
         try (Connection conn = db.DBConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -67,11 +72,13 @@ public class PictureDAO {
             if (rs.next()) {
                 return rs.getInt(1);
             }
+        } catch (SQLException e) {
+            throw new DALException("Failed to count images for order number", e);
         }
         return 0;
     }
 
-    public List<String> getTakenSidesForOrderNumber(String orderNumber) throws SQLException {
+    public List<String> getTakenSidesForOrderNumber(String orderNumber) throws DALException {
         List<String> sides = new ArrayList<>();
 
         String sql = "SELECT DISTINCT Side FROM Pictures WHERE OrderNumber = ?";
@@ -85,12 +92,14 @@ public class PictureDAO {
                 System.out.println("DAO fetched side: " + side);
                 sides.add(side);
             }
+        } catch (SQLException e) {
+            throw new DALException("Failed to retrieve taken sides for order number", e);
         }
         return sides;
     }
 
     //This is for retrieving images to QCU report
-    public List<Picture> getPicturesByOrderNumberRaw(String orderNumber) throws SQLException {
+    public List<Picture> getPicturesByOrderNumberRaw(String orderNumber) throws DALException {
         List<Picture> pictures = new ArrayList<>();
         String sql = "SELECT ImageId, Image, Side, Timestamp, OrderNumber FROM Pictures WHERE OrderNumber = ?";
 
@@ -110,16 +119,20 @@ public class PictureDAO {
                 Picture picture = new Picture(imageId, imageBytes, timestamp.toLocalDateTime(), side, dbOrderNumber);
                 pictures.add(picture);
             }
+        } catch (SQLException e) {
+            throw new DALException("Failed to retrieve pictures from database", e);
         }
         return pictures;
     }
 
-    public void deletePictureById(int imageId) throws SQLException {
+    public void deletePictureById(int imageId) throws DALException {
         String sql = "DELETE FROM Pictures WHERE ImageId = ?";
         try (Connection conn = db.DBConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, imageId);
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DALException("Failed to delete picture from database with ID: " + imageId, e);
         }
     }
 }
