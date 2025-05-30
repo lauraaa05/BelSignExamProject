@@ -73,7 +73,7 @@ public class QCUFolderController {
     public void initialize() {
         highlightActiveButton(folderButton);
 
-        for (int year = 2025; year <= 2026; year++) {
+        for (int year = 2024; year <= 2028; year++) {
             for (int month = 1; month <= 12; month++) {
                 folderDates.add(String.format("%d-%02d", year, month));
             }
