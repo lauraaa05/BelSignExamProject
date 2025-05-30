@@ -55,6 +55,7 @@
 	-fx-font-weight: bold;
 	-fx-background-color: transparent;
 	-fx-alignment: center;
+	-fx-font-size: 16px;
 }
 
 .tableView .table-row-cell {
@@ -67,7 +68,7 @@
 .tableView .table-cell {
 	-fx-padding: 8px;
 	-fx-text-fill: #333333;
-	-fx-font-size: 14px;
+	-fx-font-size: 16px;
 }
 
 .tableView .table-row-cell:filled:selected, .tableView .table-row-cell:focused:selected {
