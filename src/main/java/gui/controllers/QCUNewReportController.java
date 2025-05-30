@@ -2,15 +2,14 @@ package gui.controllers;
 
 import be.Order;
 import be.Picture;
+import be.QualityControl;
 import be.Report;
 import dal.OrderStatusDAO;
 import dal.PictureDAO;
 import gui.model.ReportModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -25,7 +24,26 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.layout.Document;
+
+
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.image.WritableImage;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+
 public class QCUNewReportController {
+
+    @FXML
+    private Label signatureLabel;
 
     @FXML
     private AnchorPane photoSectionPane;
@@ -46,6 +64,10 @@ public class QCUNewReportController {
     private TilePane photoTile;
 
     @FXML
+    private ScrollPane scrollPane;
+
+
+    @FXML
     private Label orderNumberLabel;
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -58,11 +80,13 @@ public class QCUNewReportController {
 
     private Order currentOrder;
 
+    private QualityControl currentUser;
+
     @FXML
     public void initialize() {
-        submitButton.setOnAction(e -> submitComment());
+        submitButton.setOnAction(this::handleSubmitReport);
 
-        rejectButton.setOnAction(event -> handleReject());
+        rejectButton.setOnAction(e -> handleReject());
     }
 
     public void setOrder(Order order) {
@@ -85,8 +109,8 @@ public class QCUNewReportController {
         vBox.setAlignment(javafx.geometry.Pos.CENTER);
 
         ImageView imageView = new ImageView();
-        imageView.setFitHeight(130);
-        imageView.setFitWidth(180);
+        imageView.setFitHeight(520);
+        imageView.setFitWidth(420);
         imageView.setPreserveRatio(true);
         imageView.setImage(new Image(new ByteArrayInputStream(picture.getImage())));
 
@@ -116,42 +140,42 @@ public class QCUNewReportController {
         }
     }
 
-    private void submitComment() {
-        String commentText = commentsTextArea.getText();
-        if (commentText == null || commentText.isEmpty()) {
-            System.out.println("Comment is empty");
-            return;
-        }
-
-        try {
-            String fullOrderNumber = extractOrderNumber();
-            String orderCode = fullOrderNumber.substring(fullOrderNumber.lastIndexOf("-") + 1);
-
-            Report report = new Report(4, commentText, fullOrderNumber, LocalDateTime.now(), orderCode);
-            reportModel.insertReport(report);
-
-            boolean updated = new OrderStatusDAO().updateOrderStatus(orderCode, "qcu", "done");
-
-            if (updated) {
-                System.out.println("Order marked as done.");
-            }
-
-            commentsTextArea.clear();
-            loadLatestComment(fullOrderNumber);
-
-            submitButton.setVisible(false);
-            commentsTextArea.setEditable(false);
-
-            hideSubmitButton(orderCode);
-
-            Stage currentStage = (Stage) submitButton.getScene().getWindow();
-            currentStage.close();
-            sceneNavigator.switchTo("/view/QCUMain.fxml");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    private void submitComment() {
+//        String commentText = commentsTextArea.getText();
+//        if (commentText == null || commentText.isEmpty()) {
+//            System.out.println("Comment is empty");
+//            return;
+//        }
+//
+//        try {
+//            String fullOrderNumber = extractOrderNumber();
+//            String orderCode = fullOrderNumber.substring(fullOrderNumber.lastIndexOf("-") + 1);
+//
+//            Report report = new Report(4, commentText, fullOrderNumber, LocalDateTime.now(), orderCode);
+//            reportModel.insertReport(report);
+//
+//            boolean updated = new OrderStatusDAO().updateOrderStatus(orderCode, "qcu", "done");
+//
+//            if (updated) {
+//                System.out.println("Order marked as done.");
+//            }
+//
+//            commentsTextArea.clear();
+//            loadLatestComment(fullOrderNumber);
+//
+//            submitButton.setVisible(false);
+//            commentsTextArea.setEditable(false);
+//
+//            hideSubmitButton(orderCode);
+//
+//            Stage currentStage = (Stage) submitButton.getScene().getWindow();
+//            currentStage.close();
+//            sceneNavigator.switchTo("/view/QCUMain.fxml");
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private void loadLatestComment(String orderNumber) {
         try {
@@ -221,6 +245,106 @@ public class QCUNewReportController {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void setCurrentUser(QualityControl user) {
+        this.currentUser = user;
+        signatureLabel.setText(user.getFirstName() + " " + user.getLastName());
+    }
+
+    @FXML
+    private void handleDownloadPDF(ActionEvent actionEvent) {
+        try {
+            VBox content = (VBox) scrollPane.getContent();
+
+            content.applyCss();
+            content.layout();
+
+            int width = (int) content.getBoundsInParent().getWidth();
+            int height = (int) content.getBoundsInParent().getHeight();
+
+            WritableImage fxImage = new WritableImage(width, height);
+            content.snapshot(new SnapshotParameters(), fxImage);
+
+            BufferedImage bufferedImage = SwingFXUtils.fromFXImage(fxImage, null);
+            File tempImageFile = new File("qcu_temp_snapshot.png");
+            ImageIO.write(bufferedImage, "png", tempImageFile);
+
+            String pdfPath = "QCU_Report_iText.pdf";
+            PdfWriter writer = new PdfWriter(new FileOutputStream(pdfPath));
+            PdfDocument pdfDoc = new PdfDocument(writer);
+            Document doc = new Document(pdfDoc);
+
+            ImageData imageData = ImageDataFactory.create(tempImageFile.getAbsolutePath());
+            com.itextpdf.layout.element.Image pdfImage = new com.itextpdf.layout.element.Image(imageData);
+
+            pdfImage.scaleToFit(pdfDoc.getDefaultPageSize().getWidth(), pdfDoc.getDefaultPageSize().getHeight());
+
+            doc.add(pdfImage);
+            doc.close();
+
+            System.out.println("PDF created at: " + pdfPath);
+            tempImageFile.delete(); // Clean up temp image
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleSubmitReport(ActionEvent actionEvent) {
+        if (currentOrder == null || currentUser == null) {
+            System.out.println("Missing order or user");
+            return;
+        }
+
+        String commentText = commentsTextArea.getText();
+        if (commentText == null || commentText.isEmpty()) {
+            System.out.println("Comment is empty");
+            return;
+        }
+
+        try {
+            String fullOrderNumber = extractOrderNumber(); // it was like: "2024-05-01-555123"
+            String orderCode = currentOrder.getOrderCode(); // last 6 digit: 555123
+
+            //To save comment to comment field
+            Report report = new Report(currentUser.getId(), commentText, fullOrderNumber, LocalDateTime.now(), orderCode);
+            reportModel.insertReport(report);
+
+            reportModel.saveDoneReport(orderCode, currentUser.getId());
+
+            // to update status
+            boolean updated = new OrderStatusDAO().updateOrderStatus(orderCode, "qcu", "done");
+            if (updated) {
+                System.out.println("Order marked as done");
+            }
+
+            //to clear gui
+            commentsTextArea.clear();
+            commentsTextArea.setEditable(false);
+            submitButton.setVisible(false);
+            rejectButton.setVisible(false);
+
+            //Navigate back
+            sceneNavigator.switchTo("/view/QCUMain.fxml");
+
+            //Confirmation
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Report Submitted");
+            alert.setHeaderText(null);
+            alert.setContentText("Report has been submitted successfully.");
+            alert.showAndWait();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Submission Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Failed to submit report.");
+            alert.showAndWait();
+
         }
     }
 }

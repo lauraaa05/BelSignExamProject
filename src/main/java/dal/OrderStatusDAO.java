@@ -12,9 +12,9 @@ public class OrderStatusDAO {
 
     public boolean updateOrderStatusAndRole(String orderCode, String currentRole, String newRole, String newStatus) {
         String sql = """
-            UPDATE OrderStatus 
-            SET Role = ?, Status = ?, LastUpdated = GETDATE() 
-            WHERE OrderCode = ? AND Role = ?
+            UPDATE OrderStatusOrder 
+            SET UserRole = ?, OrderStatus = ?, LastUpdated = GETDATE() 
+            WHERE OrderCode = ? AND UserRole = ?
         """;
 
         try (Connection conn = dbAccess.DBConnection();
@@ -36,7 +36,10 @@ public class OrderStatusDAO {
     // Version that returns OrderCodes
     public List<String> getRawOrderCodesByRoleAndStatus(String role, String status) {
         List<String> results = new ArrayList<>();
-        String sql = "SELECT OrderCode FROM OrderStatus WHERE Role = ? AND Status = ?";
+        String sql = "SELECT OrderCode " +
+                "FROM OrderStatusOrder " +
+                "JOIN OrderStatus s ON oso.OrderStatus = s.StatusId " +
+                "WHERE oso.UserRole = ? AND s.Status = ?";
 
         try (Connection conn = dbAccess.DBConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -57,39 +60,11 @@ public class OrderStatusDAO {
         return results;
     }
 
-//    public List<Order> getOrdersByRoleAndStatus(String role, String status) {
-//        List<Order> orders = new ArrayList<>();
-//        String query = """
-//            SELECT o.CountryNumber, o.Year, o.Month, o.OrderCode, o.OrderGroupId
-//            FROM Orders o
-//            INNER JOIN OrderStatus s ON o.OrderCode = s.OrderCode
-//            WHERE s.Role = ? AND s.Status = ?;
-//        """;
-//
-//        try (Connection conn = dbAccess.DBConnection();
-//             PreparedStatement stmt = conn.prepareStatement(query)) {
-//
-//            stmt.setString(1, role);
-//            stmt.setString(2, status);
-//            ResultSet rs = stmt.executeQuery();
-//
-//            while (rs.next()) {
-//                int countryNumber = rs.getInt("CountryNumber");
-//                int year = rs.getInt("Year");
-//                String month = rs.getString("Month");
-//                String orderCode = rs.getString("OrderCode");
-//                int orderGroupId = rs.getInt("OrderGroupId");
-//
-//                orders.add(new Order(countryNumber, year, month, orderCode, orderGroupId));
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return orders;
-//    }
-//
     public String getStatusForOrder(String orderNumber) {
-        String sql = "SELECT Status FROM OrderStatus WHERE OrderCode = ?";
+        String sql = "SELECT s.Status " +
+                "FROM OrderStatusOrder oso " +
+                "JOIN OrderStatus s ON oso.OrderStatus = s.StatusId " +
+                "WHERE oso.OrderCode = ?";
 
         try (Connection conn = dbAccess.DBConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -107,25 +82,28 @@ public class OrderStatusDAO {
         return null;
     }
 
-    public List<Order> getOrdersByRoleAndStatuses(String role, List<String> statuses) {
+    public List<Order> getOrdersByRoleAndStatuses(String roleName, List<String> statuses) {
         List<Order> orders = new ArrayList<>();
         if (statuses == null || statuses.isEmpty()) {
             return orders;
         }
+
+        int roleId = getRoleIdByName(roleName);
 
         String placeHolders = String.join(",",statuses.stream().map(s -> "?").toList());
 
         String query = """
                 SELECT o.CountryNumber, o.Year, o.Month, o.OrderCode, o.OrderGroupId
                 FROM Orders o
-                INNER JOIN OrderStatus s ON o.OrderCode = s.OrderCode
-                WHERE s.Role = ? AND s.Status IN (%s)
+                JOIN OrderStatusOrder oso ON o.OrderCode = oso.OrderCode
+                JOIN  OrderStatus s ON oso.OrderStatus = s.StatusId
+                WHERE oso.UserRole = ? AND s.Status IN (%s)
                 """.formatted(placeHolders);
 
         try (Connection conn = dbAccess.DBConnection();
             PreparedStatement stmt = conn.prepareStatement(query)) {
 
-            stmt.setString(1, role);
+            stmt.setInt(1, roleId);
             for (int i = 0; i < statuses.size(); i++) {
                 stmt.setString(i + 2, statuses.get(i));
             }
@@ -149,7 +127,7 @@ public class OrderStatusDAO {
     }
 
     public boolean updateOrderStatus(String orderCode, String role, String newStatus) {
-        String sql = "UPDATE OrderStatus SET Status = ?, LastUpdated = GETDATE() WHERE OrderCode = ? AND Role = ?";
+        String sql = "UPDATE OrderStatusOrder SET OrderStatus = ?, LastUpdated = GETDATE() WHERE OrderCode = ? AND UserRole = ?";
 
         try (Connection conn = dbAccess.DBConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -166,29 +144,34 @@ public class OrderStatusDAO {
         }
     }
 
-    public boolean saveStatusForOrder(String orderCode, String role, String status) {
-        String sql = "MERGE INTO OrderStatus AS target " +
-                    "USING (SELECT ? AS orderCode, ? AS role) AS source " +
-                    "ON target.orderCode = source.orderCode AND target.role = source.role " +
-                    "WHEN MATCHED THEN UPDATE SET status = ? " +
-                    "WHEN NOT MATCHED THEN INSERT (orderCode, role, status) VALUES (?, ?, ?);";
+    private int getStatusIdByName(String statusName) throws SQLException {
+        String sql = "SELECT StatusId FROM OrderStatus WHERE Status = ?";
+        try (Connection conn = dbAccess.DBConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, statusName);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("StatusId");
+            } else {
+                throw new SQLException("Status not found: " + statusName);
+            }
+        }
+    }
 
-        try (Connection conn = DBAccess.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, orderCode);
-            stmt.setString(2, role);
-            stmt.setString(3, status);
-            stmt.setString(4, orderCode);
-            stmt.setString(5, role);
-            stmt.setString(6, status);
-
-            int affectedRows = stmt.executeUpdate();
-            return affectedRows > 0;
-
+    private int getRoleIdByName(String roleName) {
+        String sql = "SELECT Id FROM UserRoles WHERE RoleName = ?";
+        try (Connection conn = dbAccess.DBConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, roleName);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("Id");
+            } else  {
+                throw new SQLException("No role found for id: " + roleName);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return -1;
         }
     }
 }

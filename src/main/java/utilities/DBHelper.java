@@ -12,7 +12,7 @@ public class DBHelper {
 
     public static <T> T getUserByUsername(String username, Function<ResultSet, T> mapper) {
         T user = null;
-        String sql = "SELECT * FROM LoginInfo WHERE Username = ?";
+        String sql = "SELECT ul.*, ur.RoleName FROM UserLogin ul JOIN UserRoles ur ON ul.Role = ur.Id WHERE ul.Username = ?";
 
         try (Connection conn = DBAccess.DBConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

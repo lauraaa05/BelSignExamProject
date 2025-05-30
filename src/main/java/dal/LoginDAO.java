@@ -15,8 +15,8 @@ import java.util.List;
 
 public class LoginDAO {
 
-    public boolean validateQualityControlUser(String username, String password) {
-        String sql = "SELECT Role FROM LoginInfo WHERE Username = ? AND Password = ?";
+    public boolean validateUser(String username, String password, UserRole expectedRole) {
+        String sql = "SELECT ur.RoleName FROM UserLogin ul JOIN UserRoles ur ON ul.Role = ur.Id WHERE ul.Username = ? AND ul.Password = ?";
 
         try (Connection conn = DBAccess.DBConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -27,80 +27,18 @@ public class LoginDAO {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                String roleFromDB = rs.getString("Role");
-
-                try {
-                    UserRole role = UserRole.fromString(roleFromDB);
-                    return role == UserRole.QUALITY_CONTROL;
-                } catch (IllegalArgumentException e) {
-                    return false;
-                }
+                String roleFromDB = rs.getString("RoleName");
+                return UserRole.fromString(roleFromDB) == expectedRole;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return false;
-    }
-
-    public boolean validateOperatorUser(String username, String password) {
-        String sql = "SELECT Role FROM LoginInfo WHERE Username = ? AND Password = ?";
-
-        try (Connection conn = DBAccess.DBConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, username);
-            stmt.setString(2, password);
-
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                String roleFromDB = rs.getString("Role");
-                try {
-                    UserRole role = UserRole.fromString(roleFromDB);
-                    return role == UserRole.OPERATOR;
-                } catch (IllegalArgumentException e) {
-                    return false;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
-    public boolean validateAdminUser(String username, String password) {
-        String sql = "SELECT Role FROM LoginInfo WHERE Username = ? AND Password = ?";
-
-        try (Connection conn = DBAccess.DBConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, username);
-            stmt.setString(2, password);
-
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                String roleFromDB = rs.getString("Role");
-
-                try {
-                    UserRole role = UserRole.fromString(roleFromDB);
-                    return role == UserRole.ADMIN;
-                } catch (IllegalArgumentException e) {
-                    return false;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
         return false;
     }
 
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT UserId, Username, Password, Role, FirstName, LastName, Email FROM LoginInfo";
+        String sql = "SELECT ul.UserId, ul.Username, ul.Password, ur.RoleName, ul.FirstName, ul.LastName, ul.Email FROM UserLogin ul JOIN UserRoles ur ON ul.Role = ur.Id";
 
         try (Connection conn = DBAccess.DBConnection();
         PreparedStatement stmt = conn.prepareStatement(sql);
@@ -110,7 +48,7 @@ public class LoginDAO {
                 int id = rs.getInt("UserId");
                 String username = rs.getString("Username");
                 String password = rs.getString("Password");
-                String role = rs.getString("Role");
+                String role = rs.getString("RoleName");
                 String firstName = rs.getString("FirstName");
                 String lastName = rs.getString("LastName");
                 String email = rs.getString("Email");
@@ -143,12 +81,13 @@ public class LoginDAO {
 
     public void addUser(User user, String password) {
         try(Connection conn = DBAccess.DBConnection()) {
-            String sql = "INSERT INTO LoginInfo (Username, Password, Role, FirstName, LastName, Email) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO UserLogin (Username, Password, Role, FirstName, LastName, Email) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, user.getName());
             stmt.setString(2, password);
-            stmt.setString(3, user.getRole());
+            int roleId = getRoleIdByName(user.getRole());
+            stmt.setInt(3, roleId);
             stmt.setString(4, user.getFirstName());
             stmt.setString(5, user.getLastName());
             stmt.setString(6, user.getEmail());
@@ -160,14 +99,14 @@ public class LoginDAO {
     }
 
     public boolean updateUser(User user) {
-        String sql = "UPDATE LoginInfo SET Username = ?, Password = ?, Role = ?, FirstName = ?, LastName = ?, Email = ? WHERE UserId = ?";
+        String sql = "UPDATE UserLogin SET Username = ?, Password = ?, Role = ?, FirstName = ?, LastName = ?, Email = ? WHERE UserId = ?";
 
         try(Connection conn = DBAccess.DBConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, user.getName());
             stmt.setString(2, user.getPassword());
-            stmt.setString(3, user.getRole());
+            stmt.setInt(3, getRoleIdByName(user.getRole()));
             stmt.setString(4, user.getFirstName());
             stmt.setString(5, user.getLastName());
             stmt.setString(6, user.getEmail());
@@ -183,7 +122,7 @@ public class LoginDAO {
 
     public void deleteUser(User user) {
         try(Connection conn = DBAccess.DBConnection()) {
-            String sql = "DELETE FROM LoginInfo WHERE UserId = ?";
+            String sql = "DELETE FROM UserLogin WHERE UserId = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, user.getId());
             stmt.executeUpdate();
@@ -195,14 +134,16 @@ public class LoginDAO {
     public Operator getOperatorByUsername(String username) {
         return DBHelper.getUserByUsername(username, rs -> {
             try {
-                return new Operator(
+                Operator operator = new Operator(
                         rs.getInt("UserId"),
                         rs.getString("Username"),
-                        rs.getString("Password"),
-                        rs.getString("Role"),
+                        rs.getString("RoleName"),
+                        null,
                         rs.getString("FirstName"),
-                        null
+                        rs.getString("LastName")
                 );
+                operator.setPassword(rs.getString("Password"));
+                return operator;
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -216,7 +157,7 @@ public class LoginDAO {
                         rs.getInt("UserId"),
                         rs.getString("Username"),
                         rs.getString("Password"),
-                        rs.getString("Role"),
+                        rs.getString("RoleName"),
                         rs.getString("FirstName"),
                         rs.getString("LastName")
                 );
@@ -233,12 +174,46 @@ public class LoginDAO {
                         rs.getInt("UserId"),
                         rs.getString("Username"),
                         rs.getString("Password"),
-                        rs.getString("Role"),
+                        rs.getString("RoleName"),
                         rs.getString("FirstName")
                 );
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    private int getRoleIdByName(String roleName) throws SQLException {
+        String sql = "SELECT Id FROM UserRoles WHERE RoleName = ?";
+        try (Connection conn = DBAccess.DBConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, roleName);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("Id");
+            } else  {
+                throw new SQLException("Role not found: " + roleName);
+            }
+        }
+    }
+
+    public UserRole getUserRole(String username, String password) throws SQLException {
+        String sql = "SELECT ur.RoleName FROM UserLogin ul JOIN UserRoles ur ON ul.Role = ur.Id WHERE ul.Username = ? AND ul.Password = ?";
+
+        try (Connection conn = DBAccess.DBConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String roleFromDB = rs.getString("RoleName");
+                return UserRole.fromString(roleFromDB);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -10,20 +10,27 @@ public class OperatorDAO {
     private DBAccess dbAccess = new DBAccess();
 
     public Operator getOperatorById(int userId) {
-        try (Connection conn = dbAccess.DBConnection()) {
-            String sql = "SELECT * FROM LoginInfo WHERE UserId = ? AND Role = 'Operator'";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, userId);
+        String sql = "SELECT * FROM UserLogin ul JOIN UserRoles ur ON ul.Role = ur.Id WHERE ul.UserId = ? AND ur.RoleName = 'Operator'";
 
+        try (Connection conn = dbAccess.DBConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
+
             if (rs.next()) {
-                Operator op = new Operator();
-                op.setId(rs.getInt("UserId"));
-                op.setName(rs.getString("Username"));
-                op.setRole(rs.getString("Role"));
-                op.setFirstName(rs.getString("FirstName"));
+                String firstName = rs.getString("FirstName");
+                String lastName = rs.getString("LastName");
+                String username = rs.getString("Username");
+                String password = rs.getString("Password");
+                String email = rs.getString("Email");
+
+                Operator op = new Operator(userId, username, "Operator", null, firstName, lastName);
+                op.setPassword(password);
+                op.setEmail(email);
                 return op;
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

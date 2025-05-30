@@ -1,6 +1,7 @@
 package gui.controllers;
 
 import be.Operator;
+import be.User;
 import bll.LoginManager;
 import dal.LoginDAO;
 import dal.OperatorDAO;
@@ -106,9 +107,9 @@ public class OperatorLogInbyUsernameController {
             return;
         }
 
-        boolean isValid = loginModel.loginAsOperator(username, password);
+        User user = loginModel.login(username, password);
 
-        if (isValid) {
+        if (user != null) {
             errorLabel.setVisible(false);
             Operator operator = loginDAO.getOperatorByUsername(username);
 

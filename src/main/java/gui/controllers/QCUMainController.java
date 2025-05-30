@@ -37,24 +37,7 @@ public class QCUMainController {
 
     private final SceneNavigator sceneNavigator = new SceneNavigator();
 
-    // Method to load orders into the ListView
-    @FXML
-    public void initialize() {
-        User user = LoggedInUser.getUser();
-        if (user != null) {
-            welcomeLabel.setText("Welcome " + user.getFirstName());
-
-            try {
-                OrderStatusDAO dao = new OrderStatusDAO();
-                List<Order> orders = dao.getOrdersByRoleAndStatuses("qcu", List.of("to_approve", "rejected"));
-
-                ObservableList<Order> observableOrders = FXCollections.observableArrayList(orders);
-                toApproveListView.setItems(observableOrders);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+    private QualityControl loggedInQCU;
 
     @FXML
     private void switchToFolderScene(Stage currentStage) throws IOException {
@@ -94,20 +77,55 @@ public class QCUMainController {
         sceneNavigator.switchTo(actionEvent, "QCUReport.fxml");
     }
 
+    // Method to load orders into the ListView
     @FXML
-    private void handleOrderClick(MouseEvent event) {
-        if (event.getClickCount() == 1) {
-            Order selectedOrder = toApproveListView.getSelectionModel().getSelectedItem();
-            if (selectedOrder != null) {
-                Stage stage = (Stage) toApproveListView.getScene().getWindow();
-                sceneNavigator.<QCUNewReportController>switchToWithData(stage, "QCUNewReport.fxml", controller -> {
-                    controller.setOrder(selectedOrder);
-                });
+    public void initialize() {
+        QualityControl user = (QualityControl) LoggedInUser.getUser();
+        if (user != null) {
+            welcomeLabel.setText("Welcome " + user.getFirstName());
+
+            try {
+                OrderStatusDAO dao = new OrderStatusDAO();
+                List<Order> orders = dao.getOrdersByRoleAndStatuses("Quality Control", List.of("to_approve", "rejected"));
+
+                ObservableList<Order> observableOrders = FXCollections.observableArrayList(orders);
+                toApproveListView.setItems(observableOrders);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
 
+    @FXML
+    private void handleOrderClick(MouseEvent event) {
+        Order selectedOrder = toApproveListView.getSelectionModel().getSelectedItem();
+        if (selectedOrder == null) return;
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/QCUNewReport.fxml"));
+            Scene scene = new Scene(loader.load());
+
+            QCUNewReportController controller = loader.getController();
+            controller.setOrder(selectedOrder);
+
+            // Set current user
+            QualityControl qcuUser = (QualityControl) LoggedInUser.getUser();
+            controller.setCurrentUser(qcuUser);  // <---- THIS IS MISSING ON 2ND OPEN
+
+            Stage stage = new Stage();
+            stage.setTitle("Review Order");
+            stage.setScene(scene);
+            stage.show();
+
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void setLoggedInQCU(QualityControl qcu) {
+        this.loggedInQCU = qcu;
         welcomeLabel.setText("Welcome " + qcu.getFirstName());
     }
 }

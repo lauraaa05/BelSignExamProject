@@ -6,6 +6,8 @@ import bll.PictureManager;
 import dal.OrderStatusDAO;
 import dal.PictureDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
+import exceptions.BLLException;
+import exceptions.DALException;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.mfxlocalization.Language;
 import javafx.animation.TranslateTransition;
@@ -39,6 +41,7 @@ import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static utilities.AlertHelper.showAlert;
@@ -114,8 +117,9 @@ public class OperatorPreviewController {
             for (Picture picture : pictures) {
                 addImage(picture);
             }
-        } catch (SQLException e) {
+        } catch (DALException e) {
             e.printStackTrace();
+            AlertHelper.showAlert(Alert.AlertType.ERROR, "Loading images failed", null, e.getMessage());
         }
     }
 
@@ -210,14 +214,24 @@ public class OperatorPreviewController {
         try {
             PictureDAO pictureDAO = new PictureDAO();
 
-            List<String> takenSides = pictureDAO.getTakenSidesForOrderNumber(currentOrder.getOrderCode());
+            List<String> takenSides = pictureDAO.getTakenSidesForOrderNumber(currentOrder.getFormattedOrderText());
+            System.out.println("Raw takenSides: " + takenSides);
 
-            if (takenSides.containsAll(List.of("Front", "Back", "Left", "Right", "Top"))) {
-                System.out.println("All sides have been photographed");
+            List<String> requiredSides = List.of("front", "back", "left", "right", "top");
+
+            List<String> normalizedTakenSides = takenSides.stream()
+                    .filter(Objects::nonNull)
+                    .map(s -> s.trim().toLowerCase())
+                    .toList();
+
+            if (normalizedTakenSides.containsAll(requiredSides)) {
+                System.out.println("All sides photographed: " + normalizedTakenSides);
             } else {
-                List<String> missingSides = List.of("Front", "Back", "Left", "Right", "Top")
-                        .stream().filter(side -> !takenSides.contains(side))
+                List<String> missingSides = requiredSides.stream()
+                        .filter(side -> !normalizedTakenSides.contains(side))
                         .toList();
+
+                System.out.println("Missing: " + missingSides);
 
                 AlertHelper.showAlert(
                         Alert.AlertType.WARNING,
@@ -228,7 +242,7 @@ public class OperatorPreviewController {
                 return;
             }
 
-            int imageCount = pictureDAO.countImagesForOrderNumber(currentOrder.getOrderCode());
+            int imageCount = pictureDAO.countImagesForOrderNumber(currentOrder.getFormattedOrderText());
 
             if (imageCount < MIN_IMAGES) {
                 AlertHelper.showAlert(
@@ -271,9 +285,9 @@ public class OperatorPreviewController {
 
             Stage currentStage = (Stage) fullscreenButton.getScene().getWindow();
             currentStage.setScene(new Scene(root));
-        } catch (Exception e) {
-            e.printStackTrace();
 
+        } catch (DALException | IOException e) {
+            e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Error", "Could not update order status", e.getMessage());
         }
     }
@@ -347,8 +361,9 @@ public class OperatorPreviewController {
             selectedVBox = null;
             deleteButton.setDisable(true);
             fullscreenButton.setDisable(true);
-        } catch (SQLException e) {
+        } catch (BLLException e) {
             e.printStackTrace();
+            AlertHelper.showAlert(Alert.AlertType.ERROR, "Deletion Error", "Could not delete picture from database.", e.getMessage());
         }
     }
 }

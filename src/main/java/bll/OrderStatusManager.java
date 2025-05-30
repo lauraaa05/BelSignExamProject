@@ -9,10 +9,10 @@ public class OrderStatusManager {
     private final OrderStatusDAO dao =  new OrderStatusDAO();
 
     public List<Order> getToDoOrders() {
-        return dao.getOrdersByRoleAndStatuses("operator", List.of("todo","rejected"));
+        return dao.getOrdersByRoleAndStatuses("Operator", List.of("todo","rejected"));
     }
 
     public List<Order> getDoneOrders() {
-        return dao.getOrdersByRoleAndStatuses("qcu", List.of("done"));
+        return dao.getOrdersByRoleAndStatuses("Quality Control", List.of("done"));
     }
 }
