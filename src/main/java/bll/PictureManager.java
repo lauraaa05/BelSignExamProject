@@ -2,6 +2,8 @@ package bll;
 
 import be.Picture;
 import dal.PictureDAO;
+import exceptions.BLLException;
+import exceptions.DALException;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -19,19 +21,25 @@ public class PictureManager {
         this.pictureDAO = pictureDAO;
     }
 
-    public void savePictureToDB(BufferedImage image, String orderNumber, LocalDateTime timestamp, String side) throws IOException, SQLException {
+    public void savePictureToDB(BufferedImage image, String orderNumber, LocalDateTime timestamp, String side) throws BLLException {
         System.out.println("Saving picture for order " + orderNumber);
         System.out.println("Image is null= " + (image == null));
         System.out.println("Order number is null? " + (orderNumber == null));
 
-        String fileName = generateTimestampedFileName();
+        try {
+            String fileName = generateTimestampedFileName();
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, "png", baos);
-        byte[] imageBytes = baos.toByteArray();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", baos);
+            byte[] imageBytes = baos.toByteArray();
 
-        Picture picture = new Picture(imageBytes, fileName, timestamp, orderNumber, side);
-        pictureDAO.savePicture(picture);
+            Picture picture = new Picture(imageBytes, fileName, timestamp, orderNumber, side);
+            pictureDAO.savePicture(picture);
+        } catch (IOException e) {
+            throw new BLLException("Failed to convert image to bytes.", e);
+        } catch (DALException e) {
+            throw new BLLException("Failed to save picture to database.", e);
+        }
     }
 
     private String generateTimestampedFileName() {
@@ -39,7 +47,11 @@ public class PictureManager {
         return  LocalDateTime.now().format(dtf) + ".png";
     }
 
-    public void deletePictureFromDB(int imageId) throws SQLException {
-        pictureDAO.deletePictureById(imageId);
+    public void deletePictureFromDB(int imageId) throws BLLException {
+        try {
+            pictureDAO.deletePictureById(imageId);
+        } catch (DALException e) {
+            throw new BLLException("Failed to delete picture from database.", e);
+        }
     }
 }

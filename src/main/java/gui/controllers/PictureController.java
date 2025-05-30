@@ -5,10 +5,11 @@ import be.Picture;
 import bll.CameraManager;
 import bll.PictureManager;
 import dal.PictureDAO;
+import exceptions.BLLException;
+import exceptions.DALException;
+import exceptions.ImageProcessingException;
 import io.github.palexdev.materialfx.utils.SwingFXUtils;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -24,15 +25,11 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.rmi.server.RemoteObject;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static utilities.AlertHelper.showAlert;
 
@@ -41,12 +38,8 @@ public class PictureController {
     private ImageView imgVPicture;
     @FXML
     private Button btnCapture, btnRetake, btnSave, btnExit;
-//    @FXML
-//    private ComboBox<String> cBoxSide;
     @FXML
     private StackPane stackPane;
-//    @FXML
-//    private Label comboPlaceholder;
     @FXML
     private GridPane gridCapturedImages;
     @FXML
@@ -62,7 +55,6 @@ public class PictureController {
     private Order order;
     private OperatorPreviewController operatorPreviewController;
     private final List<String> sides = List.of("Front", "Back", "Right", "Left", "Top");
-    private List<String> sidesToTake;
     private int currentSideIndex = 0;
     private int thumbnailCount = 0;
 
@@ -121,11 +113,11 @@ public class PictureController {
 
     private void saveImage() {
         if (capturedImage != null && isPhotoTaken) {
-            if (currentSideIndex >= sidesToTake.size()) {
+            if (currentSideIndex >= sides.size()) {
                 showAlert(Alert.AlertType.INFORMATION, "All sides captured", null, "You have captured all required sides.");
                 return;
             }
-            String currentSide = sidesToTake.get(currentSideIndex);
+            String currentSide = sides.get(currentSideIndex);
             LocalDateTime timestamp = LocalDateTime.now();
 
             try {
@@ -141,9 +133,9 @@ public class PictureController {
 
                 isPhotoTaken = false;
                 startWebcamStream();
-            } catch (SQLException | IOException e) {
+            } catch (BLLException | ImageProcessingException e) {
                 e.printStackTrace();
-                showAlert(Alert.AlertType.ERROR, "Picture save failed", null, "Picture save failed");
+                showAlert(Alert.AlertType.ERROR, "Picture save failed", null, e.getMessage());
             }
         } else {
             showAlert(Alert.AlertType.ERROR, "Save failed", null, "No picture to save");
@@ -152,33 +144,24 @@ public class PictureController {
 
     public void setOrder(Order order) {
         this.order = order;
-        System.out.println("Order number received in PictureController: " + order.getFormattedOrderText());
+        System.out.println("Order number received in PictureController: " + order.getOrderCode());
 
         pictureDAO = new PictureDAO();
 
         List<String> allSides = new ArrayList<>(List.of("Front", "Back", "Right", "Left", "Top"));
 
         try {
-            List<String> takenSides = pictureDAO.getTakenSidesForOrderNumber(order.getFormattedOrderText());
-            List<String> formattedTaken = takenSides.stream()
-                    .map(this::formatSide)
-                    .toList();
-
-            allSides.removeIf(side -> formattedTaken.contains(formatSide(side)));
-        } catch (SQLException e) {
+            List<String> takenSides = pictureDAO.getTakenSidesForOrderNumber(order.getOrderCode());
+            allSides.removeAll(takenSides);
+        } catch (DALException e) {
             e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Database Error", null, "Failed to load sides from database.");
         }
 
-        if (allSides.isEmpty()) {
-            allSides.add("Extra");
-        }
-
-        sidesToTake = allSides;
+        allSides.add("Extra");
         currentSideIndex = 0;
-
         updateCurrentSideLabel();
     }
-
 
     private void switchToPreviewScene(Stage currentStage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/OperatorPreview.fxml"));
@@ -208,17 +191,21 @@ public class PictureController {
         }
     }
 
-    private byte[] convertToByteArray(BufferedImage image) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, "png", baos);
-        return baos.toByteArray();
+    private byte[] convertToByteArray(BufferedImage image) throws ImageProcessingException {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", baos);
+            return baos.toByteArray();
+        } catch (IOException e) {
+            throw new ImageProcessingException("Failed to convert image to byte array", e);
+        }
     }
 
     public void setOperatorPreviewController(OperatorPreviewController operatorPreviewController) {
         this.operatorPreviewController = operatorPreviewController;
     }
 
-    private void addThumbnail(Picture picture) {
+    private void addThumbnail(Picture picture) throws ImageProcessingException {
         try {
             BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(picture.getImageBytes()));
             if (bufferedImage == null) {
@@ -241,21 +228,15 @@ public class PictureController {
             thumbnailCount++;
 
         } catch (IOException e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Thumbnail Error", null, "Failed to load thumbnail image.");
+            throw new ImageProcessingException("Failed to load thumbnail image", e);
         }
     }
 
     private void updateCurrentSideLabel() {
-        if(currentSideIndex < sidesToTake.size()) {
-            lblCurrentSide.setText(sidesToTake.get(currentSideIndex));
+        if(currentSideIndex < sides.size()) {
+            lblCurrentSide.setText(sides.get(currentSideIndex));
         } else {
             lblCurrentSide.setText("Extra");
         }
-    }
-
-    private String formatSide(String input) {
-        if (input == null || input.isEmpty()) return input;
-        return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
     }
 }

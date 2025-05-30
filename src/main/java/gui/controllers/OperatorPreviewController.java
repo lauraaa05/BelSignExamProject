@@ -6,6 +6,8 @@ import bll.PictureManager;
 import dal.OrderStatusDAO;
 import dal.PictureDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
+import exceptions.BLLException;
+import exceptions.DALException;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.mfxlocalization.Language;
 import javafx.animation.TranslateTransition;
@@ -115,8 +117,9 @@ public class OperatorPreviewController {
             for (Picture picture : pictures) {
                 addImage(picture);
             }
-        } catch (SQLException e) {
+        } catch (DALException e) {
             e.printStackTrace();
+            AlertHelper.showAlert(Alert.AlertType.ERROR, "Loading images failed", null, e.getMessage());
         }
     }
 
@@ -283,9 +286,8 @@ public class OperatorPreviewController {
             Stage currentStage = (Stage) fullscreenButton.getScene().getWindow();
             currentStage.setScene(new Scene(root));
 
-        } catch (Exception e) {
+        } catch (DALException | IOException e) {
             e.printStackTrace();
-
             showAlert(Alert.AlertType.ERROR, "Error", "Could not update order status", e.getMessage());
         }
     }
@@ -359,8 +361,9 @@ public class OperatorPreviewController {
             selectedVBox = null;
             deleteButton.setDisable(true);
             fullscreenButton.setDisable(true);
-        } catch (SQLException e) {
+        } catch (BLLException e) {
             e.printStackTrace();
+            AlertHelper.showAlert(Alert.AlertType.ERROR, "Deletion Error", "Could not delete picture from database.", e.getMessage());
         }
     }
 }

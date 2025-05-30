@@ -1,9 +1,5 @@
-package utilities;
+package exceptions;
 
-
-
-import javax.swing.text.AbstractDocument;
-import java.io.IOException;
 
 public class MyException extends Exception {
     public MyException(String message) {
