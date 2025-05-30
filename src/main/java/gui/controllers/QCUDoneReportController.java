@@ -4,6 +4,10 @@ import be.Order;
 import be.Picture;
 import be.User;
 import dal.PictureDAO;
+import exceptions.BLLException;
+import exceptions.DALException;
+import exceptions.EmailSendingException;
+import exceptions.ImageProcessingException;
 import gui.model.ReportModel;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -22,15 +26,12 @@ import utilities.PDFReportGenerator;
 import utilities.SceneNavigator;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
+import java.io.*;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import java.awt.Desktop;
-import java.io.FileOutputStream;
 
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -125,7 +126,7 @@ public class QCUDoneReportController {
                 showAlert("Failure", "Could not send email to: " + email);
             }
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
             showAlert("Error", "Exception occurred while sending email: " + e.getMessage());
         }
@@ -159,7 +160,7 @@ public class QCUDoneReportController {
 
             showAlert("Success", "PDF saved to database for order: " + currentOrder.getOrderCode());
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             showAlert("Error", "Could not save PDF to database: " + e.getMessage());
         }
@@ -194,7 +195,7 @@ public class QCUDoneReportController {
             if (pictures.isEmpty()) {
                 System.out.println("No pictures found for order number: " + orderNumber);
             }
-        } catch (SQLException e) {
+        } catch (DALException e) {
             System.err.println("Database error while loading pictures: " + e.getMessage());
         }
     }
@@ -203,7 +204,7 @@ public class QCUDoneReportController {
         try {
             String latestComment = reportModel.getLatestCommentByOrderNumber(orderNumber);
             generalCommentsLabel.setText(latestComment != null ? latestComment : "No comments yet.");
-        } catch (Exception e) {
+        } catch (SQLException e) {
             generalCommentsLabel.setText("Failed to fetch comment: " + e.getMessage());
         }
     }
@@ -265,8 +266,7 @@ public class QCUDoneReportController {
             } else {
                 showAlert("Unsupported", "Desktop API is not supported on this system.");
             }
-
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
             showAlert("Error", "Failed to generate PDF: " + e.getMessage());
         }
