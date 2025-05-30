@@ -6,6 +6,7 @@ import be.QualityControl;
 import be.Report;
 import dal.OrderStatusDAO;
 import dal.PictureDAO;
+import exceptions.DALException;
 import gui.model.ReportModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -146,7 +147,7 @@ public class QCUReportPDFController {
             if (pictures.isEmpty()) {
                 System.out.println("No pictures found for order number: " + orderNumber);
             }
-        } catch (SQLException e) {
+        } catch (DALException e) {
             System.err.println("Database error while loading pictures: " + e.getMessage());
         }
     }
