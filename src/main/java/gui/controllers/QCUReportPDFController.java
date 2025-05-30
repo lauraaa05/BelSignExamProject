@@ -6,6 +6,7 @@ import be.QualityControl;
 import be.Report;
 import dal.OrderStatusDAO;
 import dal.PictureDAO;
+import exceptions.DALException;
 import gui.model.ReportModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -146,44 +147,8 @@ public class QCUReportPDFController {
             if (pictures.isEmpty()) {
                 System.out.println("No pictures found for order number: " + orderNumber);
             }
-        } catch (SQLException e) {
+        } catch (DALException e) {
             System.err.println("Database error while loading pictures: " + e.getMessage());
-        }
-    }
-
-    private void submitComment() {
-        String commentText = commentsTextArea.getText();
-        if (commentText == null || commentText.isEmpty()) {
-            System.out.println("Comment is empty");
-            return;
-        }
-
-        try {
-            String fullOrderNumber = extractOrderNumber();
-            String orderCode = fullOrderNumber.substring(fullOrderNumber.lastIndexOf("-") + 1);
-
-            Report report = new Report(4, commentText, fullOrderNumber, LocalDateTime.now(), orderCode);
-            reportModel.insertReport(report);
-
-            boolean updated = new OrderStatusDAO().updateOrderStatus(orderCode, "qcu", "done");
-
-            if (updated) {
-                System.out.println("Order marked as done.");
-            }
-
-            commentsTextArea.clear();
-            loadLatestComment(currentOrder.getOrderCode());
-
-
-
-            hideSubmitButton(orderCode);
-
-            Stage currentStage = (Stage) submitButton.getScene().getWindow();
-            currentStage.close();
-            sceneNavigator.switchTo("/view/QCUMain.fxml");
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -199,8 +164,6 @@ public class QCUReportPDFController {
     private String extractOrderNumber() {
         return orderNumberLabel.getText().replace("ORDER NUMBER: ", "").trim();
     }
-
-
 
     private void hideSubmitButton(String orderCode) {
         String status = new OrderStatusDAO().getStatusForOrder(orderCode);
@@ -235,7 +198,6 @@ public class QCUReportPDFController {
             System.err.println("Error loading signature name: " + e.getMessage());
         }
     }
-
 
     private void handleDownloadPDF() {
         try {

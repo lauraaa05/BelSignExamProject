@@ -10,7 +10,7 @@ public class OrderStatusDAO {
 
     private DBAccess dbAccess = new DBAccess();
 
-    public boolean updateOrderStatusAndRole(String orderCode, String currentRole, String newRole, String newStatus) {
+    public boolean updateOrderStatusAndRole(String orderCode, int currentRoleId, int newRoleId, int newStatusId) {
         String sql = """
             UPDATE OrderStatusOrder 
             SET UserRole = ?, OrderStatus = ?, LastUpdated = GETDATE() 
@@ -20,10 +20,10 @@ public class OrderStatusDAO {
         try (Connection conn = dbAccess.DBConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, newRole);
-            stmt.setString(2, newStatus);
+            stmt.setInt(1, newRoleId);
+            stmt.setInt(2, newStatusId);
             stmt.setString(3, orderCode);
-            stmt.setString(4, currentRole);
+            stmt.setInt(4, currentRoleId);
 
             int updatedRows = stmt.executeUpdate();
             return updatedRows > 0;
@@ -126,15 +126,15 @@ public class OrderStatusDAO {
         return orders;
     }
 
-    public boolean updateOrderStatus(String orderCode, String role, String newStatus) {
+    public boolean updateOrderStatus(String orderCode, int roleId, int newStatusId) {
         String sql = "UPDATE OrderStatusOrder SET OrderStatus = ?, LastUpdated = GETDATE() WHERE OrderCode = ? AND UserRole = ?";
 
         try (Connection conn = dbAccess.DBConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, newStatus);
+            stmt.setInt(1, newStatusId);
             stmt.setString(2, orderCode);
-            stmt.setString(3, role);
+            stmt.setInt(3, roleId);
 
             int updatedRows = stmt.executeUpdate();
             return updatedRows > 0;
@@ -144,7 +144,7 @@ public class OrderStatusDAO {
         }
     }
 
-    private int getStatusIdByName(String statusName) throws SQLException {
+    public int getStatusIdByName(String statusName) throws SQLException {
         String sql = "SELECT StatusId FROM OrderStatus WHERE Status = ?";
         try (Connection conn = dbAccess.DBConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
