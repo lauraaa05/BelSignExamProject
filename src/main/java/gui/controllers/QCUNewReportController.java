@@ -6,6 +6,7 @@ import be.QualityControl;
 import be.Report;
 import dal.OrderStatusDAO;
 import dal.PictureDAO;
+import exceptions.BLLException;
 import exceptions.DALException;
 import gui.model.ReportModel;
 import javafx.event.ActionEvent;
@@ -158,7 +159,7 @@ public class QCUNewReportController {
         try {
             String latestComment = reportModel.getLatestCommentByOrderNumber(extractOrderNumber());
             generalCommentsLabel.setText(latestComment);
-        } catch (SQLException e) {
+        } catch (BLLException e) {
             generalCommentsLabel.setText("Failed to fetch comment: " + e.getMessage());
         }
     }
