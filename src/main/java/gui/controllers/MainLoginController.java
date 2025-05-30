@@ -5,6 +5,7 @@ import be.QualityControl;
 import be.User;
 import bll.LoginManager;
 import dal.UserRole;
+import exceptions.BLLException;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -96,22 +97,29 @@ public class MainLoginController {
             return;
         }
 
-        User user = loginManager.login(username, password);
+        try {
+            User user = loginManager.login(username, password);
 
-        if (user != null) {
-            errorLabel.setVisible(false);
-            LoggedInUser.setUser(user);
-            Stage currentStage = (Stage) logInButton.getScene().getWindow();
+            if (user != null) {
+                errorLabel.setVisible(false);
+                LoggedInUser.setUser(user);
+                Stage currentStage = (Stage) logInButton.getScene().getWindow();
 
-            UserRole role = UserRole.fromString(user.getRole());
+                UserRole role = UserRole.fromString(user.getRole());
 
-            switch (role) {
-                case OPERATOR -> switchToOperatorMainScreen(currentStage, (Operator) user);
-                case ADMIN -> switchToAdminMainScreen(currentStage, (Admin) user);
-                case QUALITY_CONTROL -> switchToMainSceneSameWindow(currentStage, (QualityControl) user);
+                switch (role) {
+                    case OPERATOR -> switchToOperatorMainScreen(currentStage, (Operator) user);
+                    case ADMIN -> switchToAdminMainScreen(currentStage, (Admin) user);
+                    case QUALITY_CONTROL -> switchToMainSceneSameWindow(currentStage, (QualityControl) user);
+                }
+            } else {
+                errorLabel.setText("Incorrect username or password!");
+                errorLabel.setStyle("-fx-text-fill: red;");
+                errorLabel.setVisible(true);
             }
-        } else {
-            errorLabel.setText("Incorrect username or password!");
+        } catch (BLLException e) {
+            e.printStackTrace();
+            errorLabel.setText("Login error: " + e.getMessage());
             errorLabel.setStyle("-fx-text-fill: red;");
             errorLabel.setVisible(true);
         }

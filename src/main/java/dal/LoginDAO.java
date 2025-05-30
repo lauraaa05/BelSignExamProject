@@ -131,7 +131,7 @@ public class LoginDAO {
         }
     }
 
-    public Operator getOperatorByUsername(String username) {
+    public Operator getOperatorByUsername(String username) throws SQLException {
         return DBHelper.getUserByUsername(username, rs -> {
             try {
                 Operator operator = new Operator(
@@ -150,7 +150,7 @@ public class LoginDAO {
         });
     }
 
-    public QualityControl getQCUByUsername(String username) {
+    public QualityControl getQCUByUsername(String username) throws SQLException {
         return DBHelper.getUserByUsername(username, rs -> {
             try {
                 return new QualityControl(
@@ -167,7 +167,7 @@ public class LoginDAO {
         });
     }
 
-    public Admin getAdminByUsername(String username) {
+    public Admin getAdminByUsername(String username) throws SQLException {
         return DBHelper.getUserByUsername(username, rs -> {
             try {
                 return new Admin(

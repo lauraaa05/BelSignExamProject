@@ -5,6 +5,7 @@ import be.User;
 import bll.LoginManager;
 import dal.LoginDAO;
 import dal.OperatorDAO;
+import exceptions.BLLException;
 import gui.model.LoginModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.beans.value.ObservableValue;
@@ -29,6 +30,7 @@ import utilities.SceneNavigator;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 
 public class OperatorLogInbyUsernameController {
 
@@ -107,25 +109,42 @@ public class OperatorLogInbyUsernameController {
             return;
         }
 
-        User user = loginModel.login(username, password);
+        User user = null;
+        try {
+            user = loginModel.login(username, password);
+        } catch (BLLException e) {
+            e.printStackTrace();
+            errorLabel.setText("Login failed due to internal error.");
+            errorLabel.setStyle("-fx-text-fill: red;");
+            errorLabel.setVisible(true);
+            return;
+        }
 
         if (user != null) {
             errorLabel.setVisible(false);
-            Operator operator = loginDAO.getOperatorByUsername(username);
+            try {
+                Operator operator = loginDAO.getOperatorByUsername(username);
 
-            if (operator != null) {
-                LoggedInUser.setUser(operator);
+                if (operator != null) {
+                    LoggedInUser.setUser(operator);
 
-                Stage currentStage = (Stage) logInButton.getScene().getWindow();
-                currentStage.setTitle("Operator");
+                    Stage currentStage = (Stage) logInButton.getScene().getWindow();
+                    currentStage.setTitle("Operator");
 
-                new SceneNavigator().<OperatorMainController>switchToWithData(
-                        currentStage,
-                        "OperatorMain.fxml",
-                        controller -> {}
-                );
-            } else {
-                errorLabel.setText("Unexpected error loading operator data.");
+                    new SceneNavigator().<OperatorMainController>switchToWithData(
+                            currentStage,
+                            "OperatorMain.fxml",
+                            controller -> {
+                            }
+                    );
+                } else {
+                    errorLabel.setText("Unexpected error loading operator data.");
+                    errorLabel.setStyle("-fx-text-fill: red;");
+                    errorLabel.setVisible(true);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                errorLabel.setText("Database error while fetching operator.");
                 errorLabel.setStyle("-fx-text-fill: red;");
                 errorLabel.setVisible(true);
             }
