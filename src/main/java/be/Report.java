@@ -3,58 +3,77 @@ package be;
 import java.time.LocalDateTime;
 
 public class Report {
-
     private int userId;
     private String comment;
     private String orderNumber;
     private LocalDateTime date;
     private String orderCode;
 
-    public Report(int userId, String comment, String orderNumber, LocalDateTime date, String orderCode) {
-        this.userId = userId;
-        this.comment = comment;
-        this.orderNumber = orderNumber;
-        this.date = date;
-        this.orderCode = orderCode;
+    // ✅ Private constructor to force use of Builder
+    private Report(Builder builder) {
+        this.userId = builder.userId;
+        this.comment = builder.comment;
+        this.orderNumber = builder.orderNumber;
+        this.date = builder.date;
+        this.orderCode = builder.orderCode;
     }
 
+    // ✅ Getters
     public int getUserId() {
         return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public String getComment() {
         return comment;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
     public String getOrderNumber() {
         return orderNumber;
-    }
-
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
     }
 
     public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
     public String getOrderCode() {
         return orderCode;
     }
 
-    public void setOrderCode(String orderCode) {
-        this.orderCode = orderCode;
+    // ✅ Static nested Builder class
+    public static class Builder {
+        private int userId;
+        private String comment;
+        private String orderNumber;
+        private LocalDateTime date;
+        private String orderCode;
+
+        public Builder setUserId(int userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public Builder setComment(String comment) {
+            this.comment = comment;
+            return this;
+        }
+
+        public Builder setOrderNumber(String orderNumber) {
+            this.orderNumber = orderNumber;
+            return this;
+        }
+
+        public Builder setDate(LocalDateTime date) {
+            this.date = date;
+            return this;
+        }
+
+        public Builder setOrderCode(String orderCode) {
+            this.orderCode = orderCode;
+            return this;
+        }
+
+        public Report build() {
+            return new Report(this);
+        }
     }
 }
