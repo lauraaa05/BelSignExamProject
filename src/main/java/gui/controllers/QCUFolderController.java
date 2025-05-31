@@ -172,7 +172,7 @@ public class QCUFolderController {
     private void switchToMainScene(Stage currentStage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/QCUMain.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        currentStage.setTitle("QCU Folder Screen");
+        currentStage.setTitle("QCU Main Screen");
         currentStage.setScene(scene);
         currentStage.show();
     }

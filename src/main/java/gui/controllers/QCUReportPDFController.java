@@ -10,6 +10,7 @@ import exceptions.DALException;
 import gui.model.ReportModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -186,7 +187,12 @@ public class QCUReportPDFController {
 
     @FXML
     private void handleGoBack(ActionEvent actionEvent) {
-        sceneNavigator.switchTo(actionEvent, "QCUFolderScreen.fxml");
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        try {
+            sceneNavigator.openNewScene(actionEvent, stage, "QCUFolderScreen.fxml", "QCU Folder Menu");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
