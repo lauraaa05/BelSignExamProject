@@ -3,6 +3,7 @@ package gui.controllers;
 import be.Operator;
 import be.QualityControl;
 import be.User;
+import bll.LoginManager;
 import dal.LoginDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -14,8 +15,8 @@ public class AddUserPopupController {
     @FXML private PasswordField passwordField;
     @FXML private ComboBox<String> roleComboBox;
 
-    private final LoginDAO loginDAO = new LoginDAO();
     private AdminUserController adminUserController;
+    private final LoginManager loginManager =  new LoginManager();
 
     public void setAdminUserController(AdminUserController controller) {
         this.adminUserController = controller;
@@ -47,7 +48,7 @@ public class AddUserPopupController {
             newUser = new QualityControl(firstName, lastName,username, password, email);
         }
 
-        loginDAO.addUser(newUser, password);
+        loginManager.addUser(newUser, password);
         adminUserController.refreshUserTable();
         closePopup();
         // Pass data to DAO or main controller here

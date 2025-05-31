@@ -66,9 +66,6 @@ public class QCUFolderController {
 
     private final SceneNavigator sceneNavigator = new SceneNavigator();
 
-    private final List<VBox> allFolderNodes = new ArrayList<>();
-
-
     @FXML
     public void initialize() {
         highlightActiveButton(folderButton);

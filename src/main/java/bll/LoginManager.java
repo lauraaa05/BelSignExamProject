@@ -1,14 +1,12 @@
 package bll;
 
-import be.Admin;
-import be.Operator;
-import be.QualityControl;
 import be.User;
 import dal.LoginDAO;
 import dal.UserRole;
 import exceptions.BLLException;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class LoginManager {
 
@@ -29,27 +27,19 @@ public class LoginManager {
         }
     }
 
-    public QualityControl getQCUByUsername(String username) throws BLLException {
-        try {
-            return lgn.getQCUByUsername(username);
-        } catch (SQLException e) {
-            throw new BLLException("Failed to fetch Quality Control user", e);
-        }
+    public User addUser(User user, String password) {
+        return lgn.addUser(user, password);
     }
 
-    public Admin getAdminByUsername(String username) throws BLLException {
-        try {
-            return lgn.getAdminByUsername(username);
-        } catch (SQLException e) {
-            throw new BLLException("Failed to fetch Admin user", e);
-        }
+    public List<User> getAllUsers() {
+        return lgn.getAllUsers();
     }
 
-    public Operator getOperatorByUsername(String username) throws BLLException {
-        try {
-            return lgn.getOperatorByUsername(username);
-        } catch (SQLException e) {
-            throw new BLLException("Failed to fetch Operator user", e);
-        }
+    public User deleteUser (User user) {
+        return lgn.deleteUser(user);
+    }
+
+    public boolean updateUser (User user) {
+        return lgn.updateUser(user);
     }
 }

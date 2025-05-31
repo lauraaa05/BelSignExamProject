@@ -4,10 +4,7 @@ import be.Operator;
 import be.QRCodeInfo;
 import bll.CameraManager;
 import bll.OperatorManager;
-import bll.QRCodeService;
-import com.google.zxing.qrcode.QRCodeReader;
-import dal.OperatorDAO;
-import dal.QRCodeDAO;
+import bll.QRCodeManager;
 import dk.easv.belsignexamproject.OperatorLogInApp;
 import io.github.palexdev.materialfx.utils.SwingFXUtils;
 import javafx.application.Platform;
@@ -16,10 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import utilities.LoggedInUser;
 import utilities.SceneNavigator;
@@ -37,30 +31,22 @@ public class OperatorLogInController {
     @FXML
     private ImageView imgQRPicture;
 
-    @FXML
-    private TextField barcodeTextField;
-
-    @FXML
-    private Label loggedUsernameLbl;
-
     private CameraManager camera = new CameraManager();
     private boolean isPhotoTaken = false;
 
-    private final OperatorDAO operatorDAO = new OperatorDAO();
     private final SceneNavigator sceneNavigator = new SceneNavigator();
-    private final QRCodeDAO  qrCodeDAO = new QRCodeDAO();
+    private final OperatorManager  operatorManager = new OperatorManager();
+    private final QRCodeManager qrCodeManager = new QRCodeManager();
 
     @FXML
     public void initialize() {
         camera.initializeCamera();
         startWebcamStream();
-        // Optional: Uncomment if using manual barcode entry with ENTER key
-        // barcodeTextField.setOnKeyPressed(this::handleBarcodeScan);
     }
 
     private void startWebcamStream() {
         Thread stream = new Thread(() -> {
-            QRCodeService qrCodeService = new QRCodeService();
+            QRCodeManager qrCodeManager = new QRCodeManager();
 
             while (!isPhotoTaken) {
                 BufferedImage image = camera.takePicture();
@@ -68,7 +54,7 @@ public class OperatorLogInController {
                     Platform.runLater(() -> imgQRPicture.setImage(SwingFXUtils.toFXImage(image, null)));
 
                     try {
-                        String content = qrCodeService.readQRCodeFromImage(image);
+                        String content = qrCodeManager.readQRCodeFromImage(image);
 
                         if (content != null && !content.isEmpty()) {
                             isPhotoTaken = true;
@@ -91,11 +77,11 @@ public class OperatorLogInController {
 
     private void loginOperator(String scannedCode) {
         try {
-            QRCodeInfo qrInfo = qrCodeDAO.getQRCodeByString(scannedCode);
+            QRCodeInfo qrInfo = qrCodeManager.getQRCodeByString(scannedCode);
 
             if (qrInfo != null) {
-                int userId = qrInfo.getUserId(); // Get actual user ID
-                Operator operator = operatorDAO.getOperatorById(userId);
+                int userId = qrInfo.getUserId();
+                Operator operator = operatorManager.getOperatorByUserId(userId);
 
                 if (operator != null && operator.getRole().equalsIgnoreCase("Operator")) {
                     LoggedInUser.setUser(operator);

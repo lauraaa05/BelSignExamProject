@@ -3,9 +3,8 @@ package gui.controllers;
 import be.Order;
 import be.Picture;
 import be.QualityControl;
-import be.Report;
-import dal.OrderStatusDAO;
-import dal.PictureDAO;
+import bll.OrderStatusManager;
+import bll.PictureManager;
 import exceptions.DALException;
 import gui.model.ReportModel;
 import javafx.event.ActionEvent;
@@ -25,15 +24,8 @@ import utilities.SceneNavigator;
 
 import java.io.ByteArrayInputStream;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
-import com.itextpdf.io.image.ImageData;
-import com.itextpdf.io.image.ImageDataFactory;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.layout.Document;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -47,12 +39,8 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 
-
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
 
 public class QCUReportPDFController {
 
@@ -63,16 +51,10 @@ public class QCUReportPDFController {
     private Label signatureLabel;
 
     @FXML
-    private AnchorPane photoSectionPane;
-
-    @FXML
     private TextArea commentsTextArea;
 
     @FXML
     private Button submitButton;
-
-    @FXML
-    private Button rejectButton;
 
     @FXML
     private Label generalCommentsLabel;
@@ -89,7 +71,9 @@ public class QCUReportPDFController {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    private final PictureDAO pictureDAO = new PictureDAO();
+    private final PictureManager pictureManager = new PictureManager();
+
+    private final OrderStatusManager orderStatusManager = new OrderStatusManager();
 
     private final ReportModel reportModel = new ReportModel();
 
@@ -111,7 +95,7 @@ public class QCUReportPDFController {
         loadPictures(order.toString());
         loadLatestComment(order.getOrderCode());
 
-        String status = new OrderStatusDAO().getStatusForOrder(order.getOrderCode());
+        String status = new OrderStatusManager().getStatusForOrder(order.getOrderCode());
 
         loadSignatureName(order.getOrderCode());
     }
@@ -137,7 +121,7 @@ public class QCUReportPDFController {
 
     private void loadPictures(String orderNumber) {
         try {
-            List<Picture> pictures = pictureDAO.getPicturesByOrderNumberRaw(orderNumber);
+            List<Picture> pictures = pictureManager.getPicturesByOrderNumberRaw(orderNumber);
             photoTile.getChildren().clear();
 
             for (Picture picture : pictures) {
@@ -172,7 +156,7 @@ public class QCUReportPDFController {
     }
 
     private void hideSubmitButton(String orderCode) {
-        String status = new OrderStatusDAO().getStatusForOrder(orderCode);
+        String status = new OrderStatusManager().getStatusForOrder(orderCode);
         if ("done".equalsIgnoreCase(status)) {
             submitButton.setVisible(false);
             submitButton.setManaged(false);

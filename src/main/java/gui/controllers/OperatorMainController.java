@@ -4,7 +4,6 @@ package gui.controllers;
 import be.Operator;
 import be.Order;
 import bll.OrderStatusManager;
-import dal.OrderStatusDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,7 +13,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -34,6 +32,8 @@ public class OperatorMainController implements Initializable {
 
     @FXML
     private Label loggedUsernameLbl;
+
+    private final OrderStatusManager orderStatusManager = new OrderStatusManager();
 
     public OperatorMainController() throws IOException {
     }
@@ -59,7 +59,7 @@ public class OperatorMainController implements Initializable {
                     setStyle("");
                 } else {
                     setText(order.toString());
-                    String status = orderStatusDAO.getStatusForOrder(order.getOrderCode());
+                    String status = orderStatusManager.getStatusForOrder(order.getOrderCode());
                     if ("rejected".equalsIgnoreCase(status)) {
                         setStyle("-fx-text-fill: red; -fx-font-weight: bold; -fx-background-color: #ffeeee;");
 
@@ -129,17 +129,12 @@ public class OperatorMainController implements Initializable {
         System.out.println("Operator received in controller: " + operator.getFirstName());
     }
 
-    private final String currentUserRole = "Operator";
-
-    private final OrderStatusDAO  orderStatusDAO = new OrderStatusDAO();
-
     public void refreshLists() {
-        OrderStatusDAO dao = new OrderStatusDAO();
-        List<Order> todoOrders = dao.getOrdersByRoleAndStatuses("operator", List.of("todo","rejected"));
+        List<Order> todoOrders = orderStatusManager.getOrdersByRoleAndStatuses("operator", List.of("todo","rejected"));
 
         todoOrders.sort((o1, o2) -> {
-            String status1 = orderStatusDAO.getStatusForOrder(o1.getOrderCode());
-            String status2 = orderStatusDAO.getStatusForOrder(o2.getOrderCode());
+            String status1 = orderStatusManager.getStatusForOrder(o1.getOrderCode());
+            String status2 = orderStatusManager.getStatusForOrder(o2.getOrderCode());
 
             if ("rejected".equalsIgnoreCase(status1) && !"rejected".equalsIgnoreCase(status2)) {
                 return -1;

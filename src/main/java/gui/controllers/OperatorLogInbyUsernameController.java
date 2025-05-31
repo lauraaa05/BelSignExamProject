@@ -4,22 +4,16 @@ import be.Operator;
 import be.User;
 import bll.LoginManager;
 import dal.LoginDAO;
-import dal.OperatorDAO;
 import exceptions.BLLException;
 import gui.model.LoginModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputControl;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import utilities.LoggedInUser;
 import utilities.SceneNavigator;
@@ -56,9 +50,8 @@ public class OperatorLogInbyUsernameController {
 
     private boolean passwordVisible = false;
 
-    private final LoginManager loginManager = new LoginManager();
-    private final LoginModel loginModel = new LoginModel();
     private final LoginDAO loginDAO = new LoginDAO();
+    private final LoginModel loginModel = new LoginModel();
 
     @FXML
     private void initialize() {

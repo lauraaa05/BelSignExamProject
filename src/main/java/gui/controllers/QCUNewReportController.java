@@ -4,8 +4,8 @@ import be.Order;
 import be.Picture;
 import be.QualityControl;
 import be.Report;
-import dal.OrderStatusDAO;
-import dal.PictureDAO;
+import bll.OrderStatusManager;
+import bll.PictureManager;
 import exceptions.BLLException;
 import exceptions.DALException;
 import gui.model.ReportModel;
@@ -14,41 +14,20 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import utilities.SceneNavigator;
 
 import java.io.ByteArrayInputStream;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
-import com.itextpdf.io.image.ImageData;
-import com.itextpdf.io.image.ImageDataFactory;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.layout.Document;
-
-
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.SnapshotParameters;
-import javafx.scene.image.WritableImage;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
 
 public class QCUNewReportController {
 
     @FXML
     private Label signatureLabel;
-
-    @FXML
-    private AnchorPane photoSectionPane;
 
     @FXML
     private TextArea commentsTextArea;
@@ -68,17 +47,18 @@ public class QCUNewReportController {
     @FXML
     private ScrollPane scrollPane;
 
-
     @FXML
     private Label orderNumberLabel;
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    private final PictureDAO pictureDAO = new PictureDAO();
-
     private final ReportModel reportModel = new ReportModel();
 
     private final SceneNavigator sceneNavigator = new SceneNavigator();
+
+    private final OrderStatusManager orderStatusManager = new OrderStatusManager();
+
+    private final PictureManager pictureManager = new PictureManager();
 
     private Order currentOrder;
 
@@ -98,7 +78,7 @@ public class QCUNewReportController {
         loadPictures(order.toString());
         loadLatestComment(order.getOrderCode());
 
-        String status = new OrderStatusDAO().getStatusForOrder(order.getOrderCode());
+        String status = new OrderStatusManager().getStatusForOrder(order.getOrderCode());
         if ("done".equalsIgnoreCase(status)) {
             submitButton.setVisible(false);
             commentsTextArea.setEditable(false);
@@ -126,7 +106,7 @@ public class QCUNewReportController {
 
     private void loadPictures(String orderNumber) {
         try {
-            List<Picture> pictures = pictureDAO.getPicturesByOrderNumberRaw(orderNumber);
+            List<Picture> pictures = pictureManager.getPicturesByOrderNumberRaw(orderNumber);
             photoTile.getChildren().clear();
 
             for (Picture picture : pictures) {
@@ -184,7 +164,7 @@ public class QCUNewReportController {
             }
 
             // Update order status to 'rejected'
-            boolean updated = new OrderStatusDAO().updateOrderStatusAndRole(orderCode, 2, 1, 1029);
+            boolean updated = new OrderStatusManager().updateOrderStatusAndRole(orderCode, 2, 1, 1029);
 
             if (updated) {
                 System.out.println("Order marked as rejected and returned to operator.");
@@ -227,8 +207,8 @@ public class QCUNewReportController {
         }
 
         try {
-            String fullOrderNumber = extractOrderNumber(); // it was like: "2024-05-01-555123"
-            String orderCode = currentOrder.getOrderCode(); // last 6 digit: 555123
+            String fullOrderNumber = extractOrderNumber();
+            String orderCode = currentOrder.getOrderCode();
 
             //To save comment to comment field
             Report report = new Report(currentUser.getId(), commentText, fullOrderNumber, LocalDateTime.now(), orderCode);
@@ -237,7 +217,7 @@ public class QCUNewReportController {
             reportModel.saveDoneReport(orderCode, currentUser.getId());
 
             // to update status
-            boolean updated = new OrderStatusDAO().updateOrderStatus(orderCode, 2, 1028);
+            boolean updated = new OrderStatusManager().updateOrderStatus(orderCode, 2, 1028);
             if (updated) {
                 System.out.println("Order marked as done");
             }

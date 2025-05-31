@@ -79,7 +79,7 @@ public class LoginDAO {
         return users;
     }
 
-    public void addUser(User user, String password) {
+    public User addUser(User user, String password) {
         try(Connection conn = DBAccess.DBConnection()) {
             String sql = "INSERT INTO UserLogin (Username, Password, Role, FirstName, LastName, Email) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -93,8 +93,10 @@ public class LoginDAO {
             stmt.setString(6, user.getEmail());
 
             stmt.executeUpdate();
+            return user;
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
@@ -120,14 +122,16 @@ public class LoginDAO {
         }
     }
 
-    public void deleteUser(User user) {
+    public User deleteUser(User user) {
         try(Connection conn = DBAccess.DBConnection()) {
             String sql = "DELETE FROM UserLogin WHERE UserId = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, user.getId());
             stmt.executeUpdate();
+            return user;
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
     }
 

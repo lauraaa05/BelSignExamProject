@@ -1,11 +1,11 @@
 package dk.easv.belsignexamproject.TestApps;
 
-import bll.QRCodeService;
+import bll.QRCodeManager;
 import dal.QRCodeDAO;
 
 public class QRTestGenerator {
     public static void main(String[] args) {
-        QRCodeService qrService = new QRCodeService();
+        QRCodeManager qrService = new QRCodeManager();
         QRCodeDAO qrDao = new QRCodeDAO();
 
         int userId = 3;

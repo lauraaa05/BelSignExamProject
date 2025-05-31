@@ -2,8 +2,7 @@ package gui.controllers;
 
 import be.Order;
 import be.QualityControl;
-import be.User;
-import dal.OrderStatusDAO;
+import bll.OrderStatusManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,6 +35,7 @@ public class QCUMainController {
     private Label welcomeLabel;
 
     private final SceneNavigator sceneNavigator = new SceneNavigator();
+    private final OrderStatusManager orderStatusManager = new OrderStatusManager();
 
     private QualityControl loggedInQCU;
 
@@ -85,8 +85,7 @@ public class QCUMainController {
             welcomeLabel.setText("Welcome " + user.getFirstName());
 
             try {
-                OrderStatusDAO dao = new OrderStatusDAO();
-                List<Order> orders = dao.getOrdersByRoleAndStatuses("Quality Control", List.of("to_approve", "rejected"));
+                List<Order> orders = orderStatusManager.getOrdersByRoleAndStatuses("Quality Control", List.of("to_approve", "rejected"));
 
                 ObservableList<Order> observableOrders = FXCollections.observableArrayList(orders);
                 toApproveListView.setItems(observableOrders);

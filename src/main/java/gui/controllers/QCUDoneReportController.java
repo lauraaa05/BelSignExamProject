@@ -3,7 +3,7 @@ package gui.controllers;
 import be.Order;
 import be.Picture;
 import be.User;
-import dal.PictureDAO;
+import bll.PictureManager;
 import exceptions.DALException;
 import gui.model.ReportModel;
 import javafx.embed.swing.SwingFXUtils;
@@ -14,7 +14,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import utilities.EmailSender;
@@ -24,9 +23,7 @@ import utilities.SceneNavigator;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -36,7 +33,6 @@ import java.io.FileOutputStream;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Paragraph;
 
 import javax.imageio.ImageIO;
 
@@ -47,12 +43,6 @@ public class QCUDoneReportController {
 
     @FXML
     private TextField emailField;
-
-    @FXML
-    private AnchorPane photoSectionPane;
-
-    @FXML
-    private TextArea commentsTextArea;
 
     @FXML
     private Label emailText;
@@ -72,9 +62,8 @@ public class QCUDoneReportController {
     @FXML
     private Label orderNumberLabel;
 
-    private final PictureDAO pictureDAO = new PictureDAO();
-
     private final ReportModel reportModel = new ReportModel();
+    private final PictureManager pictureManager = new PictureManager();
 
     private Order currentOrder;
 
@@ -184,7 +173,7 @@ public class QCUDoneReportController {
 
     private void loadPictures(String orderNumber) {
         try {
-            List<Picture> pictures = pictureDAO.getPicturesByOrderNumberRaw(orderNumber);
+            List<Picture> pictures = pictureManager.getPicturesByOrderNumberRaw(orderNumber);
             photoTile.getChildren().clear();
 
             for (Picture picture : pictures) {

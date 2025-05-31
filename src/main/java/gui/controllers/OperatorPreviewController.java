@@ -2,16 +2,12 @@ package gui.controllers;
 
 import be.Order;
 import be.Picture;
+import bll.OrderStatusManager;
 import bll.PictureManager;
-import dal.OrderStatusDAO;
-import dal.PictureDAO;
 import dk.easv.belsignexamproject.OperatorLogInApp;
 import exceptions.BLLException;
-import exceptions.DALException;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.mfxlocalization.Language;
 import javafx.animation.TranslateTransition;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +16,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -37,15 +32,12 @@ import utilities.SceneNavigator;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import static utilities.AlertHelper.showAlert;
-import static utilities.AlertHelper.showConfirmationAlert;
 
 public class OperatorPreviewController {
 
@@ -60,9 +52,6 @@ public class OperatorPreviewController {
 
     @FXML
     private FlowPane imageFlowPane;
-
-    @FXML
-    private Button doneButton;
 
     @FXML
     private Button deleteButton;
@@ -82,7 +71,8 @@ public class OperatorPreviewController {
     private Picture selectedPicture;
     private VBox selectedVBox;
     private final SceneNavigator sceneNavigator = new SceneNavigator();
-    private PictureManager pictureManager;
+    private final PictureManager pictureManager = new PictureManager();
+    private final OrderStatusManager orderStatusManager = new OrderStatusManager();
 
     public void initialize() {
         btnExit.setOnAction(e -> {
@@ -96,9 +86,6 @@ public class OperatorPreviewController {
         swipeButton.setOnMousePressed(this::onMousePressed);
         swipeButton.setOnMouseDragged(this::onMouseDragged);
         swipeButton.setOnMouseReleased(this::onMouseReleased);
-
-        PictureDAO pictureDAO = new PictureDAO();
-        pictureManager = new PictureManager(pictureDAO);
     }
 
     public void setOrder(Order order) {
@@ -111,13 +98,12 @@ public class OperatorPreviewController {
         imageFlowPane.getChildren().clear();
         imageViews.clear();
 
-        PictureDAO pictureDAO = new PictureDAO();
         try {
-            List<Picture> pictures = pictureDAO.getPicturesByOrderNumber(orderNumber);
+            List<Picture> pictures = pictureManager.getPicturesByOrderNumber(orderNumber);
             for (Picture picture : pictures) {
                 addImage(picture);
             }
-        } catch (DALException e) {
+        } catch (BLLException e) {
             e.printStackTrace();
             AlertHelper.showAlert(Alert.AlertType.ERROR, "Loading images failed", null, e.getMessage());
         }
@@ -212,9 +198,7 @@ public class OperatorPreviewController {
         }
 
         try {
-            PictureDAO pictureDAO = new PictureDAO();
-
-            List<String> takenSides = pictureDAO.getTakenSidesForOrderNumber(currentOrder.getFormattedOrderText());
+            List<String> takenSides = pictureManager.getTakenSidesForOrderNumber(currentOrder.getFormattedOrderText());
             System.out.println("Raw takenSides: " + takenSides);
 
             List<String> requiredSides = List.of("front", "back", "left", "right", "top");
@@ -242,7 +226,7 @@ public class OperatorPreviewController {
                 return;
             }
 
-            int imageCount = pictureDAO.countImagesForOrderNumber(currentOrder.getFormattedOrderText());
+            int imageCount = pictureManager.countImagesForOrderNumber(currentOrder.getFormattedOrderText());
 
             if (imageCount < MIN_IMAGES) {
                 AlertHelper.showAlert(
@@ -261,13 +245,11 @@ public class OperatorPreviewController {
                 return;
             }
 
-            OrderStatusDAO orderStatusDAO = new OrderStatusDAO();
-
             String codeOnly = currentOrder.getOrderCode();
 
             System.out.println("Extracted code: " + codeOnly);
 
-            boolean updated = orderStatusDAO.updateOrderStatusAndRole(codeOnly, 1, 2, 1027);
+            boolean updated = orderStatusManager.updateOrderStatusAndRole(codeOnly, 1, 2, 1027);
 
             if (!updated) {
                 showAlert(Alert.AlertType.ERROR, "Update failed", null, "No matching order found for operator role.");
@@ -286,7 +268,7 @@ public class OperatorPreviewController {
             Stage currentStage = (Stage) fullscreenButton.getScene().getWindow();
             currentStage.setScene(new Scene(root));
 
-        } catch (DALException | IOException e) {
+        } catch (IOException | BLLException e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Error", "Could not update order status", e.getMessage());
         }

@@ -4,9 +4,7 @@ import be.Order;
 import be.Picture;
 import bll.CameraManager;
 import bll.PictureManager;
-import dal.PictureDAO;
 import exceptions.BLLException;
-import exceptions.DALException;
 import exceptions.ImageProcessingException;
 import io.github.palexdev.materialfx.utils.SwingFXUtils;
 import javafx.application.Platform;
@@ -26,7 +24,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,9 +44,8 @@ public class PictureController {
     @FXML
     private ImageView imgPicture;
 
-    private CameraManager camera = new CameraManager();
-    private PictureManager pictureManager;
-    private PictureDAO pictureDAO;
+    private final CameraManager camera = new CameraManager();
+    private final PictureManager pictureManager = new  PictureManager();
     private BufferedImage capturedImage;
     private boolean isPhotoTaken = false;
     private Order order;
@@ -76,8 +72,6 @@ public class PictureController {
                 ex.printStackTrace();
             }
         });
-
-        pictureManager = new PictureManager(new PictureDAO());
     }
 
     private void startWebcamStream() {
@@ -147,18 +141,16 @@ public class PictureController {
         this.order = order;
         System.out.println("Order number received in PictureController: " + order.getOrderCode());
 
-        pictureDAO = new PictureDAO();
-
         List<String> allSides = new ArrayList<>(List.of("Front", "Back", "Right", "Left", "Top"));
 
         try {
-            List<String> takenSides = pictureDAO.getTakenSidesForOrderNumber(order.getFormattedOrderText());
+            List<String> takenSides = pictureManager.getTakenSidesForOrderNumber(order.getFormattedOrderText());
             List<String> formattedTaken = takenSides.stream()
                     .map(this::formatSide)
                     .toList();
 
             allSides.removeIf(side -> formattedTaken.contains(formatSide(side)));
-        } catch (DALException e) {
+        } catch (BLLException e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Database Error", null, "Failed to load sides from database.");
         }

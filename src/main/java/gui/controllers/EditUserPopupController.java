@@ -1,6 +1,6 @@
 package gui.controllers;
 
-import dal.LoginDAO;
+import bll.LoginManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -47,8 +47,8 @@ public class EditUserPopupController {
         user.setEmail(emailField.getText());
         user.setRole(roleComboBox.getValue());
 
-        LoginDAO loginDAO = new LoginDAO();
-        boolean success = loginDAO.updateUser(user);
+        LoginManager loginManager = new LoginManager();
+        boolean success = loginManager.updateUser(user);
         adminUserController.refreshUserTable();
 
         if(!success) {

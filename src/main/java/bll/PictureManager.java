@@ -12,14 +12,11 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class PictureManager {
 
-    private final PictureDAO pictureDAO;
-
-    public PictureManager(PictureDAO pictureDAO) {
-        this.pictureDAO = pictureDAO;
-    }
+    private final PictureDAO pictureDAO =  new PictureDAO();
 
     public void savePictureToDB(BufferedImage image, String orderNumber, LocalDateTime timestamp, String side) throws BLLException {
         System.out.println("Saving picture for order " + orderNumber);
@@ -53,5 +50,33 @@ public class PictureManager {
         } catch (DALException e) {
             throw new BLLException("Failed to delete picture from database.", e);
         }
+    }
+
+    public List<Picture> getPicturesByOrderNumber(String orderNumber) throws BLLException {
+        try {
+            return pictureDAO.getPicturesByOrderNumber(orderNumber);
+        } catch (DALException e) {
+            throw new BLLException("Failed to load pictures", e);
+        }
+    }
+
+    public List<String> getTakenSidesForOrderNumber(String orderNumber) throws BLLException {
+        try {
+            return pictureDAO.getTakenSidesForOrderNumber(orderNumber);
+        } catch (DALException e) {
+            throw new BLLException("Failed to get taken sides", e);
+        }
+    }
+
+    public int countImagesForOrderNumber(String orderNumber) throws BLLException {
+        try {
+            return pictureDAO.countImagesForOrderNumber(orderNumber);
+        } catch (DALException e) {
+            throw new BLLException("Failed to count pictures", e);
+        }
+    }
+
+    public List<Picture> getPicturesByOrderNumberRaw(String orderNumber) throws DALException {
+        return pictureDAO.getPicturesByOrderNumberRaw(orderNumber);
     }
 }

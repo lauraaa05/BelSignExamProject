@@ -2,7 +2,7 @@ package gui.controllers;
 
 import be.Admin;
 import be.User;
-import dal.LoginDAO;
+import bll.LoginManager;
 import dk.easv.belsignexamproject.OperatorLogInApp;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -38,7 +38,7 @@ public class AdminUserController implements Initializable {
     @FXML
     private Button signOutButton, addButton, editButton, deleteUserButton, reportButton;
 
-    private final LoginDAO loginDAO = new LoginDAO();
+    private final LoginManager loginManager = new LoginManager();
 
     private final SceneNavigator sceneNavigator = new SceneNavigator();
 
@@ -51,7 +51,7 @@ public class AdminUserController implements Initializable {
         roleColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getRole()));
 
-        List<User> allUsers = loginDAO.getAllUsers();
+        List<User> allUsers = loginManager.getAllUsers();
         tableViewUsers.setItems(FXCollections.observableArrayList(allUsers));
 
         deleteUserButton.setDisable(true);
@@ -143,14 +143,14 @@ public class AdminUserController implements Initializable {
 
         alert.showAndWait().ifPresent(type -> {
             if(type == yesButton) {
-                loginDAO.deleteUser(selectedUser);
+                loginManager.deleteUser(selectedUser);
                 refreshUserTable();
             }
         });
     }
 
     public void refreshUserTable() {
-        tableViewUsers.setItems(FXCollections.observableArrayList(loginDAO.getAllUsers()));
+        tableViewUsers.setItems(FXCollections.observableArrayList(loginManager.getAllUsers()));
     }
 
     private void switchToReportScreen(Stage currentStage) throws IOException {
