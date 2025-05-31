@@ -169,7 +169,7 @@ public class QCUFolderController {
     private void switchToMainScene(Stage currentStage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/QCUMain.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        currentStage.setTitle("QCU Folder Screen");
+        currentStage.setTitle("QCU Main Screen");
         currentStage.setScene(scene);
         currentStage.show();
     }
@@ -245,7 +245,7 @@ public class QCUFolderController {
             Order selectedOrder = orderListView.getSelectionModel().getSelectedItem();
             if (selectedOrder != null) {
                 Stage stage = (Stage) orderListView.getScene().getWindow();
-                sceneNavigator.<QCUReportPDFController>switchToWithData(stage, "QCUReportPDF.fxml", controller -> {
+                sceneNavigator.<QCUReportPDFController>switchToWithData(stage, "QCUReportPDF.fxml", "QCU Report PDF", controller -> {
                     controller.setOrder(selectedOrder);
                 });
             }

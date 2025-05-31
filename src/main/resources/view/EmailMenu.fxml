@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="mainVbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="151.0" prefWidth="418.0" stylesheets="@../css/EmailMenu.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.EmailMenuController">
+   <children>
+      <HBox prefHeight="11.0" prefWidth="418.0">
+         <children>
+            <Label fx:id="errorMessageLbl" prefHeight="18.0" prefWidth="254.0" text="">
+               <HBox.margin>
+                  <Insets left="120.0" top="5.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <HBox prefHeight="42.0" prefWidth="403.0">
+         <children>
+            <Label fx:id="EmailAdressLabel" text="E-mail adress:">
+               <HBox.margin>
+                  <Insets left="15.0" top="30.0" />
+               </HBox.margin>
+            </Label>
+            <TextField fx:id="emailTxtField" prefHeight="26.0" prefWidth="235.0">
+               <HBox.margin>
+                  <Insets left="16.0" top="28.0" />
+               </HBox.margin>
+            </TextField>
+         </children>
+      </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="sendPdfBtn" mnemonicParsing="false" onAction="#senPdfOnAct" prefHeight="9.0" prefWidth="175.0" text="Send the report as pdf ">
+               <HBox.margin>
+                  <Insets left="128.0" top="20.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</VBox>

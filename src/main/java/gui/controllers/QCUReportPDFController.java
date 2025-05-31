@@ -9,6 +9,7 @@ import exceptions.DALException;
 import gui.model.ReportModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -23,6 +24,7 @@ import javafx.stage.Stage;
 import utilities.SceneNavigator;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -137,6 +139,7 @@ public class QCUReportPDFController {
         }
     }
 
+
     private void loadLatestComment(String orderCode) {
         try {
             String latestComment = reportModel.getLatestCommentByOrderNumber(orderCode);
@@ -150,10 +153,7 @@ public class QCUReportPDFController {
         return orderNumberLabel.getText().replace("ORDER NUMBER: ", "").trim();
     }
 
-    public void setCurrentUser(QualityControl user) {
-        this.currentUser = user;
-        signatureLabel.setText(user.getFirstName() + " " + user.getLastName());
-    }
+
 
     private void hideSubmitButton(String orderCode) {
         String status = new OrderStatusManager().getStatusForOrder(orderCode);
@@ -164,9 +164,19 @@ public class QCUReportPDFController {
         }
     }
 
+    public void setCurrentUser(QualityControl user) {
+        this.currentUser = user;
+        signatureLabel.setText(user.getFirstName() + " " + user.getLastName());
+    }
+
     @FXML
     private void handleGoBack(ActionEvent actionEvent) {
-        sceneNavigator.switchTo(actionEvent, "QCUFolderScreen.fxml");
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        try {
+            sceneNavigator.openNewScene(actionEvent, stage, "QCUFolderScreen.fxml", "QCU Folder Menu");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -253,5 +263,10 @@ public class QCUReportPDFController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void sendMailAct(ActionEvent actionEvent) throws IOException {
+        sceneNavigator.openNewScene(actionEvent, new Stage(),"EmailMenu.fxml", "Send Report to Email");
     }
 }

@@ -1,0 +1,23 @@
+#sendPdfBtn {
+    -fx-background-color: #004b88;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+
+#EmailAdressLabel {
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+}
+
+#errorMessageLbl {
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+#mainVBox {
+    -fx-background-color: linear-gradient(#d9d9d9, #bfbfbf)
+}

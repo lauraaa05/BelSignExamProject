@@ -13,7 +13,7 @@ public class TestMainLogin extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/MainLogin.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Operator Log In");
+        stage.setTitle("Main Log In");
         stage.setScene(scene);
         stage.show();
     }
