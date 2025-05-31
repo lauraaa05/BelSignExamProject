@@ -169,14 +169,6 @@ public class QCUNewReportController {
         sceneNavigator.switchTo(actionEvent, "QCUMain.fxml");
     }
 
-    private void hideSubmitButton(String orderCode) {
-        String status = new OrderStatusDAO().getStatusForOrder(orderCode);
-        if ("done".equalsIgnoreCase(status)) {
-            submitButton.setVisible(false);
-            submitButton.setManaged(false);
-            commentsTextArea.setEditable(false);
-        }
-    }
 
     @FXML
     private void handleReject() {
@@ -220,44 +212,6 @@ public class QCUNewReportController {
         signatureLabel.setText(user.getFirstName() + " " + user.getLastName());
     }
 
-    @FXML
-    private void handleDownloadPDF(ActionEvent actionEvent) {
-        try {
-            VBox content = (VBox) scrollPane.getContent();
-
-            content.applyCss();
-            content.layout();
-
-            int width = (int) content.getBoundsInParent().getWidth();
-            int height = (int) content.getBoundsInParent().getHeight();
-
-            WritableImage fxImage = new WritableImage(width, height);
-            content.snapshot(new SnapshotParameters(), fxImage);
-
-            BufferedImage bufferedImage = SwingFXUtils.fromFXImage(fxImage, null);
-            File tempImageFile = new File("qcu_temp_snapshot.png");
-            ImageIO.write(bufferedImage, "png", tempImageFile);
-
-            String pdfPath = "QCU_Report_iText.pdf";
-            PdfWriter writer = new PdfWriter(new FileOutputStream(pdfPath));
-            PdfDocument pdfDoc = new PdfDocument(writer);
-            Document doc = new Document(pdfDoc);
-
-            ImageData imageData = ImageDataFactory.create(tempImageFile.getAbsolutePath());
-            com.itextpdf.layout.element.Image pdfImage = new com.itextpdf.layout.element.Image(imageData);
-
-            pdfImage.scaleToFit(pdfDoc.getDefaultPageSize().getWidth(), pdfDoc.getDefaultPageSize().getHeight());
-
-            doc.add(pdfImage);
-            doc.close();
-
-            System.out.println("PDF created at: " + pdfPath);
-            tempImageFile.delete(); // Clean up temp image
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     private void handleSubmitReport(ActionEvent actionEvent) {
@@ -313,6 +267,7 @@ public class QCUNewReportController {
             alert.setHeaderText(null);
             alert.setContentText("Failed to submit report.");
             alert.showAndWait();
+
         }
     }
 }
