@@ -77,7 +77,6 @@
                         <Button fx:id="goBackButton" onAction="#goBackBtnAction" prefHeight="35" prefWidth="127" text="← BACK" GridPane.columnIndex="0" GridPane.halignment="LEFT" />
                         <Button fx:id="rejectButton" onAction="#handleReject" prefHeight="35" prefWidth="150" text="REJECT" textFill="white" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                         <Button fx:id="submitButton" onAction="#handleSubmitReport" prefHeight="35" prefWidth="158.0" text="SUBMIT REPORT" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
-                        <Button fx:id="downloadPDFButton" onAction="#handleDownloadPDF" prefHeight="35" prefWidth="150" text="Download PDF" GridPane.columnIndex="1" />
 
                     </children>
                <rowConstraints>

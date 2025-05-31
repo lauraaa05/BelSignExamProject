@@ -140,42 +140,6 @@ public class QCUNewReportController {
         }
     }
 
-//    private void submitComment() {
-//        String commentText = commentsTextArea.getText();
-//        if (commentText == null || commentText.isEmpty()) {
-//            System.out.println("Comment is empty");
-//            return;
-//        }
-//
-//        try {
-//            String fullOrderNumber = extractOrderNumber();
-//            String orderCode = fullOrderNumber.substring(fullOrderNumber.lastIndexOf("-") + 1);
-//
-//            Report report = new Report(4, commentText, fullOrderNumber, LocalDateTime.now(), orderCode);
-//            reportModel.insertReport(report);
-//
-//            boolean updated = new OrderStatusDAO().updateOrderStatus(orderCode, "qcu", "done");
-//
-//            if (updated) {
-//                System.out.println("Order marked as done.");
-//            }
-//
-//            commentsTextArea.clear();
-//            loadLatestComment(fullOrderNumber);
-//
-//            submitButton.setVisible(false);
-//            commentsTextArea.setEditable(false);
-//
-//            hideSubmitButton(orderCode);
-//
-//            Stage currentStage = (Stage) submitButton.getScene().getWindow();
-//            currentStage.close();
-//            sceneNavigator.switchTo("/view/QCUMain.fxml");
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     private void loadLatestComment(String orderNumber) {
         try {
@@ -204,14 +168,6 @@ public class QCUNewReportController {
         sceneNavigator.switchTo(actionEvent, "QCUMain.fxml");
     }
 
-    private void hideSubmitButton(String orderCode) {
-        String status = new OrderStatusDAO().getStatusForOrder(orderCode);
-        if ("done".equalsIgnoreCase(status)) {
-            submitButton.setVisible(false);
-            submitButton.setManaged(false);
-            commentsTextArea.setEditable(false);
-        }
-    }
 
     @FXML
     private void handleReject() {
@@ -251,45 +207,6 @@ public class QCUNewReportController {
     public void setCurrentUser(QualityControl user) {
         this.currentUser = user;
         signatureLabel.setText(user.getFirstName() + " " + user.getLastName());
-    }
-
-    @FXML
-    private void handleDownloadPDF(ActionEvent actionEvent) {
-        try {
-            VBox content = (VBox) scrollPane.getContent();
-
-            content.applyCss();
-            content.layout();
-
-            int width = (int) content.getBoundsInParent().getWidth();
-            int height = (int) content.getBoundsInParent().getHeight();
-
-            WritableImage fxImage = new WritableImage(width, height);
-            content.snapshot(new SnapshotParameters(), fxImage);
-
-            BufferedImage bufferedImage = SwingFXUtils.fromFXImage(fxImage, null);
-            File tempImageFile = new File("qcu_temp_snapshot.png");
-            ImageIO.write(bufferedImage, "png", tempImageFile);
-
-            String pdfPath = "QCU_Report_iText.pdf";
-            PdfWriter writer = new PdfWriter(new FileOutputStream(pdfPath));
-            PdfDocument pdfDoc = new PdfDocument(writer);
-            Document doc = new Document(pdfDoc);
-
-            ImageData imageData = ImageDataFactory.create(tempImageFile.getAbsolutePath());
-            com.itextpdf.layout.element.Image pdfImage = new com.itextpdf.layout.element.Image(imageData);
-
-            pdfImage.scaleToFit(pdfDoc.getDefaultPageSize().getWidth(), pdfDoc.getDefaultPageSize().getHeight());
-
-            doc.add(pdfImage);
-            doc.close();
-
-            System.out.println("PDF created at: " + pdfPath);
-            tempImageFile.delete(); // Clean up temp image
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML

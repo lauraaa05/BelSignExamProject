@@ -1,0 +1,201 @@
+/* Root container */
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-background-color: #f4f6f8; /* Soft light gray */
+}
+
+/* Header Section */
+#headerSection {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d1d5db; /* Light gray border */
+    -fx-border-width: 0 0 2px 0;
+    -fx-padding: 15 20 15 20;
+    -fx-background-radius: 8px;
+}
+
+#title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #004b88; /* Deep blue */
+}
+
+#orderNumberLabel {
+    -fx-font-size: 16px;
+    -fx-text-fill: #374151; /* Slate gray */
+}
+
+/* Photo Section */
+#photoGrid VBox {
+    -fx-background-color: #ffffff;
+    -fx-padding: 10;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+
+#photoGrid Label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+#photoGrid ImageView {
+    -fx-border-color: #d1d5db;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+}
+
+/* Comment Section */
+#commentSection {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d1d5db;
+    -fx-border-width: 2px 0 0 0;
+    -fx-padding: 15 20;
+    -fx-background-radius: 8px;
+}
+
+#commentsTextArea {
+    -fx-font-size: 14px;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 5px;
+    -fx-padding: 10;
+    -fx-background-color: #f9fafb;
+}
+
+/* Buttons */
+#submitButton {
+    -fx-background-color: linear-gradient(to right, #33ad71, #28a745);
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+* Buttons *,
+#rejectButton {
+    -fx-background-color: linear-gradient(to right, #cc4b39, #e41b1b);
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 3, 0, 0, 1);
+}
+
+#goBackButton {
+    -fx-background-color: #004b88;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+#rejectedButton {
+    -fx-background-color: #e81414;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+#sendEmailButton {
+    -fx-background-color: #575757;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+#savePDFButton {
+    -fx-background-color: #004b88;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+
+#viewPdfButton {
+    -fx-background-color: #004b88;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+
+
+/* Hover Effects */
+#submitButton:hover {
+    -fx-background-color: linear-gradient(to right, #28a745, #218838);
+    -fx-opacity: 0.9;
+}
+
+#goBackButton:hover {
+    -fx-background-color: #003060;
+    -fx-opacity: 0.9;
+}
+#reject:hover {
+    -fx-background-color: #cd1a1e;
+    -fx-opacity: 0.9;
+}
+
+/* Labels in sections */
+.label {
+    -fx-font-size: 14px;
+}
+
+/* General ImageView styling */
+ImageView {
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 5px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);
+}
+
+#productDetailsSection {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 4, 0, 0, 1);
+}
+
+#productDetailsBox .label {
+    -fx-font-size: 14px;
+}
+
+.product-detail-box {
+    -fx-background-color: #f9fafb;
+    -fx-padding: 10px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-alignment: center;
+}
+
+.product-detail-key {
+    -fx-font-weight: bold;
+    -fx-text-fill: #004b88;
+}
+
+.product-detail-value {
+    -fx-text-fill: #374151;
+}
+
+#signatureLabel {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 24px;
+    -fx-font-weight: bold; /* handwriting fonts look better without bold */
+    -fx-text-fill: #003366;
+}
+
+#downloadPDFBtn {
+    -fx-background-color: #004b88;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+
+

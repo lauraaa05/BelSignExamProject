@@ -18,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utilities.SceneNavigator;
 
@@ -262,13 +263,25 @@ public class QCUReportPDFController {
             // Convert WritableImage to BufferedImage
             BufferedImage bufferedImage = SwingFXUtils.fromFXImage(fxImage, null);
 
-            // Create a new PDF document
+            // Use FileChooser to let user select the save location
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save PDF Report");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+            fileChooser.setInitialFileName("QCU_Report.pdf");
+
+            // Get the current window/stage
+            Stage stage = (Stage) scrollPane.getScene().getWindow();
+            File selectedFile = fileChooser.showSaveDialog(stage);
+
+            if (selectedFile == null) {
+                System.out.println("PDF save cancelled by user.");
+                return;
+            }
+
             try (PDDocument document = new PDDocument()) {
-                // Calculate scale to fit into A4
+                // Scale to fit A4
                 float pageWidth = PDRectangle.A4.getWidth();
                 float pageHeight = PDRectangle.A4.getHeight();
-
-                // Scale image to fit page size
                 float scale = Math.min(pageWidth / bufferedImage.getWidth(), pageHeight / bufferedImage.getHeight());
 
                 int scaledWidth = (int) (bufferedImage.getWidth() * scale);
@@ -280,20 +293,19 @@ public class QCUReportPDFController {
                 PDImageXObject pdImage = LosslessFactory.createFromImage(document, bufferedImage);
                 PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
-                // Draw the image centered
                 float x = (pageWidth - scaledWidth) / 2;
                 float y = (pageHeight - scaledHeight) / 2;
                 contentStream.drawImage(pdImage, x, y, scaledWidth, scaledHeight);
 
                 contentStream.close();
 
-                String outputPath = "QCU_Report_PDFBox.pdf";
-                document.save(outputPath);
-                System.out.println("PDF created at: " + outputPath);
+                document.save(selectedFile);
+                System.out.println("PDF saved at: " + selectedFile.getAbsolutePath());
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 }

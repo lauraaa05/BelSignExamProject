@@ -145,25 +145,6 @@ public class QCUDoneReportController {
         }
     }
 
-    // Save PDF to file
-    public void handleSavePdf(ActionEvent actionEvent) {
-        String content = "Quality Control Report Completed.\nAll items approved.";
-        String fileName = "QCU_Report";
-
-        try {
-            // Generate PDF as bytes
-            byte[] pdfBytes = PDFReportGenerator.generateReportAsBytes(content, fileName);
-
-            // Save to DB
-            reportModel.savePdfToDatabase(currentOrder.getOrderCode(), pdfBytes);
-
-            showAlert("Success", "PDF saved to database for order: " + currentOrder.getOrderCode());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Error", "Could not save PDF to database: " + e.getMessage());
-        }
-    }
 
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -227,48 +208,4 @@ public class QCUDoneReportController {
         return vBox;
     }
 
-    @FXML
-    private void handleViewPdf(ActionEvent actionEvent) {
-        try {
-            // Capture the node you want as image (e.g., ScrollPane)
-            WritableImage snapshot = scrollPane.snapshot(new SnapshotParameters(), null);
-
-            // Convert WritableImage to BufferedImage
-            BufferedImage bufferedImage = SwingFXUtils.fromFXImage(snapshot, null);
-
-            // Save the image to a temporary file (optional)
-            File imageFile = File.createTempFile("report_image_", ".png");
-            ImageIO.write(bufferedImage, "png", imageFile);
-
-            // Create a PDF file
-            File pdfFile = File.createTempFile("report_", ".pdf");
-            pdfFile.deleteOnExit();
-
-            // Use iText to write image to PDF
-            try (FileOutputStream fos = new FileOutputStream(pdfFile)) {
-                PdfWriter writer = new PdfWriter(fos);
-                PdfDocument pdfDoc = new PdfDocument(writer);
-                Document document = new Document(pdfDoc);
-
-                // Load image
-                com.itextpdf.layout.element.Image pdfImage =
-                        new com.itextpdf.layout.element.Image(com.itextpdf.io.image.ImageDataFactory.create(imageFile.getAbsolutePath()));
-
-                pdfImage.scaleToFit(500, 700);  // Resize as needed
-                document.add(pdfImage);
-                document.close();
-            }
-
-            // Open the PDF
-            if (Desktop.isDesktopSupported()) {
-                Desktop.getDesktop().open(pdfFile);
-            } else {
-                showAlert("Unsupported", "Desktop API is not supported on this system.");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Error", "Failed to generate PDF: " + e.getMessage());
-        }
-    }
 }
