@@ -24,6 +24,7 @@ import javafx.stage.Stage;
 import utilities.SceneNavigator;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -153,6 +154,7 @@ public class QCUReportPDFController {
         }
     }
 
+
     private void loadLatestComment(String orderCode) {
         try {
             String latestComment = reportModel.getLatestCommentByOrderNumber(orderCode);
@@ -166,10 +168,7 @@ public class QCUReportPDFController {
         return orderNumberLabel.getText().replace("ORDER NUMBER: ", "").trim();
     }
 
-    public void setCurrentUser(QualityControl user) {
-        this.currentUser = user;
-        signatureLabel.setText(user.getFirstName() + " " + user.getLastName());
-    }
+
 
     private void hideSubmitButton(String orderCode) {
         String status = new OrderStatusDAO().getStatusForOrder(orderCode);
@@ -178,6 +177,11 @@ public class QCUReportPDFController {
             submitButton.setManaged(false);
             commentsTextArea.setEditable(false);
         }
+    }
+
+    public void setCurrentUser(QualityControl user) {
+        this.currentUser = user;
+        signatureLabel.setText(user.getFirstName() + " " + user.getLastName());
     }
 
     @FXML
@@ -269,5 +273,10 @@ public class QCUReportPDFController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void sendMailAct(ActionEvent actionEvent) throws IOException {
+        sceneNavigator.openNewScene(actionEvent, new Stage(),"EmailMenu.fxml", "Send Report to Email");
     }
 }
