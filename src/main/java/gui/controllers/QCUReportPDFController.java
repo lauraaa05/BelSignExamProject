@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import utilities.SceneNavigator;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -152,41 +153,6 @@ public class QCUReportPDFController {
         }
     }
 
-    private void submitComment() {
-        String commentText = commentsTextArea.getText();
-        if (commentText == null || commentText.isEmpty()) {
-            System.out.println("Comment is empty");
-            return;
-        }
-
-        try {
-            String fullOrderNumber = extractOrderNumber();
-            String orderCode = fullOrderNumber.substring(fullOrderNumber.lastIndexOf("-") + 1);
-
-            Report report = new Report(4, commentText, fullOrderNumber, LocalDateTime.now(), orderCode);
-            reportModel.insertReport(report);
-
-            boolean updated = new OrderStatusDAO().updateOrderStatus(orderCode, "qcu", "done");
-
-            if (updated) {
-                System.out.println("Order marked as done.");
-            }
-
-            commentsTextArea.clear();
-            loadLatestComment(currentOrder.getOrderCode());
-
-
-
-            hideSubmitButton(orderCode);
-
-            Stage currentStage = (Stage) submitButton.getScene().getWindow();
-            currentStage.close();
-            sceneNavigator.switchTo("/view/QCUMain.fxml");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     private void loadLatestComment(String orderCode) {
         try {
@@ -306,6 +272,11 @@ public class QCUReportPDFController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void sendMailAct(ActionEvent actionEvent) throws IOException {
+        sceneNavigator.openNewScene(actionEvent, new Stage(),"EmailMenu.fxml", "Send Report to Email");
     }
 
 }

@@ -248,7 +248,7 @@ public class QCUFolderController {
             Order selectedOrder = orderListView.getSelectionModel().getSelectedItem();
             if (selectedOrder != null) {
                 Stage stage = (Stage) orderListView.getScene().getWindow();
-                sceneNavigator.<QCUReportPDFController>switchToWithData(stage, "QCUReportPDF.fxml", controller -> {
+                sceneNavigator.<QCUReportPDFController>switchToWithData(stage, "QCUReportPDF.fxml", "QCU Report PDF", controller -> {
                     controller.setOrder(selectedOrder);
                 });
             }
