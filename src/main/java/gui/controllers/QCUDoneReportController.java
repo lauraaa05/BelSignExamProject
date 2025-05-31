@@ -3,42 +3,26 @@ package gui.controllers;
 import be.Order;
 import be.Picture;
 import be.User;
-import dal.OrderStatusDAO;
-import dal.PictureDAO;
+import bll.OrderStatusManager;
+import bll.PictureManager;
 import exceptions.DALException;
 import gui.model.ReportModel;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import utilities.EmailSender;
 import utilities.LoggedInUser;
-import utilities.PDFReportGenerator;
 import utilities.SceneNavigator;
 
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
-import java.awt.Desktop;
-
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Paragraph;
-
-import javax.imageio.ImageIO;
 
 public class QCUDoneReportController {
 
@@ -49,24 +33,6 @@ public class QCUDoneReportController {
     private ScrollPane scrollPane;
 
     @FXML
-    private TextField emailField;
-
-    @FXML
-    private AnchorPane photoSectionPane;
-
-    @FXML
-    private TextArea commentsTextArea;
-
-    @FXML
-    private Label emailText;
-
-    @FXML
-    private Button sendEmailButton;
-
-    @FXML
-    private Button viewPdfButton;
-
-    @FXML
     private Label generalCommentsLabel;
 
     @FXML
@@ -75,7 +41,7 @@ public class QCUDoneReportController {
     @FXML
     private Label orderNumberLabel;
 
-    private final PictureDAO pictureDAO = new PictureDAO();
+    private final PictureManager pictureManager = new PictureManager();
 
     private final ReportModel reportModel = new ReportModel();
 
@@ -118,7 +84,7 @@ public class QCUDoneReportController {
         loadPictures(order.toString());
         loadLatestComment(order.getOrderCode());
 
-        String status = new OrderStatusDAO().getStatusForOrder(order.getOrderCode());
+        String status = new OrderStatusManager().getStatusForOrder(order.getOrderCode());
 
         loadSignatureName(order.getOrderCode());
     }
@@ -135,7 +101,7 @@ public class QCUDoneReportController {
 
     private void loadPictures(String orderNumber) {
         try {
-            List<Picture> pictures = pictureDAO.getPicturesByOrderNumberRaw(orderNumber);
+            List<Picture> pictures = pictureManager.getPicturesByOrderNumberRaw(orderNumber);
             photoTile.getChildren().clear();
 
             for (Picture picture : pictures) {
