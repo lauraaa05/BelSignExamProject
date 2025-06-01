@@ -73,7 +73,7 @@
                         <Font name="Arial Bold" size="20.0" />
                      </font>
                   </Label>
-                  <TextField prefHeight="36.0" prefWidth="171.0" promptText="OrderNumber...">
+                  <TextField fx:id="searchField" prefHeight="36.0" prefWidth="171.0" promptText="OrderNumber...">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>

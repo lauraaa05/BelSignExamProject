@@ -13,17 +13,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 
 public class OperatorMainController implements Initializable {
 
+    @FXML
+    public TextField searchField;
     @FXML
     private Button signOutButton;
 
@@ -34,6 +38,8 @@ public class OperatorMainController implements Initializable {
     private Label loggedUsernameLbl;
 
     private final OrderStatusManager orderStatusManager = new OrderStatusManager();
+
+    private List<Order> allOrders = new ArrayList<>();
 
     public OperatorMainController() throws IOException {
     }
@@ -69,6 +75,7 @@ public class OperatorMainController implements Initializable {
                 }
             }
         });
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> filterOrders(newVal));
     }
 
     private void loadOrdersIntoToDoList() {
@@ -144,6 +151,17 @@ public class OperatorMainController implements Initializable {
                 return 0;
             }
         });
-        toDoListView.getItems().setAll(todoOrders);
+        allOrders =  todoOrders;
+        toDoListView.getItems().setAll(allOrders);
+    }
+
+    private void filterOrders(String searchText) {
+        String lowerSearch = searchText.toLowerCase();
+
+        List<Order> filtered = allOrders.stream()
+                .filter(order -> order.toString().toLowerCase().contains(lowerSearch))
+                .toList();
+
+        toDoListView.getItems().setAll(filtered);
     }
 }
