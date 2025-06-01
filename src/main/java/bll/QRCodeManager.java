@@ -12,30 +12,11 @@ import dal.QRCodeDAO;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.sql.SQLException;
 
-/**
- * Service for generating and validating QR Codes.
- * Supports both file and byte array operations.
- */
 public class QRCodeManager {
 
     private final QRCodeDAO qrCodeDAO =  new QRCodeDAO();
-
-    public String generateQRCodeImage(String token, String fileName) throws WriterException, IOException {
-        int width = 250;
-        int height = 250;
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        BitMatrix bitMatrix = qrCodeWriter.encode(token, BarcodeFormat.QR_CODE, width, height);
-
-        String directory = "qrcodes/";
-        Path path = FileSystems.getDefault().getPath(directory + fileName);
-        MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
-
-        return path.toString();
-    }
 
 
     public String readQRCode(String filePath) throws IOException, NotFoundException {
@@ -47,19 +28,6 @@ public class QRCodeManager {
         return result.getText();
     }
 
-
-    public boolean isValidQRCode(String filePath, String expectedToken) {
-        try {
-            String content = readQRCode(filePath);
-            return content.equals(expectedToken);
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    /**
-     * Generates a QR code and returns it as a byte array (e.g., for database storage).
-     */
     public byte[] generateQRCodeAsBytes(String token) throws WriterException, IOException {
         int width = 250;
         int height = 250;
@@ -80,22 +48,6 @@ public class QRCodeManager {
 
         Result result = new MultiFormatReader().decode(bitmap);
         return result.getText();
-    }
-
-    /**
-     * Validates QR code content from image bytes against the expected token.
-     *
-     * @param imageBytes     PNG data
-     * @param expectedToken  token to validate against
-     * @return true if valid, false if not
-     */
-    public boolean isValidQRCode(byte[] imageBytes, String expectedToken) {
-        try {
-            String content = readQRCodeFromBytes(imageBytes);
-            return content.equals(expectedToken);
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     public String readQRCodeFromImage(BufferedImage image) throws NotFoundException {

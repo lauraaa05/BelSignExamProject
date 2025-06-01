@@ -4,7 +4,6 @@ import be.Operator;
 import be.QualityControl;
 import be.User;
 import bll.LoginManager;
-import dal.LoginDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;

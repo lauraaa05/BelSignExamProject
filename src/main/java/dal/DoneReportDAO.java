@@ -1,7 +1,6 @@
     package dal;
 
     import dal.interfaceDAO.IDoneReportDAO;
-    import exceptions.DALException;
 
     import java.sql.Connection;
     import java.sql.PreparedStatement;

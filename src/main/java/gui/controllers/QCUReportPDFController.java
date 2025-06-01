@@ -16,7 +16,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -147,26 +146,6 @@ public class QCUReportPDFController {
         } catch (Exception e) {
             generalCommentsLabel.setText("Failed to fetch comment: " + e.getMessage());
         }
-    }
-
-    private String extractOrderNumber() {
-        return orderNumberLabel.getText().replace("ORDER NUMBER: ", "").trim();
-    }
-
-
-
-    private void hideSubmitButton(String orderCode) {
-        String status = new OrderStatusManager().getStatusForOrder(orderCode);
-        if ("done".equalsIgnoreCase(status)) {
-            submitButton.setVisible(false);
-            submitButton.setManaged(false);
-            commentsTextArea.setEditable(false);
-        }
-    }
-
-    public void setCurrentUser(QualityControl user) {
-        this.currentUser = user;
-        signatureLabel.setText(user.getFirstName() + " " + user.getLastName());
     }
 
     @FXML

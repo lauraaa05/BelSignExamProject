@@ -34,33 +34,6 @@ public class OrderStatusDAO implements IOrderStatusDAO {
         }
     }
 
-    // Version that returns OrderCodes
-    public List<String> getRawOrderCodesByRoleAndStatus(String role, String status) {
-        List<String> results = new ArrayList<>();
-        String sql = "SELECT OrderCode " +
-                "FROM OrderStatusOrder " +
-                "JOIN OrderStatus s ON oso.OrderStatus = s.StatusId " +
-                "WHERE oso.UserRole = ? AND s.Status = ?";
-
-        try (Connection conn = dbAccess.DBConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, role);
-            stmt.setString(2, status);
-
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                String orderCode = rs.getString("OrderCode");
-                results.add(orderCode);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return results;
-    }
-
     public String getStatusForOrder(String orderNumber) {
         String sql = "SELECT s.Status " +
                 "FROM OrderStatusOrder oso " +

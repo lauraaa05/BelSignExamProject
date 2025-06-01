@@ -1,10 +1,8 @@
 package dal;
 
 import be.QRCodeInfo;
-import com.google.zxing.qrcode.encoder.QRCode;
 import dal.interfaceDAO.IQRCodeDAO;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

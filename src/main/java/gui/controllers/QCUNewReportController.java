@@ -6,7 +6,6 @@ import be.QualityControl;
 import be.Report;
 import bll.OrderStatusManager;
 import bll.PictureManager;
-import exceptions.BLLException;
 import exceptions.DALException;
 import gui.model.ReportModel;
 import javafx.event.ActionEvent;
@@ -133,15 +132,6 @@ public class QCUNewReportController {
 
     private String extractOrderNumber() {
         return orderNumberLabel.getText().replace("ORDER NUMBER: ", "").trim();
-    }
-
-    private void refreshLatestComment() {
-        try {
-            String latestComment = reportModel.getLatestCommentByOrderNumber(extractOrderNumber());
-            generalCommentsLabel.setText(latestComment);
-        } catch (BLLException e) {
-            generalCommentsLabel.setText("Failed to fetch comment: " + e.getMessage());
-        }
     }
 
     @FXML

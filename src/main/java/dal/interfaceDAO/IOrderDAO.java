@@ -8,8 +8,4 @@ public interface IOrderDAO extends IBaseDAO<Order> {
     static List<Order> getFormattedOrderNumbers() {
         return null;
     }
-
-
-
-
 }

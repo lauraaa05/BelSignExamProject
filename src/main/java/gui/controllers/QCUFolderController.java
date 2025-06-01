@@ -3,7 +3,7 @@ package gui.controllers;
 import be.Order;
 import be.User;
 import bll.OrderManager;
-import dk.easv.belsignexamproject.OperatorLogInApp;
+import dk.easv.belsignexamproject.MainLogin;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -138,18 +138,6 @@ public class QCUFolderController {
     }
 
 
-    private List<String> performSearch(String searchText) {
-        // Case-insensitive partial match search on folderDates
-        return folderDates.stream()
-                .filter(date -> date.toLowerCase().contains(searchText.toLowerCase()))
-                .collect(Collectors.toList());
-    }
-
-    private void displayResults(List<String> results) {
-        resultsListView.getItems().clear();
-        resultsListView.getItems().addAll(results);
-    }
-
     private void filterFolders(String searchText) {
         String lowerSearch = searchText.trim().toLowerCase();
 
@@ -195,7 +183,7 @@ public class QCUFolderController {
     }
 
     private void switchToLoginScene(Stage currentStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/MainLogin.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MainLogin.class.getResource("/view/MainLogin.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         currentStage.setTitle("QCU Login");
         currentStage.setScene(scene);
@@ -207,10 +195,6 @@ public class QCUFolderController {
         activeButton.getStyleClass().add("active");
     }
 
-    @FXML
-    private void btnOpenReportAction(ActionEvent actionEvent) {
-        sceneNavigator.switchTo(actionEvent, "QCUDoneReport.fxml");
-    }
 
     private void openFolderAndShowOrders(String date) {
         String[] parts = date.split("-");

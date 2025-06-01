@@ -4,7 +4,8 @@ package gui.controllers;
 import be.Operator;
 import be.Order;
 import bll.OrderStatusManager;
-import dk.easv.belsignexamproject.OperatorLogInApp;
+
+import dk.easv.belsignexamproject.MainLogin;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -41,8 +42,6 @@ public class OperatorMainController implements Initializable {
 
     private List<Order> allOrders = new ArrayList<>();
 
-    public OperatorMainController() throws IOException {
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -78,12 +77,6 @@ public class OperatorMainController implements Initializable {
         searchField.textProperty().addListener((obs, oldVal, newVal) -> searchOrders(newVal));
     }
 
-    private void loadOrdersIntoToDoList() {
-        OrderStatusManager osm = new OrderStatusManager();
-        List<Order> toDoOrders = osm.getToDoOrders();
-        toDoListView.getItems().setAll(toDoOrders);
-        toDoListView.setFixedCellSize(48);
-    }
 
     // Handle order click
     private void handleOrderClick(MouseEvent event) {
@@ -116,7 +109,7 @@ public class OperatorMainController implements Initializable {
     }
     private void switchToMainLoginWindow(Stage currentStage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/MainLogin.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MainLogin.class.getResource("/view/MainLogin.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
         currentStage.setTitle("MainLogin");

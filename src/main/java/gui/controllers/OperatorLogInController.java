@@ -5,7 +5,7 @@ import be.QRCodeInfo;
 import bll.CameraManager;
 import bll.OperatorManager;
 import bll.QRCodeManager;
-import dk.easv.belsignexamproject.OperatorLogInApp;
+import dk.easv.belsignexamproject.MainLogin;
 import io.github.palexdev.materialfx.utils.SwingFXUtils;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -86,7 +86,7 @@ public class OperatorLogInController {
                 if (operator != null && operator.getRole().equalsIgnoreCase("Operator")) {
                     LoggedInUser.setUser(operator);
 
-                    FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorMain.fxml"));
+                    FXMLLoader fxmlLoader = new FXMLLoader(MainLogin.class.getResource("/view/OperatorMain.fxml"));
                     Scene scene = new Scene(fxmlLoader.load());
 
                     Platform.runLater(() -> {
@@ -116,7 +116,7 @@ public class OperatorLogInController {
 
     // Optional: For returning to login screen later from another controller
     public static void switchToLoginScene(Stage currentStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/OperatorLogIn.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MainLogin.class.getResource("/view/OperatorLogIn.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
         currentStage.setTitle("Operator Login");

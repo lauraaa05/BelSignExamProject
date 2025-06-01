@@ -72,11 +72,6 @@ public class QCUMainController {
         }
     }
 
-    @FXML
-    private void btnOpenReportAction(ActionEvent actionEvent) {
-        sceneNavigator.switchTo(actionEvent, "QCUReport.fxml");
-    }
-
     // Method to load orders into the ListView
     @FXML
     public void initialize() {

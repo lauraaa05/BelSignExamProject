@@ -4,7 +4,6 @@ import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.SwipeEvent;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 

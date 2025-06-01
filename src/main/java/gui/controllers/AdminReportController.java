@@ -1,7 +1,7 @@
 package gui.controllers;
 
 import be.User;
-import dk.easv.belsignexamproject.OperatorLogInApp;
+import dk.easv.belsignexamproject.MainLogin;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -104,7 +104,7 @@ public class AdminReportController {
 
     private void switchToUserScreen(Stage currentStage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/AdminUserScreen.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MainLogin.class.getResource("/view/AdminUserScreen.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
         currentStage.setTitle("User Management");
@@ -121,7 +121,7 @@ public class AdminReportController {
 
     private void switchToLogInScreen(Stage currentStage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/MainLogin.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MainLogin.class.getResource("/view/MainLogin.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
         currentStage.setTitle("Login");

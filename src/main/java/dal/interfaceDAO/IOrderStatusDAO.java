@@ -8,8 +8,6 @@ public interface IOrderStatusDAO {
 
     boolean updateOrderStatusAndRole(String orderCode, int currentRoleId, int newRoleId, int newStatusId);
 
-    List<String> getRawOrderCodesByRoleAndStatus(String role, String status);
-
     String getStatusForOrder(String orderNumber);
 
     List<Order> getOrdersByRoleAndStatuses(String roleName, List<String> statuses);

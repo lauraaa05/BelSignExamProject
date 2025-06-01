@@ -189,29 +189,6 @@ public class MainLoginController {
         currentStage.show();
     }
 
-//    private void switchToOperatorMainScreen(ActionEvent event, Operator operator) throws IOException {
-//        sceneNavigator.switchTo(event, "OperatorMain.fxml");
-//    }
-
-    // handle sign out
-    @FXML
-    private void handleSignOutButtonClick(ActionEvent event) {
-        try {
-            // Get current stage from the button source
-            Stage currentStage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-
-            // Load login screen again
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/MainLogin.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
-
-            currentStage.setTitle("QCU Login");
-            currentStage.setScene(scene);
-            currentStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @FXML
     private void actQRLogin(ActionEvent actionEvent) {
         sceneNavigator.switchTo(actionEvent, "OperatorLogIn.fxml");

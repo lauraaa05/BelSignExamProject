@@ -1,6 +1,6 @@
 package dal.interfaceDAO;
 
-import exceptions.DALException;
+
 
 import java.sql.SQLException;
 

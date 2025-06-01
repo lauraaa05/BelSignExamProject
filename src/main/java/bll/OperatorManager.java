@@ -3,8 +3,6 @@ package bll;
 import be.Operator;
 import dal.OperatorDAO;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class OperatorManager{
 

@@ -68,15 +68,6 @@ public class QCUDoneReportController {
         }
     }
 
-
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
     public void setOrder(Order order) {
         this.currentOrder = order;
         orderNumberLabel.setText("ORDER NUMBER: " + order);

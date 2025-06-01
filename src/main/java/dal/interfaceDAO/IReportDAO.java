@@ -19,5 +19,4 @@ public interface IReportDAO {
 
     void saveDoneReport(String orderCode, int signedBy) throws DALException;
 
-
 }

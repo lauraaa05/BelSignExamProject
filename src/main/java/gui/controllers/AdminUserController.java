@@ -3,7 +3,7 @@ package gui.controllers;
 import be.Admin;
 import be.User;
 import bll.LoginManager;
-import dk.easv.belsignexamproject.OperatorLogInApp;
+import dk.easv.belsignexamproject.MainLogin;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -67,7 +67,7 @@ public class AdminUserController implements Initializable {
 
     private void switchToLogInScreen(Stage currentStage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/MainLogin.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MainLogin.class.getResource("/view/MainLogin.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
         currentStage.setTitle("Login");
@@ -155,7 +155,7 @@ public class AdminUserController implements Initializable {
 
     private void switchToReportScreen(Stage currentStage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/AdminReport.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MainLogin.class.getResource("/view/AdminReport.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
         currentStage.setTitle("Admin Report Screen");

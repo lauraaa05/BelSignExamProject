@@ -12,13 +12,6 @@ import java.util.function.Consumer;
 
 public class SceneNavigator {
 
-    /**
-     * Switches to a new scene based on an ActionEvent (e.g., button click).
-     * Loads the FXML file from the /view/ directory.
-     *
-     * @param event     The ActionEvent from the UI component.
-     * @param fxmlFile  The name of the FXML file (e.g., "OperatorMain.fxml").
-     */
     public void switchTo(ActionEvent event, String fxmlFile) {
         try {
             Parent root = FXMLLoader.load(SceneNavigator.class.getResource("/view/" + fxmlFile));
@@ -30,15 +23,6 @@ public class SceneNavigator {
         }
     }
 
-    /**
-     * Switches to a new scene and initializes its controller with data.
-     * Useful when passing values to the controller before displaying the scene.
-     *
-     * @param stage                The target stage to set the new scene on.
-     * @param fxmlFile             The name of the FXML file (e.g., "OperatorMain.fxml").
-     * @param controllerInitializer A lambda function to initialize the controller.
-     * @param <T>                  The type of the controller.
-     */
     public <T> void switchToWithData(Stage stage, String fxmlFile, Consumer<T> controllerInitializer) {
         try {
             FXMLLoader loader = new FXMLLoader(SceneNavigator.class.getResource("/view/" + fxmlFile));
@@ -54,12 +38,6 @@ public class SceneNavigator {
         }
     }
 
-    /**
-     * Opens a new scene in a new window, based only on FXML path.
-     * Example: switchTo("/view/OperatorMain.fxml");
-     *
-     * @param fxmlPath The path to the FXML file (including folder).
-     */
     public void switchTo(String fxmlPath) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));

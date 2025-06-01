@@ -4,7 +4,7 @@ import be.Order;
 import be.Picture;
 import bll.OrderStatusManager;
 import bll.PictureManager;
-import dk.easv.belsignexamproject.OperatorLogInApp;
+import dk.easv.belsignexamproject.MainLogin;
 import exceptions.BLLException;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.animation.TranslateTransition;
@@ -144,7 +144,7 @@ public class OperatorPreviewController {
 
     // Méthod change the scene
     private void switchToMainLoginScene(Stage currentStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(OperatorLogInApp.class.getResource("/view/MainLogin.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MainLogin.class.getResource("/view/MainLogin.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         currentStage.setTitle("Main Login");
         currentStage.setScene(scene);

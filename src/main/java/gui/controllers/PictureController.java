@@ -165,15 +165,6 @@ public class PictureController {
         updateCurrentSideLabel();
     }
 
-    private void switchToPreviewScene(Stage currentStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/OperatorPreview.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-
-        currentStage.setTitle("Operator Preview");
-        currentStage.setScene(scene);
-        currentStage.show();
-        System.out.println("Switching to OperatorPreview scene");
-    }
 
     private void exit() throws IOException {
         try {
