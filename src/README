@@ -6,7 +6,28 @@ The application is a photo documenting tool designed to integrate into Belman’
 
 Using three-layered architecture and uses a View Manager system,  to manage images fxml (view).
 
+How to Use
 
+The application can be run from JavaFX IntelliJ using maven and the libraries
+- lib/webcam-capture-0.3.12.jar
+- lib/jakarta.xml.bind-api-2.3.3.jar
+- lib/ikonli-materialdesign-pack-12.2.0.jar
+- lib/ikonli-javafx-12.2.0.jar
+- lib/ikonli-core-12.2.0.jar
+
+To login and use the systems.  Here the credentials to access at differences roles
+
+Operator
+username: Martin
+password: 1234
+
+Quality Control:
+username: Emre
+password: 54
+
+Admin
+username: Admin
+password: 1234
 
 BY: Laura
     Katja
