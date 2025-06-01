@@ -41,8 +41,6 @@ public class PictureController {
     private GridPane gridCapturedImages;
     @FXML
     private Label lblCurrentSide;
-    @FXML
-    private ImageView imgPicture;
 
     private final CameraManager camera = new CameraManager();
     private final PictureManager pictureManager = new  PictureManager();
@@ -54,6 +52,7 @@ public class PictureController {
     private List<String> sidesToTake;
     private int currentSideIndex = 0;
     private int thumbnailCount = 0;
+    private int extraPictureCount = 0;
 
     public void initialize() {
         camera.initializeCamera();
@@ -108,11 +107,14 @@ public class PictureController {
 
     private void saveImage() {
         if (capturedImage != null && isPhotoTaken) {
-            if (currentSideIndex >= sidesToTake.size()) {
-                showAlert(Alert.AlertType.INFORMATION, "All sides captured", null, "You have captured all required sides.");
-                return;
+            String currentSide;
+            if (currentSideIndex < sidesToTake.size()) {
+                currentSide = sidesToTake.get(currentSideIndex);
+            } else {
+                extraPictureCount++;
+                currentSide = "Extra " + extraPictureCount;
             }
-            String currentSide = sidesToTake.get(currentSideIndex);
+
             LocalDateTime timestamp = LocalDateTime.now();
 
             try {
@@ -150,17 +152,17 @@ public class PictureController {
                     .toList();
 
             allSides.removeIf(side -> formattedTaken.contains(formatSide(side)));
+
+            extraPictureCount = (int) formattedTaken.stream()
+                    .filter(side -> side.startsWith("Extra"))
+                    .count();
         } catch (BLLException e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Database Error", null, "Failed to load sides from database.");
         }
-        if (allSides.isEmpty()) {
-            allSides.add("Extra");
-        }
         sidesToTake = allSides;
         currentSideIndex = 0;
         updateCurrentSideLabel();
-
     }
 
     private void switchToPreviewScene(Stage currentStage) throws IOException {
@@ -236,7 +238,7 @@ public class PictureController {
         if(currentSideIndex < sidesToTake.size()) {
             lblCurrentSide.setText(sidesToTake.get(currentSideIndex));
         } else {
-            lblCurrentSide.setText("Extra");
+            lblCurrentSide.setText("Extra " + (extraPictureCount + 1));
         }
     }
 
