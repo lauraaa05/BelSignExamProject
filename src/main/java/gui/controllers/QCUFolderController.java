@@ -65,6 +65,8 @@ public class QCUFolderController {
 
     private final SceneNavigator sceneNavigator = new SceneNavigator();
 
+    private boolean viewingOrders = false;
+
     @FXML
     public void initialize() {
         highlightActiveButton(folderButton);
@@ -139,14 +141,30 @@ public class QCUFolderController {
     private void filterFolders(String searchText) {
         String lowerSearch = searchText.trim().toLowerCase();
 
-        for (Node node : folderFlowPane.getChildren()) {
-            if (node instanceof VBox folderBox && !folderBox.getChildren().isEmpty()) {
-                Label label = (Label) folderBox.getChildren().get(1);
-                String folderDate = label.getText().toLowerCase();
+        if (viewingOrders) {
+            try {
+                String labelText = currentFolderLabel.getText().replace("📁 ", "").trim();
+                String[] parts = labelText.split("-");
+                int year = Integer.parseInt(parts[0]);
+                int month = Integer.parseInt(parts[1]);
 
-                boolean matches = lowerSearch.isEmpty() || folderDate.contains(lowerSearch);
-                folderBox.setVisible(matches);
-                folderBox.setManaged(matches);
+                orderListView.getItems().setAll(
+                        orderManager.getOrdersForDate(year, month).stream()
+                                .filter(order -> order.toString().toLowerCase().contains(lowerSearch))
+                                .toList()
+                );
+            } catch (Exception e) {
+                System.err.println("Error while filtering orders: " + e.getMessage());
+            }
+        } else {
+            for (Node node : folderFlowPane.getChildren()) {
+                if (node instanceof VBox folderBox && !folderBox.getChildren().isEmpty()) {
+                    Label label = (Label) folderBox.getChildren().get(1);
+                    String folderDate = label.getText().toLowerCase();
+                    boolean matches = lowerSearch.isEmpty() || folderDate.contains(lowerSearch);
+                    folderBox.setVisible(matches);
+                    folderBox.setManaged(matches);
+                }
             }
         }
     }
@@ -200,6 +218,8 @@ public class QCUFolderController {
 
         currentFolderLabel.setText("📁 " + date);
 
+        viewingOrders = true;
+
         folderViewPane.setVisible(false);
         folderViewPane.setManaged(false);
 
@@ -213,6 +233,8 @@ public class QCUFolderController {
 
     @FXML
     private void handleBackToFolders() {
+        viewingOrders = false;
+
         orderListPane.setVisible(false);
         orderListPane.setManaged(false);
 
