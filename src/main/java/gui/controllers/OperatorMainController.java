@@ -75,7 +75,7 @@ public class OperatorMainController implements Initializable {
                 }
             }
         });
-        searchField.textProperty().addListener((obs, oldVal, newVal) -> filterOrders(newVal));
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> searchOrders(newVal));
     }
 
     private void loadOrdersIntoToDoList() {
@@ -155,7 +155,7 @@ public class OperatorMainController implements Initializable {
         toDoListView.getItems().setAll(allOrders);
     }
 
-    private void filterOrders(String searchText) {
+    private void searchOrders(String searchText) {
         String lowerSearch = searchText.toLowerCase();
 
         List<Order> filtered = allOrders.stream()
