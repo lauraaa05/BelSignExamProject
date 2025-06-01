@@ -38,7 +38,7 @@ public class ReportModel {
         reportManager.saveDoneReport(orderCode, signedBy);
     }
 
-    public String getSignatureNameByOrderCode(String orderCode) throws SQLException {
+    public String getSignatureNameByOrderCode(String orderCode) throws BLLException {
         return reportManager.getSignatureNameByOrderCode(orderCode);
     }
 }

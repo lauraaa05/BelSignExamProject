@@ -4,6 +4,7 @@ import be.Admin;
 import be.User;
 import bll.LoginManager;
 import dk.easv.belsignexamproject.MainLogin;
+import exceptions.BLLException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -51,8 +52,12 @@ public class AdminUserController implements Initializable {
         roleColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getRole()));
 
-        List<User> allUsers = loginManager.getAllUsers();
-        tableViewUsers.setItems(FXCollections.observableArrayList(allUsers));
+        try {
+            List<User> allUsers = loginManager.getAllUsers();
+            tableViewUsers.setItems(FXCollections.observableArrayList(allUsers));
+        } catch (BLLException e) {
+            showError("Failed to load users: " + e.getMessage());
+        }
 
         deleteUserButton.setDisable(true);
         tableViewUsers.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -150,7 +155,11 @@ public class AdminUserController implements Initializable {
     }
 
     public void refreshUserTable() {
-        tableViewUsers.setItems(FXCollections.observableArrayList(loginManager.getAllUsers()));
+        try {
+            tableViewUsers.setItems(FXCollections.observableArrayList(loginManager.getAllUsers()));
+        } catch (BLLException e) {
+            showError("Failed to refresh user table: " + e.getMessage());
+        }
     }
 
     private void switchToReportScreen(Stage currentStage) throws IOException {
@@ -172,5 +181,13 @@ public class AdminUserController implements Initializable {
 
     public void setLoggedInAdmin(Admin admin) {
         welcomeLabel.setText("Welcome " + admin.getFirstName());
+    }
+
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Something went wrong");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

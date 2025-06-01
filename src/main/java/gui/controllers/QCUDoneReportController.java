@@ -5,6 +5,7 @@ import be.Picture;
 import be.User;
 import bll.OrderStatusManager;
 import bll.PictureManager;
+import exceptions.BLLException;
 import exceptions.DALException;
 import gui.model.ReportModel;
 import javafx.event.ActionEvent;
@@ -73,7 +74,11 @@ public class QCUDoneReportController {
         loadPictures(order.toString());
         loadLatestComment(order.getOrderCode());
 
-        String status = new OrderStatusManager().getStatusForOrder(order.getOrderCode());
+        try {
+            String status = new OrderStatusManager().getStatusForOrder(order.getOrderCode());
+        } catch (BLLException e) {
+            System.err.println("Failed to fetch order status: " + e.getMessage());
+        }
 
         loadSignatureName(order.getOrderCode());
     }
@@ -82,7 +87,7 @@ public class QCUDoneReportController {
         try {
             String signatureName = reportModel.getSignatureNameByOrderCode(orderCode);
             signatureLabel.setText(signatureName);
-        } catch (SQLException e) {
+        } catch (BLLException e) {
             signatureLabel.setText("Failed to fetch signature name: " + e.getMessage());
             System.err.println("Error loading signature name: " + e.getMessage());
         }

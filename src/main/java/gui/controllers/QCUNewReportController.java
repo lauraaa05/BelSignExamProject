@@ -6,6 +6,7 @@ import be.QualityControl;
 import be.Report;
 import bll.OrderStatusManager;
 import bll.PictureManager;
+import exceptions.BLLException;
 import exceptions.DALException;
 import gui.model.ReportModel;
 import javafx.event.ActionEvent;
@@ -77,10 +78,15 @@ public class QCUNewReportController {
         loadPictures(order.toString());
         loadLatestComment(order.getOrderCode());
 
-        String status = new OrderStatusManager().getStatusForOrder(order.getOrderCode());
-        if ("done".equalsIgnoreCase(status)) {
-            submitButton.setVisible(false);
-            commentsTextArea.setEditable(false);
+        try {
+            String status = new OrderStatusManager().getStatusForOrder(order.getOrderCode());
+            if ("done".equalsIgnoreCase(status)) {
+                submitButton.setVisible(false);
+                commentsTextArea.setEditable(false);
+            }
+        } catch (BLLException e) {
+            e.printStackTrace();
+            showError("Failed to retrieve order status: " + e.getMessage());
         }
     }
 
@@ -239,5 +245,12 @@ public class QCUNewReportController {
             alert.showAndWait();
 
         }
+    }
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

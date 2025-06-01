@@ -1,6 +1,7 @@
     package dal;
 
     import dal.interfaceDAO.IDoneReportDAO;
+    import exceptions.DALException;
 
     import java.sql.Connection;
     import java.sql.PreparedStatement;
@@ -9,7 +10,7 @@
 
     public class DoneReportDAO implements IDoneReportDAO {
 
-        public String getSignatureNameByOrderCode(String orderCode) throws SQLException {
+        public String getSignatureNameByOrderCode(String orderCode) throws DALException {
             String sql = "SELECT UL.FirstName, UL.LastName " +
                     "FROM DoneReport DR " +
                     "INNER JOIN UserLogin UL ON DR.SignedBy = UL.UserId " +
@@ -26,8 +27,7 @@
                     return firstName + " " + lastName;
                 }
             } catch (SQLException e) {
-
-                throw new SQLException(e);
+                throw new DALException("Failed to fetch signature by order code: " + orderCode, e);
             }
             return "Unknown";
         }

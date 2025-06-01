@@ -2,6 +2,7 @@ package dal;
 
 import be.Order;
 import dal.interfaceDAO.IOrderDAO;
+import exceptions.DALException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +15,7 @@ public class OrderDAO implements IOrderDAO {
     public OrderDAO() {
     }
 
-    public List<Order> getOrdersForDate(int year, int month) {
+    public List<Order> getOrdersForDate(int year, int month) throws DALException {
         List<Order> orders = new ArrayList<>();
 
         String sql = """
@@ -49,7 +50,7 @@ public class OrderDAO implements IOrderDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DALException("Failed to retrieve orders for date: " + year + "-" + month, e);
         }
 
         return orders;

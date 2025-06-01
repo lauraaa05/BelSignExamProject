@@ -5,6 +5,7 @@ import be.Operator;
 import be.QualityControl;
 import be.User;
 import dal.interfaceDAO.ILoginDAO;
+import exceptions.DALException;
 import utilities.DBHelper;
 
 import java.sql.Connection;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class LoginDAO implements ILoginDAO {
 
-    public boolean validateUser(String username, String password, UserRole expectedRole) {
+    public boolean validateUser(String username, String password, UserRole expectedRole) throws DALException {
         String sql = "SELECT ur.RoleName FROM UserLogin ul JOIN UserRoles ur ON ul.Role = ur.Id WHERE ul.Username = ? AND ul.Password = ?";
 
         try (Connection conn = DBAccess.DBConnection();
@@ -32,12 +33,12 @@ public class LoginDAO implements ILoginDAO {
                 return UserRole.fromString(roleFromDB) == expectedRole;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DALException("Failed to validate user", e);
         }
         return false;
     }
 
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers() throws DALException {
         List<User> users = new ArrayList<>();
         String sql = "SELECT ul.UserId, ul.Username, ul.Password, ur.RoleName, ul.FirstName, ul.LastName, ul.Email FROM UserLogin ul JOIN UserRoles ur ON ul.Role = ur.Id";
 
@@ -75,12 +76,12 @@ public class LoginDAO implements ILoginDAO {
 
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DALException("Failed to fetch all users", e);
         }
         return users;
     }
 
-    public User addUser(User user, String password) {
+    public User addUser(User user, String password) throws DALException{
         try(Connection conn = DBAccess.DBConnection()) {
             String sql = "INSERT INTO UserLogin (Username, Password, Role, FirstName, LastName, Email) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -101,7 +102,7 @@ public class LoginDAO implements ILoginDAO {
         }
     }
 
-    public boolean updateUser(User user) {
+    public boolean updateUser(User user) throws DALException{
         String sql = "UPDATE UserLogin SET Username = ?, Password = ?, Role = ?, FirstName = ?, LastName = ?, Email = ? WHERE UserId = ?";
 
         try(Connection conn = DBAccess.DBConnection();
@@ -136,7 +137,7 @@ public class LoginDAO implements ILoginDAO {
         }
     }
 
-    public Operator getOperatorByUsername(String username) throws SQLException {
+    public Operator getOperatorByUsername(String username) throws DALException {
         return DBHelper.getUserByUsername(username, rs -> {
             try {
                 Operator operator = new Operator(
@@ -155,7 +156,7 @@ public class LoginDAO implements ILoginDAO {
         });
     }
 
-    public QualityControl getQCUByUsername(String username) throws SQLException {
+    public QualityControl getQCUByUsername(String username) throws DALException {
         return DBHelper.getUserByUsername(username, rs -> {
             try {
                 return new QualityControl(
@@ -172,7 +173,7 @@ public class LoginDAO implements ILoginDAO {
         });
     }
 
-    public Admin getAdminByUsername(String username) throws SQLException {
+    public Admin getAdminByUsername(String username) throws DALException {
         return DBHelper.getUserByUsername(username, rs -> {
             try {
                 return new Admin(
@@ -188,7 +189,7 @@ public class LoginDAO implements ILoginDAO {
         });
     }
 
-    public int getRoleIdByName(String roleName) throws SQLException {
+    public int getRoleIdByName(String roleName) throws DALException {
         String sql = "SELECT Id FROM UserRoles WHERE RoleName = ?";
         try (Connection conn = DBAccess.DBConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -197,12 +198,14 @@ public class LoginDAO implements ILoginDAO {
             if (rs.next()) {
                 return rs.getInt("Id");
             } else  {
-                throw new SQLException("Role not found: " + roleName);
+                throw new DALException("Role not found: " + roleName);
             }
+        } catch (SQLException e) {
+            throw new DALException("Failed to fetch role id by name: " + roleName, e);
         }
     }
 
-    public UserRole getUserRole(String username, String password) throws SQLException {
+    public UserRole getUserRole(String username, String password) throws DALException {
         String sql = "SELECT ur.RoleName FROM UserLogin ul JOIN UserRoles ur ON ul.Role = ur.Id WHERE ul.Username = ? AND ul.Password = ?";
 
         try (Connection conn = DBAccess.DBConnection();
@@ -217,7 +220,7 @@ public class LoginDAO implements ILoginDAO {
                 return UserRole.fromString(roleFromDB);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DALException("Failed to validate user", e);
         }
         return null;
     }

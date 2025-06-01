@@ -4,6 +4,7 @@ import be.Order;
 import be.User;
 import bll.OrderManager;
 import dk.easv.belsignexamproject.MainLogin;
+import exceptions.BLLException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -226,9 +227,13 @@ public class QCUFolderController {
         orderListPane.setVisible(true);
         orderListPane.setManaged(true);
 
-        List<Order> orders = orderManager.getOrdersForDate(year, month);
-        orderListView.getItems().setAll(orders);
-
+        try {
+            List<Order> orders = orderManager.getOrdersForDate(year, month);
+            orderListView.getItems().setAll(orders);
+        } catch (BLLException e) {
+            e.printStackTrace();
+            showError("Failed to load orders for the folder: " + e.getMessage());
+        }
     }
 
     @FXML
@@ -253,5 +258,13 @@ public class QCUFolderController {
                 });
             }
         }
+    }
+
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

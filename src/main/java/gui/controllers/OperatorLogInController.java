@@ -6,6 +6,7 @@ import bll.CameraManager;
 import bll.OperatorManager;
 import bll.QRCodeManager;
 import dk.easv.belsignexamproject.MainLogin;
+import exceptions.BLLException;
 import io.github.palexdev.materialfx.utils.SwingFXUtils;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -106,7 +107,7 @@ public class OperatorLogInController {
                 welcomeText.setText("QR code not found.");
                 isPhotoTaken = false;
             }
-        } catch (NumberFormatException | IOException | SQLException e) {
+        } catch (NumberFormatException | IOException | SQLException | BLLException e) {
             welcomeText.setText("Invalid barcode or loading error.");
             isPhotoTaken = false;
             e.printStackTrace();

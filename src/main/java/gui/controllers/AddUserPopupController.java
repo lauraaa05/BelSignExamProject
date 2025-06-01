@@ -4,6 +4,7 @@ import be.Operator;
 import be.QualityControl;
 import be.User;
 import bll.LoginManager;
+import exceptions.BLLException;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -47,11 +48,15 @@ public class AddUserPopupController {
             newUser = new QualityControl(firstName, lastName,username, password, email);
         }
 
-        loginManager.addUser(newUser, password);
-        adminUserController.refreshUserTable();
-        closePopup();
-        // Pass data to DAO or main controller here
-        System.out.println("User created: " + firstName + " " + lastName + " (" + role + ")");
+        try {
+            loginManager.addUser(newUser, password);
+            adminUserController.refreshUserTable();
+            closePopup();
+            // Pass data to DAO or main controller here
+            System.out.println("User created: " + firstName + " " + lastName + " (" + role + ")");
+        } catch (BLLException e) {
+            showAlert("Failed to add user: " + e.getMessage());
+        }
 
         // Close the popup
         Stage stage = (Stage) firstNameField.getScene().getWindow();

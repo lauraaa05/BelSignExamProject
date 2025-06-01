@@ -2,6 +2,7 @@ package dal;
 
 import be.Order;
 import dal.interfaceDAO.IOrderStatusDAO;
+import exceptions.DALException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class OrderStatusDAO implements IOrderStatusDAO {
 
     private DBAccess dbAccess = new DBAccess();
 
-    public boolean updateOrderStatusAndRole(String orderCode, int currentRoleId, int newRoleId, int newStatusId) {
+    public boolean updateOrderStatusAndRole(String orderCode, int currentRoleId, int newRoleId, int newStatusId) throws DALException {
         String sql = """
             UPDATE OrderStatusOrder 
             SET UserRole = ?, OrderStatus = ?, LastUpdated = GETDATE() 
@@ -29,12 +30,11 @@ public class OrderStatusDAO implements IOrderStatusDAO {
             int updatedRows = stmt.executeUpdate();
             return updatedRows > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new DALException("Failed to update order status and role for order: " + orderCode, e);
         }
     }
 
-    public String getStatusForOrder(String orderNumber) {
+    public String getStatusForOrder(String orderNumber) throws DALException {
         String sql = "SELECT s.Status " +
                 "FROM OrderStatusOrder oso " +
                 "JOIN OrderStatus s ON oso.OrderStatus = s.StatusId " +
@@ -50,13 +50,12 @@ public class OrderStatusDAO implements IOrderStatusDAO {
                 return rs.getString("Status");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DALException("Failed to get status for order: " + orderNumber, e);
         }
-
         return null;
     }
 
-    public List<Order> getOrdersByRoleAndStatuses(String roleName, List<String> statuses) {
+    public List<Order> getOrdersByRoleAndStatuses(String roleName, List<String> statuses) throws DALException {
         List<Order> orders = new ArrayList<>();
         if (statuses == null || statuses.isEmpty()) {
             return orders;
@@ -94,13 +93,12 @@ public class OrderStatusDAO implements IOrderStatusDAO {
                 orders.add(new Order(countryNumber, year, month, orderCode, orderGroupId));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DALException("Failed to get orders for role: " + roleName, e);
         }
-
         return orders;
     }
 
-    public boolean updateOrderStatus(String orderCode, int roleId, int newStatusId) {
+    public boolean updateOrderStatus(String orderCode, int roleId, int newStatusId) throws DALException {
         String sql = "UPDATE OrderStatusOrder SET OrderStatus = ?, LastUpdated = GETDATE() WHERE OrderCode = ? AND UserRole = ?";
 
         try (Connection conn = dbAccess.DBConnection();
@@ -113,12 +111,11 @@ public class OrderStatusDAO implements IOrderStatusDAO {
             int updatedRows = stmt.executeUpdate();
             return updatedRows > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new DALException("Failed to update order status for order: " + orderCode, e);
         }
     }
 
-    private int getRoleIdByName(String roleName) {
+    private int getRoleIdByName(String roleName) throws DALException {
         String sql = "SELECT Id FROM UserRoles WHERE RoleName = ?";
         try (Connection conn = dbAccess.DBConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -127,11 +124,10 @@ public class OrderStatusDAO implements IOrderStatusDAO {
             if (rs.next()) {
                 return rs.getInt("Id");
             } else  {
-                throw new SQLException("No role found for id: " + roleName);
+                throw new DALException("No role found with name: " + roleName);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            return -1;
+            throw new DALException("Failed to fetch role id by name: " + roleName, e);
         }
     }
 }

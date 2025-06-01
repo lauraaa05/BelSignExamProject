@@ -2,6 +2,7 @@ package gui.controllers;
 
 import be.User;
 import dk.easv.belsignexamproject.MainLogin;
+import exceptions.BLLException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -60,28 +61,32 @@ public class AdminReportController {
     }
     // Method to load finished orders into the ListView
     private void loadFinishedReports() {
-        List<Order> doneOrders = orderStatusManager.getDoneOrders();
-        allFinishedOrders.clear();
-        allFinishedOrders.addAll(doneOrders);
+        try {
+            List<Order> doneOrders = orderStatusManager.getDoneOrders();
+            allFinishedOrders.clear();
+            allFinishedOrders.addAll(doneOrders);
 
-        listViewReports.getItems().setAll(allFinishedOrders);
+            listViewReports.getItems().setAll(allFinishedOrders);
 
-        listViewReports.setCellFactory(lv -> new ListCell<>() {
-            @Override
-            protected void updateItem(Order order, boolean empty) {
-                super.updateItem(order, empty);
-                if (empty || order == null) {
-                    setText(null);
-                } else {
-                    // Display full formatted order number
-                    String fullOrderNumber = order.getCountryNumber() + "-" +
-                            order.getYear() + "-" +
-                            order.getMonth() + "-" +
-                            order.getOrderCode();
-                    setText("Order: " + fullOrderNumber);
+            listViewReports.setCellFactory(lv -> new ListCell<>() {
+                @Override
+                protected void updateItem(Order order, boolean empty) {
+                    super.updateItem(order, empty);
+                    if (empty || order == null) {
+                        setText(null);
+                    } else {
+                        // Display full formatted order number
+                        String fullOrderNumber = order.getCountryNumber() + "-" +
+                                order.getYear() + "-" +
+                                order.getMonth() + "-" +
+                                order.getOrderCode();
+                        setText("Order: " + fullOrderNumber);
+                    }
                 }
-            }
-        });
+            });
+        } catch (BLLException e) {
+            showError("Failed to load finished reports: " + e.getMessage());
+        }
     }
 
     // Method to filter the List based on the searchField text
@@ -147,4 +152,13 @@ public class AdminReportController {
             }
         }
     }
+
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Something went wrong");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 }
