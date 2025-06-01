@@ -3,6 +3,7 @@ package dal;
 
 import be.Operator;
 import dal.interfaceDAO.IOperatorDAO;
+import exceptions.DALException;
 
 import java.sql.*;
 
@@ -10,7 +11,7 @@ public class OperatorDAO implements IOperatorDAO {
 
     private DBAccess dbAccess = new DBAccess();
 
-    public Operator getOperatorById(int userId) {
+    public Operator getOperatorById(int userId) throws DALException {
         String sql = "SELECT * FROM UserLogin ul JOIN UserRoles ur ON ul.Role = ur.Id WHERE ul.UserId = ? AND ur.RoleName = 'Operator'";
 
         try (Connection conn = dbAccess.DBConnection();
@@ -30,11 +31,12 @@ public class OperatorDAO implements IOperatorDAO {
                 op.setPassword(password);
                 op.setEmail(email);
                 return op;
+            } else {
+                throw new DALException("Operator not found for id: " + userId);
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DALException("Failed to fetch operator by id: " + userId, e);
         }
-        return null;
     }
 }

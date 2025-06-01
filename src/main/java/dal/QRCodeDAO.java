@@ -2,6 +2,7 @@ package dal;
 
 import be.QRCodeInfo;
 import dal.interfaceDAO.IQRCodeDAO;
+import exceptions.DALException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,7 +13,7 @@ public class QRCodeDAO implements IQRCodeDAO {
 
     DBAccess db = new DBAccess();
 
-    public void saveQRCode(byte[] imageBytes, String qrContent, int userId) throws SQLException {
+    public void saveQRCode(byte[] imageBytes, String qrContent, int userId) throws DALException {
         String sql = "INSERT INTO QRCode (QRCodeImage, QRCodeString, UserId) VALUES (?, ?, ?)";
 
         try (Connection conn = db.DBConnection();
@@ -23,6 +24,8 @@ public class QRCodeDAO implements IQRCodeDAO {
             stmt.setInt(3, userId);
 
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DALException("Failed to save QR code", e);
         }
     }
 
@@ -46,7 +49,7 @@ public class QRCodeDAO implements IQRCodeDAO {
         return null;
     }
 
-    public QRCodeInfo getLatestQRCode() throws SQLException {
+    public QRCodeInfo getLatestQRCode() throws DALException {
         String sql = "SELECT TOP 1 * FROM QRCode ORDER BY QRCodeId DESC";
 
         try (Connection conn = db.DBConnection();
@@ -60,6 +63,8 @@ public class QRCodeDAO implements IQRCodeDAO {
 
                 return new QRCodeInfo(image, qrCodeString, userId);
             }
+        } catch (SQLException e) {
+            throw new DALException("Failed to fetch latest QR code", e);
         }
         return null;
     }

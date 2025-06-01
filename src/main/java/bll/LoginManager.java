@@ -4,6 +4,7 @@ import be.User;
 import dal.LoginDAO;
 import dal.UserRole;
 import exceptions.BLLException;
+import exceptions.DALException;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -22,24 +23,36 @@ public class LoginManager {
                 case QUALITY_CONTROL -> lgn.getQCUByUsername(username);
                 case ADMIN -> lgn.getAdminByUsername(username);
             };
-        } catch (SQLException e) {
+        } catch (DALException e) {
             throw new BLLException("Failed to log in due to a database error", e);
         }
     }
 
-    public User addUser(User user, String password) {
-        return lgn.addUser(user, password);
+    public User addUser(User user, String password) throws BLLException {
+        try {
+            return lgn.addUser(user, password);
+        } catch (DALException e) {
+            throw new BLLException("Failed to add user.", e);
+        }
     }
 
-    public List<User> getAllUsers() {
-        return lgn.getAllUsers();
+    public List<User> getAllUsers() throws BLLException {
+        try {
+            return lgn.getAllUsers();
+        } catch (DALException e) {
+            throw new BLLException("Failed to retrieve all users.", e);
+        }
     }
 
     public User deleteUser (User user) {
         return lgn.deleteUser(user);
     }
 
-    public boolean updateUser (User user) {
-        return lgn.updateUser(user);
+    public boolean updateUser (User user) throws BLLException {
+        try {
+            return lgn.updateUser(user);
+        } catch (DALException e) {
+            throw new BLLException("Failed to update user.", e);
+        }
     }
 }

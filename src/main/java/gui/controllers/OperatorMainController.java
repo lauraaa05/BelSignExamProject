@@ -6,6 +6,7 @@ import be.Order;
 import bll.OrderStatusManager;
 
 import dk.easv.belsignexamproject.MainLogin;
+import exceptions.BLLException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -64,12 +65,15 @@ public class OperatorMainController implements Initializable {
                     setStyle("");
                 } else {
                     setText(order.toString());
-                    String status = orderStatusManager.getStatusForOrder(order.getOrderCode());
-                    if ("rejected".equalsIgnoreCase(status)) {
-                        setStyle("-fx-text-fill: red; -fx-font-weight: bold; -fx-background-color: #ffeeee;");
-
-                    } else {
-                        setStyle("-fx-text-fill: black;");
+                    try {
+                        String status = orderStatusManager.getStatusForOrder(order.getOrderCode());
+                        if ("rejected".equalsIgnoreCase(status)) {
+                            setStyle("-fx-text-fill: red; -fx-font-weight: bold; -fx-background-color: #ffeeee;");
+                        } else {
+                            setStyle("-fx-text-fill: black;");
+                        }
+                    } catch (BLLException e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -130,23 +134,33 @@ public class OperatorMainController implements Initializable {
     }
 
     public void refreshLists() {
-        List<Order> todoOrders = orderStatusManager.getOrdersByRoleAndStatuses("operator", List.of("todo","rejected"));
+        try {
+            List<Order> todoOrders = orderStatusManager.getOrdersByRoleAndStatuses("operator", List.of("todo", "rejected"));
 
-        todoOrders.sort((o1, o2) -> {
-            String status1 = orderStatusManager.getStatusForOrder(o1.getOrderCode());
-            String status2 = orderStatusManager.getStatusForOrder(o2.getOrderCode());
+            todoOrders.sort((o1, o2) -> {
+                try {
+                    String status1 = orderStatusManager.getStatusForOrder(o1.getOrderCode());
+                    String status2 = orderStatusManager.getStatusForOrder(o2.getOrderCode());
 
-            if ("rejected".equalsIgnoreCase(status1) && !"rejected".equalsIgnoreCase(status2)) {
-                return -1;
-            } else if (!"rejected".equalsIgnoreCase(status1) && "rejected".equalsIgnoreCase(status2)) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
-        allOrders =  todoOrders;
-        toDoListView.getItems().setAll(allOrders);
+                    if ("rejected".equalsIgnoreCase(status1) && !"rejected".equalsIgnoreCase(status2)) {
+                        return -1;
+                    } else if (!"rejected".equalsIgnoreCase(status1) && "rejected".equalsIgnoreCase(status2)) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                } catch (BLLException e) {
+                    e.printStackTrace();
+                    return 0;
+                }
+            });
+            allOrders = todoOrders;
+            toDoListView.getItems().setAll(allOrders);
+        } catch (BLLException e) {
+            e.printStackTrace();
+        }
     }
+
 
     private void searchOrders(String searchText) {
         String lowerSearch = searchText.toLowerCase();

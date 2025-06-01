@@ -46,7 +46,11 @@ public class ReportManager {
         }
     }
 
-    public String getSignatureNameByOrderCode(String orderCode) throws SQLException {
-        return doneReportDAO.getSignatureNameByOrderCode(orderCode);
+    public String getSignatureNameByOrderCode(String orderCode) throws BLLException {
+        try {
+            return doneReportDAO.getSignatureNameByOrderCode(orderCode);
+        } catch (DALException e) {
+            throw new BLLException("Failed to retrieve signature name.", e);
+        }
     }
 }

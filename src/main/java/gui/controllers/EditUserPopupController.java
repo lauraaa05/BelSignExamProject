@@ -1,6 +1,7 @@
 package gui.controllers;
 
 import bll.LoginManager;
+import exceptions.BLLException;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -48,17 +49,29 @@ public class EditUserPopupController {
         user.setRole(roleComboBox.getValue());
 
         LoginManager loginManager = new LoginManager();
-        boolean success = loginManager.updateUser(user);
-        adminUserController.refreshUserTable();
+        try {
+            boolean success = loginManager.updateUser(user);
+            adminUserController.refreshUserTable();
 
-        if(!success) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to update user in the database.");
-            alert.showAndWait();
-            return;
-        } else {
-            System.out.println("User updated: " + user.getFirstName() + " " + user.getLastName());
+            if (!success) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to update user in the database.");
+                alert.showAndWait();
+                return;
+            } else {
+                System.out.println("User updated: " + user.getFirstName() + " " + user.getLastName());
+            }
+
+            ((Stage) firstNameField.getScene().getWindow()).close();
+        } catch (BLLException e) {
+            showError("An error has occured while udpdating the user: " + e.getMessage());
         }
-
-        ((Stage) firstNameField.getScene().getWindow()).close();
     }
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Something went wrong");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 }
