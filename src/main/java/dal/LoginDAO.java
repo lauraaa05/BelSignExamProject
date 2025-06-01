@@ -4,6 +4,7 @@ import be.Admin;
 import be.Operator;
 import be.QualityControl;
 import be.User;
+import dal.interfaceDAO.ILoginDAO;
 import utilities.DBHelper;
 
 import java.sql.Connection;
@@ -13,7 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoginDAO {
+public class LoginDAO implements ILoginDAO {
 
     public boolean validateUser(String username, String password, UserRole expectedRole) {
         String sql = "SELECT ur.RoleName FROM UserLogin ul JOIN UserRoles ur ON ul.Role = ur.Id WHERE ul.Username = ? AND ul.Password = ?";
@@ -187,7 +188,7 @@ public class LoginDAO {
         });
     }
 
-    private int getRoleIdByName(String roleName) throws SQLException {
+    public int getRoleIdByName(String roleName) throws SQLException {
         String sql = "SELECT Id FROM UserRoles WHERE RoleName = ?";
         try (Connection conn = DBAccess.DBConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {

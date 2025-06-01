@@ -1,13 +1,14 @@
 package dal;
 
 import be.Report;
+import dal.interfaceDAO.IReportDAO;
 import exceptions.DALException;
 
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ReportDAO {
+public class ReportDAO implements IReportDAO {
 
     public void insertReport(Report report) throws DALException {
         String sql = "INSERT INTO Reports (UserId, Comment, OrderNumber, Date, OrderCode) VALUES (?,?,?,?,?)";

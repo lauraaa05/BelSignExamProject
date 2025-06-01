@@ -1,11 +1,14 @@
     package dal;
 
+    import dal.interfaceDAO.IDoneReportDAO;
+    import exceptions.DALException;
+
     import java.sql.Connection;
     import java.sql.PreparedStatement;
     import java.sql.ResultSet;
     import java.sql.SQLException;
 
-    public class DoneReportDAO {
+    public class DoneReportDAO implements IDoneReportDAO {
 
         public String getSignatureNameByOrderCode(String orderCode) throws SQLException {
             String sql = "SELECT UL.FirstName, UL.LastName " +
@@ -23,6 +26,9 @@
                     String lastName = rs.getString("LastName");
                     return firstName + " " + lastName;
                 }
+            } catch (SQLException e) {
+
+                throw new SQLException(e);
             }
 
             return "Unknown";

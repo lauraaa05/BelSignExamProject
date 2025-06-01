@@ -1,13 +1,14 @@
 package dal;
 
 import be.Picture;
+import dal.interfaceDAO.IPictureDAO;
 import exceptions.DALException;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PictureDAO {
+public class PictureDAO implements IPictureDAO {
 
     DBAccess db = new DBAccess();
 

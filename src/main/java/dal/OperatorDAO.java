@@ -2,10 +2,11 @@ package dal;
 
 
 import be.Operator;
+import dal.interfaceDAO.IOperatorDAO;
 
 import java.sql.*;
 
-public class OperatorDAO {
+public class OperatorDAO implements IOperatorDAO {
 
     private DBAccess dbAccess = new DBAccess();
 

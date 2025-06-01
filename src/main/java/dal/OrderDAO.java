@@ -152,11 +152,6 @@ public class OrderDAO implements IOrderDAO {
 
 
     @Override
-    public Order findOrderByOrderNumber(String orderNumber) {
-        return null;
-    }
-
-    @Override
     public void save(Order obj) {
 
     }

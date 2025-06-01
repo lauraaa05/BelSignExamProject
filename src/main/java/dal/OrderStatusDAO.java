@@ -1,12 +1,13 @@
 package dal;
 
 import be.Order;
+import dal.interfaceDAO.IOrderStatusDAO;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderStatusDAO {
+public class OrderStatusDAO implements IOrderStatusDAO {
 
     private DBAccess dbAccess = new DBAccess();
 
