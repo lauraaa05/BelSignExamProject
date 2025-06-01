@@ -55,6 +55,22 @@ public class OrderStatusDAO implements IOrderStatusDAO {
         return null;
     }
 
+    public int getStatusIdByName(String statusName) throws DALException {
+        String sql = "SELECT StatusId FROM OrderStatus WHERE Status = ?";
+        try (Connection conn = dbAccess.DBConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, statusName);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("StatusId");
+            } else {
+                throw new DALException("Status not found: " + statusName);
+            }
+        } catch (SQLException e) {
+            throw new DALException("Failed to fetch status id by name: " + statusName, e);
+        }
+    }
+
     public List<Order> getOrdersByRoleAndStatuses(String roleName, List<String> statuses) throws DALException {
         List<Order> orders = new ArrayList<>();
         if (statuses == null || statuses.isEmpty()) {
