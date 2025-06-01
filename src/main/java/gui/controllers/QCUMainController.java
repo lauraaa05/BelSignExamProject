@@ -24,7 +24,6 @@ import javafx.collections.ObservableList;
 
 public class QCUMainController {
 
-
     @FXML
     private Button btnOpenReport, folderButton, homeButton;
 

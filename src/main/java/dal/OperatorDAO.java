@@ -1,6 +1,5 @@
 package dal;
 
-
 import be.Operator;
 import dal.interfaceDAO.IOperatorDAO;
 

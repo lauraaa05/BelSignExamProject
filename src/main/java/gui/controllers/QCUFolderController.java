@@ -23,7 +23,6 @@ import utilities.SceneNavigator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class QCUFolderController {
 
@@ -137,7 +136,6 @@ public class QCUFolderController {
         }
     }
 
-
     private void filterFolders(String searchText) {
         String lowerSearch = searchText.trim().toLowerCase();
 
@@ -194,7 +192,6 @@ public class QCUFolderController {
         folderButton.getStyleClass().remove("active");
         activeButton.getStyleClass().add("active");
     }
-
 
     private void openFolderAndShowOrders(String date) {
         String[] parts = date.split("-");

@@ -29,7 +29,6 @@
 
                 throw new SQLException(e);
             }
-
             return "Unknown";
         }
     }

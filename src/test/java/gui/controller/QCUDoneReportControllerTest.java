@@ -27,4 +27,3 @@ import static org.junit.jupiter.api.Assertions.*;
             assertTrue(imageCard.getChildren().stream().anyMatch(node -> node instanceof Label));
         }
     }
-

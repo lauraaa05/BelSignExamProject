@@ -19,7 +19,7 @@ public class SceneNavigator {
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace(); // You can replace with an alert for production
+            e.printStackTrace();
         }
     }
 
@@ -49,18 +49,10 @@ public class SceneNavigator {
         }
     }
 
-    public void openNewScene(ActionEvent actionEvent, Stage stage, String fxmlFile) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/" + fxmlFile));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("QCU Folder Screen");
-        stage.setScene(scene);
-        stage.show();
-    }
-
     public void openNewScene(ActionEvent actionEvent, Stage stage, String fxmlFile, String title) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/" + fxmlFile));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle(title); // set custom title
+        stage.setTitle(title);
         stage.setScene(scene);
         stage.show();
     }
@@ -74,7 +66,7 @@ public class SceneNavigator {
             controllerInitializer.accept(controller);
 
             stage.setScene(new Scene(root));
-            stage.setTitle(title); // ✅ Set new window title here
+            stage.setTitle(title);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

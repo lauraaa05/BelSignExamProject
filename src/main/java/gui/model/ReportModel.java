@@ -41,5 +41,4 @@ public class ReportModel {
     public String getSignatureNameByOrderCode(String orderCode) throws SQLException {
         return reportManager.getSignatureNameByOrderCode(orderCode);
     }
-
 }

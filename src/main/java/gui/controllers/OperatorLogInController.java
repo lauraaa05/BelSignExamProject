@@ -114,16 +114,6 @@ public class OperatorLogInController {
         System.out.println("Scanned QR content: " + scannedCode);
     }
 
-    // Optional: For returning to login screen later from another controller
-    public static void switchToLoginScene(Stage currentStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MainLogin.class.getResource("/view/OperatorLogIn.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-
-        currentStage.setTitle("Operator Login");
-        currentStage.setScene(scene);
-        currentStage.show();
-    }
-
     @FXML
     private void openUsernamePasswordLoginAct(ActionEvent actionEvent) {
         sceneNavigator.switchTo(actionEvent, "MainLogin.fxml");

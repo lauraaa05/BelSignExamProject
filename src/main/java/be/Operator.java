@@ -26,11 +26,9 @@ public class Operator implements User {
         this.email = email;
     }
 
-
     public Operator() {
         this(0, "", "", null,"","");
     }
-
 
     // Getters and Setters
 

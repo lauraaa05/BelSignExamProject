@@ -7,5 +7,4 @@ public class MyException extends Exception {
     }
 
     // in utilies package we can have hashmap, parsers, exceptions this kind of utilities tools
-
 }

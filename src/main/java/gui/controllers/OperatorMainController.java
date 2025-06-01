@@ -1,6 +1,5 @@
 package gui.controllers;
 
-
 import be.Operator;
 import be.Order;
 import bll.OrderStatusManager;
@@ -29,6 +28,7 @@ public class OperatorMainController implements Initializable {
 
     @FXML
     public TextField searchField;
+
     @FXML
     private Button signOutButton;
 
@@ -41,7 +41,6 @@ public class OperatorMainController implements Initializable {
     private final OrderStatusManager orderStatusManager = new OrderStatusManager();
 
     private List<Order> allOrders = new ArrayList<>();
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -77,7 +76,6 @@ public class OperatorMainController implements Initializable {
         searchField.textProperty().addListener((obs, oldVal, newVal) -> searchOrders(newVal));
     }
 
-
     // Handle order click
     private void handleOrderClick(MouseEvent event) {
         if (event.getClickCount() == 1) {  // Single click
@@ -107,6 +105,7 @@ public class OperatorMainController implements Initializable {
             e.printStackTrace();
         }
     }
+
     private void switchToMainLoginWindow(Stage currentStage) throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(MainLogin.class.getResource("/view/MainLogin.fxml"));

@@ -51,13 +51,11 @@ public class QCUDoneReportController {
 
     private final SceneNavigator sceneNavigator = new SceneNavigator();
 
-
     @FXML
     public void initialize() {
         User loggedIn = LoggedInUser.getUser();
 
     }
-
 
     public void handleGoBack(ActionEvent actionEvent) {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -117,7 +115,7 @@ public class QCUDoneReportController {
         }
     }
 
-    private VBox createImageCard(Picture picture) {
+    public VBox createImageCard(Picture picture) {
         VBox vBox = new VBox(10);
         vBox.setStyle("-fx-background-color: #fff; -fx-padding: 10px; -fx-border-color: #d1d5db; -fx-border-radius: 5px; -fx-background-radius: 8px;");
         vBox.setAlignment(javafx.geometry.Pos.CENTER);
@@ -135,5 +133,4 @@ public class QCUDoneReportController {
         vBox.getChildren().addAll(imageView, sideLabel, dateLabel);
         return vBox;
     }
-
 }

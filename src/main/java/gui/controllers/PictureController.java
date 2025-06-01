@@ -165,7 +165,6 @@ public class PictureController {
         updateCurrentSideLabel();
     }
 
-
     private void exit() throws IOException {
         try {
             camera.closeCamera();

@@ -35,7 +35,6 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
-
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
@@ -52,12 +51,6 @@ public class QCUReportPDFController {
     private Label signatureLabel;
 
     @FXML
-    private TextArea commentsTextArea;
-
-    @FXML
-    private Button submitButton;
-
-    @FXML
     private Label generalCommentsLabel;
 
     @FXML
@@ -65,7 +58,6 @@ public class QCUReportPDFController {
 
     @FXML
     private ScrollPane scrollPane;
-
 
     @FXML
     private Label orderNumberLabel;
@@ -81,8 +73,6 @@ public class QCUReportPDFController {
     private final SceneNavigator sceneNavigator = new SceneNavigator();
 
     private Order currentOrder;
-
-    private QualityControl currentUser;
 
     @FXML
     public void initialize() {
@@ -138,7 +128,6 @@ public class QCUReportPDFController {
         }
     }
 
-
     private void loadLatestComment(String orderCode) {
         try {
             String latestComment = reportModel.getLatestCommentByOrderNumber(orderCode);
@@ -172,7 +161,6 @@ public class QCUReportPDFController {
             System.err.println("Error loading signature name: " + e.getMessage());
         }
     }
-
 
     private void handleDownloadPDF() {
         try {

@@ -18,7 +18,6 @@ public class QRCodeManager {
 
     private final QRCodeDAO qrCodeDAO =  new QRCodeDAO();
 
-
     public String readQRCode(String filePath) throws IOException, NotFoundException {
         BufferedImage bufferedImage = ImageIO.read(new File(filePath));
         LuminanceSource source = new BufferedImageLuminanceSource(bufferedImage);

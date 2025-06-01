@@ -118,20 +118,6 @@ public class OrderStatusDAO implements IOrderStatusDAO {
         }
     }
 
-    public int getStatusIdByName(String statusName) throws SQLException {
-        String sql = "SELECT StatusId FROM OrderStatus WHERE Status = ?";
-        try (Connection conn = dbAccess.DBConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, statusName);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("StatusId");
-            } else {
-                throw new SQLException("Status not found: " + statusName);
-            }
-        }
-    }
-
     private int getRoleIdByName(String roleName) {
         String sql = "SELECT Id FROM UserRoles WHERE RoleName = ?";
         try (Connection conn = dbAccess.DBConnection();

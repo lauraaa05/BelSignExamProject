@@ -101,7 +101,6 @@ public class AdminReportController {
         listViewReports.getItems().setAll(filtered);
     }
 
-
     private void switchToUserScreen(Stage currentStage) throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(MainLogin.class.getResource("/view/AdminUserScreen.fxml"));

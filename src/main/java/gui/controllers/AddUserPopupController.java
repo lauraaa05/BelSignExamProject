@@ -74,5 +74,4 @@ public class AddUserPopupController {
         alert.setContentText(msg);
         alert.showAndWait();
     }
-
 }

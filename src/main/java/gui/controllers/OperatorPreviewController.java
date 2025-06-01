@@ -62,6 +62,7 @@ public class OperatorPreviewController {
     //These are for swiping gesture
     @FXML
     private HBox swipeContainer;
+
     @FXML
     private Button swipeButton;
 
@@ -82,7 +83,6 @@ public class OperatorPreviewController {
                 ex.printStackTrace();
             }
         });
-
         swipeButton.setOnMousePressed(this::onMousePressed);
         swipeButton.setOnMouseDragged(this::onMouseDragged);
         swipeButton.setOnMouseReleased(this::onMouseReleased);
@@ -142,7 +142,7 @@ public class OperatorPreviewController {
         imageFlowPane.getChildren().add(vBox);
     }
 
-    // Méthod change the scene
+    // Method change the scene
     private void switchToMainLoginScene(Stage currentStage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainLogin.class.getResource("/view/MainLogin.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
@@ -274,7 +274,7 @@ public class OperatorPreviewController {
         }
     }
 
-    //These are for swipin gesture
+    //These are for swiping gesture
     private double startX;
     private final double TRIGGER_DISTANCE = 150; // Distance to consider it a full swipe
 

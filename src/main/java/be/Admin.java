@@ -19,8 +19,6 @@ public class Admin implements User {
         this.email = email;
     }
 
-    public Admin() { this(0, "", "", "", "", ""); }
-
     public Admin(int id, String role, String name, String firstName, String password) {
         this.id = id;
         this.role = role;
@@ -28,7 +26,6 @@ public class Admin implements User {
         this.firstName = firstName;
         this.password = password;
     }
-
 
     public String getFirstName() {
         return firstName;

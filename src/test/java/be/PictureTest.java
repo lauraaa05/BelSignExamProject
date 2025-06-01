@@ -71,5 +71,3 @@ import static org.junit.jupiter.api.Assertions.*;
             assertEquals("ORD999", picture.getOrderNumber());
         }
     }
-
-
